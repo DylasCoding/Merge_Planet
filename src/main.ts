@@ -1,19 +1,21 @@
-import { Application } from 'pixi.js';
+import { Application, Assets } from "pixi.js";
+import { Game } from "./Game";
+import { manifest } from "./core/manifest.ts";
 
-const app = new Application();
+async function main() {
+    const app = new Application();
 
-async function initGame() {
     await app.init({
-        width: 800,
-        height: 600,
-        backgroundColor: 0x1099bb,
-        resolution: window.devicePixelRatio || 1,
+        resizeTo: window,
+        background: "#1b1b1b",
     });
+
+    await Assets.init({ manifest });
 
     document.body.appendChild(app.canvas);
 
-    console.log('PixiJS is ready!');
+    const game = new Game(app);
+    await game.initialize();
 }
 
-// Chạy hàm khởi tạo
-initGame();
+main();
