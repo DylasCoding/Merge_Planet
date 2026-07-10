@@ -16,6 +16,12 @@ import gem_icon from "../assets/Icons/gem-1-64.png";
 import Asap_Bold from "../assets/Fonts/Asap-Bold.ttf";
 import Righteous_Regular from "../assets/Fonts/Righteous-Regular.ttf";
 
+import planet1 from "../assets/Icons/earth-128.png";
+import planet2 from "../assets/Icons/mars-128.png";
+import planet3 from "../assets/Icons/jupiter-128.png";
+
+import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-large 1.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -37,11 +43,17 @@ export const manifest: AssetsManifest = {
 
                 gem_bg: gem_bg,
                 gem_icon: gem_icon,
+
+                nextPlanet_bg: nextPlanet_bg,
             },
         },
         {
             name: "planets",
-            assets: {},
+            assets: {
+                planet1: planet1,
+                planet2: planet2,
+                planet3: planet3,
+            },
         },
         {
             name: "fonts",
