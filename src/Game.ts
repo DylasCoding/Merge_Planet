@@ -7,7 +7,7 @@ export class Game {
 
     constructor(app: Application) {
         this.app = app;
-        this.gameScene = new GameScene();
+        this.gameScene = new GameScene(this.app);
     }
 
     public async initialize(): Promise<void> {
