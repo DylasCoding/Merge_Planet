@@ -22,6 +22,9 @@ import planet3 from "../assets/Icons/jupiter-128.png";
 
 import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-large 1.png";
 
+import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-large.png";
+// import box from "../assets/Grid_Components/box.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -45,6 +48,8 @@ export const manifest: AssetsManifest = {
                 gem_icon: gem_icon,
 
                 nextPlanet_bg: nextPlanet_bg,
+
+                box: box,
             },
         },
         {
