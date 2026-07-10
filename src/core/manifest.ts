@@ -7,6 +7,11 @@ import button_pink from "../assets/Button_Images/Source_Image_Sprites/medium/med
 import button_yellow from "../assets/Button_Images/Source_Image_Sprites/medium/medium-yellow-medium.png";
 import button_purple from "../assets/Button_Images/Source_Image_Sprites/medium/medium-purple-medium.png";
 
+import button_blue_pressed from "../assets/Button_Images/Pressed_Sprites/Medium/medium-blue-pressed-medium.png";
+import button_pink_pressed from "../assets/Button_Images/Pressed_Sprites/Medium/medium-pink-pressed-medium.png";
+import button_yellow_pressed from "../assets/Button_Images/Pressed_Sprites/Medium/medium-yellow-pressed-medium.png";
+import button_purple_pressed from "../assets/Button_Images/Pressed_Sprites/Medium/medium-purple-pressed-medium.png";
+
 import score_star from "../assets/Icons/star-64.png";
 import score_bg from "../assets/Containers/Small/pause-container-small.png";
 
