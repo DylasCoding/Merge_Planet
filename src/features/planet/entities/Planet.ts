@@ -1,6 +1,7 @@
 import { Sprite, Texture } from "pixi.js";
 import { Vector2 } from "../../../utils/math/Vector2";
 import { type PlanetData } from "../data/PlanetData";
+import { type PlanetOptions } from "../types/PlanetOptions";
 
 export class Planet {
     public readonly data: PlanetData;
@@ -9,12 +10,8 @@ export class Planet {
     public position: Vector2;
     public velocity: Vector2;
 
-    constructor(
-        data: PlanetData,
-        sprite: Sprite,
-        position: Vector2 = new Vector2(),
-        velocity: Vector2 = new Vector2(),
-    ) {
+    constructor(options: PlanetOptions) {
+        const { data, sprite, position = new Vector2(), velocity = new Vector2() } = options;
         this.data = data;
         this.sprite = sprite;
 
