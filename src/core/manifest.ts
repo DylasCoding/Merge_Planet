@@ -13,6 +13,9 @@ import score_bg from "../assets/Containers/Small/pause-container-small.png";
 import gem_bg from "../assets/Rank_System_Components/Medium/ranking-highlight-medium.png";
 import gem_icon from "../assets/Icons/gem-1-64.png";
 
+import Asap_Bold from "../assets/Fonts/Asap-Bold.ttf";
+import Righteous_Regular from "../assets/Fonts/Righteous-Regular.ttf";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -39,6 +42,13 @@ export const manifest: AssetsManifest = {
         {
             name: "planets",
             assets: {},
+        },
+        {
+            name: "fonts",
+            assets: {
+                Asap_Bold: Asap_Bold,
+                Righteous_Regular: Righteous_Regular,
+            },
         },
     ],
 };
