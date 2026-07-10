@@ -1,4 +1,5 @@
 import { Container, Sprite, Text } from "pixi.js";
+import { Font } from "../../core/Font.ts";
 
 export class GemView extends Container {
     private readonly gemText: Text;
@@ -12,6 +13,7 @@ export class GemView extends Container {
         this.gemText = new Text({
             text: "0",
             style: {
+                fontFamily: Font.Asap_Bold,
                 fill: 0x80ffff,
                 fontSize: 24,
             },

@@ -1,4 +1,5 @@
 import { Container, Text, Sprite } from "pixi.js";
+import { Font } from "../../core/Font.ts";
 
 export class ScoreView extends Container {
     private readonly scoreText: Text;
@@ -12,6 +13,7 @@ export class ScoreView extends Container {
         this.scoreText = new Text({
             text: "0",
             style: {
+                fontFamily: Font.Asap_Bold,
                 fill: 0xffffff,
             },
         });
