@@ -10,6 +10,9 @@ import button_purple from "../assets/Button_Images/Source_Image_Sprites/medium/m
 import score_star from "../assets/Icons/star-64.png";
 import score_bg from "../assets/Containers/Small/pause-container-small.png";
 
+import gem_bg from "../assets/Rank_System_Components/Medium/ranking-highlight-medium.png";
+import gem_icon from "../assets/Icons/gem-1-64.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -28,6 +31,9 @@ export const manifest: AssetsManifest = {
 
                 score_star: score_star,
                 score_bg: score_bg,
+
+                gem_bg: gem_bg,
+                gem_icon: gem_icon,
             },
         },
         {
