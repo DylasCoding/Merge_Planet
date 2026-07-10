@@ -4,10 +4,12 @@ import { HUD } from "../ui/hud/HUD.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
-    private readonly hud = new HUD();
+    private hud!: HUD;
 
     public async initialize(): Promise<void> {
         await Assets.loadBundle(["ui", "backgrounds"]);
+
+        this.hud = new HUD();
 
         this.addChild(this.world);
         this.addChild(this.hud);
