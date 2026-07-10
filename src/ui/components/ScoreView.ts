@@ -14,7 +14,8 @@ export class ScoreView extends Container {
             text: "0",
             style: {
                 fontFamily: Font.Asap_Bold,
-                fill: 0xffffff,
+                fill: 0xffffb3,
+                fontSize: 24,
             },
         });
 

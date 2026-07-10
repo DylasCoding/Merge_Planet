@@ -16,7 +16,7 @@ export class GameScene extends BaseScene {
         await Assets.loadBundle(["ui"]);
 
         this.gameBox = new GameBox();
-        this.gameBox.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+        this.gameBox.position.set(this.app.screen.width / 2, this.app.screen.height / 1.65);
         this.world.addChild(this.gameBox);
 
         this.hud = new HUD(this.app);

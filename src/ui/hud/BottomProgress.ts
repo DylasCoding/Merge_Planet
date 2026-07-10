@@ -1,6 +1,6 @@
-import * as PIXI from "pixi.js";
+import { Container } from "pixi.js";
 
-export class BottomProgress extends PIXI.Container {
+export class BottomProgress extends Container {
     constructor() {
         super();
     }
