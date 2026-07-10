@@ -22,13 +22,15 @@ import Asap_Bold from "../assets/Fonts/Asap-Bold.ttf";
 import Righteous_Regular from "../assets/Fonts/Righteous-Regular.ttf";
 
 import planet1 from "../assets/Icons/earth-128.png";
-import planet2 from "../assets/Icons/mars-128.png";
+import planet2 from "../assets/Icons/full-moon-128.png";
 import planet3 from "../assets/Icons/jupiter-128.png";
 
 import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-large 1.png";
 
 import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-large.png";
-// import box from "../assets/Grid_Components/box.png";
+
+// import sidebar_bg from "../assets/Settings_Menu_Components/Large/vertical-scroll-bar-handle-large.png";
+import sidebar_bg from "../assets/leftsidebar.png";
 
 export const manifest: AssetsManifest = {
     bundles: [
@@ -55,6 +57,8 @@ export const manifest: AssetsManifest = {
                 nextPlanet_bg: nextPlanet_bg,
 
                 box: box,
+
+                sidebar_bg: sidebar_bg,
             },
         },
         {
@@ -63,6 +67,13 @@ export const manifest: AssetsManifest = {
                 planet1: planet1,
                 planet2: planet2,
                 planet3: planet3,
+                planet4: planet3,
+                planet5: planet3,
+                planet6: planet3,
+                planet7: planet3,
+                planet8: planet3,
+                planet9: planet3,
+                planet10: planet3,
             },
         },
         {
