@@ -1,4 +1,4 @@
-import { Container, Assets, Text, Sprite } from "pixi.js";
+import { Container, Text, Sprite } from "pixi.js";
 
 export class ScoreView extends Container {
     private readonly scoreText: Text;
@@ -11,19 +11,25 @@ export class ScoreView extends Container {
 
         this.scoreText = new Text({
             text: "0",
-            style: { fill: 0xffffff },
+            style: {
+                fill: 0xffffff,
+            },
         });
 
-        this.scoreText.position.set(10, 10);
-
-        bg.scale.set(0.5);
+        bg.scale.x = 0.45;
+        bg.scale.y = 0.5;
         icon.scale.set(0.5);
 
-        bg.anchor.set(0, 0);
-        icon.anchor.set(-0.5, -0.5);
-        this.scoreText.anchor.set(-2.5, -0.25);
+        bg.anchor.set(0.5, 0);
+        icon.anchor.set(0.5);
 
-        this.addChild(bg, this.scoreText, icon);
+        this.scoreText.anchor.set(0, 0.5);
+
+        bg.position.set(0, 0);
+        icon.position.set(-45, bg.height * 0.5);
+        this.scoreText.position.set(-25, bg.height * 0.5);
+
+        this.addChild(icon, this.scoreText);
     }
 
     public setScoreText(score: number): void {

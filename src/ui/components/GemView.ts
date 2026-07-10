@@ -12,12 +12,14 @@ export class GemView extends Container {
         this.gemText = new Text({
             text: "0",
             style: {
-                fill: 0xa64dff,
+                fill: 0x80ffff,
                 fontSize: 24,
             },
         });
 
-        bg.scale.set(0.5);
+        bg.scale.x = 0.35;
+        bg.scale.y = 0.5;
+
         icon.scale.set(0.5);
 
         bg.anchor.set(0, 0);
@@ -26,7 +28,7 @@ export class GemView extends Container {
 
         bg.position.set(0, 0);
 
-        icon.position.set(icon.width / 2, bg.height / 2);
+        icon.position.set(25, bg.height / 2);
 
         this.gemText.position.set(bg.width * 0.65, bg.height / 2);
 
