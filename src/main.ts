@@ -12,7 +12,7 @@ async function main() {
     });
 
     await Assets.init({ manifest });
-    await Assets.loadBundle(["backgrounds", "fonts"]);
+    await Assets.loadBundle(["backgrounds", "fonts", "planets"]);
     const background = Sprite.from("background_sky");
 
     function resizeBackground() {
