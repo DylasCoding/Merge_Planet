@@ -31,6 +31,7 @@ import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-lar
 
 // import sidebar_bg from "../assets/Settings_Menu_Components/Large/vertical-scroll-bar-handle-large.png";
 import sidebar_bg from "../assets/leftsidebar.png";
+import arrow_icon from "../assets/Icons/arrowicon.png";
 
 export const manifest: AssetsManifest = {
     bundles: [
@@ -59,6 +60,7 @@ export const manifest: AssetsManifest = {
                 box: box,
 
                 sidebar_bg: sidebar_bg,
+                arrow_icon: arrow_icon,
             },
         },
         {
