@@ -11,7 +11,8 @@ export class PlanetRandomizer {
             return;
         }
 
-        if (this.currentMaxRandomLevel > this.maxRandomLevel) {
+        // stop increasing max random level at limit (6 > 6 # 6 >= 6)
+        if (this.currentMaxRandomLevel >= this.maxRandomLevel) {
             return;
         }
 
