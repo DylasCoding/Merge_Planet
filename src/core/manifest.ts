@@ -16,7 +16,7 @@ import score_star from "../assets/Icons/star-64.png";
 import score_bg from "../assets/Containers/Small/pause-container-small.png";
 
 import gem_bg from "../assets/Rank_System_Components/Medium/ranking-highlight-medium.png";
-import gem_icon from "../assets/Icons/gem-1-64.png";
+import gem_icon from "../assets/Shop_Assets/gems-tier-1-medium.png";
 
 import Asap_Bold from "../assets/Fonts/Asap-Bold.ttf";
 import Righteous_Regular from "../assets/Fonts/Righteous-Regular.ttf";
@@ -32,6 +32,11 @@ import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-lar
 // import sidebar_bg from "../assets/Settings_Menu_Components/Large/vertical-scroll-bar-handle-large.png";
 import sidebar_bg from "../assets/leftsidebar.png";
 import arrow_icon from "../assets/Icons/arrowicon.png";
+
+import tool_bg from "../assets/Button_Images/Highlighted_Sprite/medium/square-purple-highlight-medium.png";
+
+import tool1_icon from "../assets/Icons/pickaxe-64.png";
+import tool2_icon from "../assets/Icons/solar-system-1-64.png";
 
 export const manifest: AssetsManifest = {
     bundles: [
@@ -61,6 +66,10 @@ export const manifest: AssetsManifest = {
 
                 sidebar_bg: sidebar_bg,
                 arrow_icon: arrow_icon,
+
+                tool_bg: tool_bg,
+                tool1_icon: tool1_icon,
+                tool2_icon: tool2_icon,
             },
         },
         {
