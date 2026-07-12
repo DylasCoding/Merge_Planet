@@ -1,49 +1,35 @@
-import { Sprite, Texture } from "pixi.js";
-import { Vector2 } from "../../../utils/math/Vector2";
+import { Container, Graphics, Sprite, Texture } from "pixi.js";
 import { type PlanetData } from "../data/PlanetData";
+import { rigidBody } from "../../Physics/Rigidbody";
 
-export class Planet {
+export class Planet extends Container {
     public readonly data: PlanetData;
     public readonly sprite: Sprite;
 
-    public position: Vector2;
-    public velocity: Vector2;
+    public planetRigidbody: rigidBody;
 
-    constructor(
-        data: PlanetData,
-        sprite: Sprite,
-        position: Vector2 = new Vector2(),
-        velocity: Vector2 = new Vector2(),
-    ) {
+    constructor(data: PlanetData, sprite: Sprite, xCoord: number, yCoord: number) {
+        super();
         this.data = data;
         this.sprite = sprite;
 
-        this.position = position;
-        this.velocity = velocity;
+        this.planetRigidbody = new rigidBody(xCoord, yCoord);
 
-        this.syncSpritePosition();
+        //temporary body for checking hitbox
+        const planetBody = new Graphics().circle(0, 0, this.data.radius).fill("green");
+
+        this.addChild(sprite);
+        this.addChild(planetBody);
+       
     }
+    update(deltaTime: number) {
+        this.planetRigidbody.update(deltaTime);
 
-    private syncSpritePosition(): void {
-        this.sprite.position.set(this.position.x, this.position.y);
+        this.position.set(this.planetRigidbody.position.x, this.planetRigidbody.position.y);
     }
-
     public setTexture(texture: Texture): void {
         this.sprite.texture = texture;
     }
-
-    public setPosition(x: number, y: number): void {
-        this.position.x = x;
-        this.position.y = y;
-
-        this.syncSpritePosition();
-    }
-
-    public setVelocity(vx: number, vy: number): void {
-        this.velocity.x = vx;
-        this.velocity.y = vy;
-    }
-
     public destroy(): void {
         this.sprite.destroy({
             texture: false,
