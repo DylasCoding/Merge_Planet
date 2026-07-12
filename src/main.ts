@@ -1,6 +1,7 @@
 import { Application, Assets, Sprite } from "pixi.js";
 import { Game } from "./Game";
 import { manifest } from "./core/manifest.ts";
+import { StorageManager } from "./core/StorageManager";
 import "./style.css";
 
 async function main() {
@@ -10,6 +11,8 @@ async function main() {
         resizeTo: window,
         background: "#fdfdfd",
     });
+
+    StorageManager.load();
 
     await Assets.init({ manifest });
     await Assets.loadBundle(["backgrounds", "fonts", "planets"]);
