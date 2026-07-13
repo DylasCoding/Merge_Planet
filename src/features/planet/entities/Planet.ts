@@ -17,6 +17,7 @@ export class Planet extends Container {
 
         this.position = position;
         this.velocity = velocity;
+        this.addChild(this.sprite);
     }
 
     public setTexture(texture: Texture): void {
@@ -32,5 +33,6 @@ export class Planet extends Container {
         this.sprite.destroy({
             children: true,
         });
+        this.removeChild(this.sprite);
     }
 }
