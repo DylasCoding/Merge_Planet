@@ -35,6 +35,8 @@ import tool2_icon from "../assets/Icons/solar-system-1-64.png";
 
 import highscore_icon from "../assets/Icons/crown-gold-64.png";
 
+import add_icon from "../assets/Picto_Icons/Dark_Purple/add-32.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -68,6 +70,7 @@ export const manifest: AssetsManifest = {
                 tool1_icon: tool1_icon,
                 tool2_icon: tool2_icon,
                 highscore_icon: highscore_icon,
+                add_icon: add_icon,
             },
         },
         {
