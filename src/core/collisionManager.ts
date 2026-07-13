@@ -2,11 +2,14 @@ import { Planet } from "../features/planet/entities/Planet";
 
 import { collisionResolve } from "../features/Physics/collisionResolve";
 import type { GameBox } from "../ui/components/GameBox";
+import type { mergeManager } from "./mergeManager";
 
 export class collisionManager {
     public listOfPlanetObjects!: Array<Planet>;
     public gameBox!: GameBox;
     public cResolver: collisionResolve;
+
+    public mergeManager!: mergeManager;
     constructor() {
         this.cResolver = new collisionResolve();
     }
@@ -57,11 +60,18 @@ export class collisionManager {
                 const planet2 = this.listOfPlanetObjects[j];
                 if (!this.detectCollisionPlanetWithPlanet(planet1, planet2)) continue;
                 this.cResolver.resolvePlanetWithPlanet(planet1, planet2);
+                if (this.mergeManager.checkingPlanetType(planet1, planet2))
+                    this.mergeManager.pushMergeQueue(planet1, planet2);
             }
         }
     }
-    setComponentForCollision(ListOfPlanetObjects: Array<Planet>, gameBox: GameBox) {
+    setComponentForCollision(
+        ListOfPlanetObjects: Array<Planet>,
+        gameBox: GameBox,
+        mergeManager: mergeManager,
+    ) {
         this.listOfPlanetObjects = ListOfPlanetObjects;
         this.gameBox = gameBox;
+        this.mergeManager = mergeManager;
     }
 }

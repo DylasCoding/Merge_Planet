@@ -10,6 +10,9 @@ import { MouseInputManager } from "../core/input/MouseInputManager.ts";
 import { PlanetInteractionManager } from "../features/planet/interaction/PlanetInteractionManager.ts";
 import { PlanetSpawner } from "../features/planet/spawn/PlanetSpawner.ts";
 import { PlanetDragController } from "../features/planet/interaction/PlanetDragController.ts";
+import type { Planet } from "../features/planet/entities/Planet.ts";
+import { collisionManager } from "../core/collisionManager.ts";
+import { mergeManager } from "../core/mergeManager.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -21,10 +24,11 @@ export class GameScene extends BaseScene {
     private mouseInputManager!: MouseInputManager;
     private interactionManager!: PlanetInteractionManager;
     private planetSpawner!: PlanetSpawner;
-
+    private CollisionManager!: collisionManager;
+    private mergeManager!: mergeManager;
     private currentDragController: PlanetDragController | null = null;
     private shouldSpawnNext = false;
-
+    private currentPlanet!: Planet;
     constructor(app: Application) {
         super(app);
     }
@@ -33,10 +37,13 @@ export class GameScene extends BaseScene {
         await Assets.loadBundle(["ui", "planets"]);
 
         this.gameBox = new GameBox();
+
         this.gameBox.position.set(this.app.screen.width / 2, this.app.screen.height / 1.65);
         this.world.addChild(this.gameBox);
+        console.log(this.gameBox.position);
 
         this.planetManager = new PlanetManager();
+        this.CollisionManager = new collisionManager();
         this.mouseInputManager = new MouseInputManager(this.app);
         this.interactionManager = new PlanetInteractionManager(this.mouseInputManager);
 
@@ -44,12 +51,20 @@ export class GameScene extends BaseScene {
         const queue = new PlanetSpawnQueue(randomizer, 3);
         const factory = new PlanetFactory();
 
+        this.mergeManager = new mergeManager(factory, this.planetManager, this);
+
         this.planetSpawner = new PlanetSpawner(
             queue,
             factory,
             this.planetManager,
             this.gameBox.getBoundsAsObject(),
             this.mouseInputManager,
+        );
+
+        this.CollisionManager.setComponentForCollision(
+            this.planetManager.planets,
+            this.gameBox,
+            this.mergeManager,
         );
 
         this.hud = new HUD(this.app);
@@ -61,6 +76,7 @@ export class GameScene extends BaseScene {
 
         this.mouseInputManager.onMouseClick(() => {
             if (this.currentDragController) {
+                this.planetManager.setDropPlanet(this.currentPlanet);
                 this.currentDragController.endDrag();
                 this.shouldSpawnNext = true;
             }
@@ -69,19 +85,22 @@ export class GameScene extends BaseScene {
 
     private spawnNextPlanet(): void {
         const { planet, dragController } = this.planetSpawner.spawn();
+        this.currentPlanet = planet;
         this.world.addChild(planet);
 
         this.currentDragController = dragController;
         this.interactionManager.setDraggedPlanet(dragController);
     }
 
-    public update(): void {
+    public update(deltaTime: number): void {
         if (this.shouldSpawnNext) {
             this.shouldSpawnNext = false;
             this.spawnNextPlanet();
             this.interactionManager.updateDrag();
         }
-
+        this.planetManager.update(deltaTime);
+        this.CollisionManager.update();
+        // this.mergeManager.update();
         this.interactionManager.updateDrag();
     }
 }

@@ -1,12 +1,17 @@
 import { Planet } from "../entities/Planet";
 
 export class PlanetManager {
-    private readonly planets: Planet[] = [];
+    public readonly planets: Array<Planet> = [];
 
+    public update(deltaTime: number) {
+        this.planets.forEach((planet) => planet.update(deltaTime));
+    }
     public add(planet: Planet): void {
         this.planets.push(planet);
     }
-
+    public setDropPlanet(Planet: Planet): void {
+        Planet.isDropPlanet = true;
+    }
     public remove(planet: Planet): void {
         const index = this.planets.indexOf(planet);
 

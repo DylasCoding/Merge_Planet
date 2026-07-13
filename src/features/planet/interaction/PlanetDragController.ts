@@ -38,7 +38,9 @@ export class PlanetDragController implements IPlanetDraggable {
     public setPosition(position: Vector2): void {
         this.position.copyFrom(position);
         this.clampPosition();
-        this.planet.position.set(this.position.x, this.position.y);
+
+        this.planet.planetRigidbody.position.x = this.position.x;
+        this.planet.planetRigidbody.position.y = this.position.y;
     }
 
     public getPosition(): Vector2 {
