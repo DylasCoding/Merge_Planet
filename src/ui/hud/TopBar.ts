@@ -23,6 +23,7 @@ export class TopBar extends PIXI.Container {
 
         this.score = new ScoreView();
         this.score.setScoreText(120);
+        this.score.setHighScoreText(1000);
 
         this.nextPlanet = new NextPlanetView();
         this.nextPlanet.setPlanetIcon(Sprite.from("planet2"));
