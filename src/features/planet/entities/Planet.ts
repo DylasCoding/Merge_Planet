@@ -20,7 +20,6 @@ export class Planet extends Container {
 
         this.addChild(sprite);
         this.addChild(planetBody);
-       
     }
     update(deltaTime: number) {
         this.planetRigidbody.update(deltaTime);
