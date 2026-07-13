@@ -13,14 +13,18 @@ export class GemView extends Container {
         this.gemText = new Text({
             text: "0",
             style: {
-                fontFamily: Font.Asap_Bold,
+                fontFamily: Font.Righteous_Regular,
                 fill: 0x80ffff,
                 fontSize: 24,
+                stroke: {
+                    color: 0x000000,
+                    width: 2,
+                },
             },
         });
 
-        bg.scale.x = 0.35;
-        bg.scale.y = 0.5;
+        bg.scale.x = 1;
+        bg.scale.y = 0.7;
 
         icon.scale.set(0.5);
 
@@ -32,7 +36,7 @@ export class GemView extends Container {
 
         icon.position.set(25, bg.height / 2);
 
-        this.gemText.position.set(bg.width * 0.65, bg.height / 2);
+        this.gemText.position.set(bg.width * 0.5, bg.height / 2);
 
         this.addChild(bg, icon, this.gemText);
     }

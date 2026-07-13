@@ -17,7 +17,7 @@ export class LeftSideBar extends Container {
         this.bg = Sprite.from("sidebar_bg");
         this.bg.anchor.set(0, 0.5);
         this.bg.scale.x = 1;
-        this.bg.scale.y = 0.8;
+        this.bg.scale.y = 0.75;
         this.bg.x = leftPadding;
         this.bg.y = app.screen.height / 1.75;
 
