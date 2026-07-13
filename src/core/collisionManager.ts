@@ -1,29 +1,32 @@
 import { Planet } from "../features/planet/entities/Planet";
-import { planetBox } from "../features/planet/entities/planetBox";
+
 import { collisionResolve } from "../features/Physics/collisionResolve";
+import type { GameBox } from "../ui/components/GameBox";
 
 export class collisionManager {
     public listOfPlanetObjects!: Array<Planet>;
-    public planetBox!: planetBox;
+    public gameBox!: GameBox;
     public cResolver: collisionResolve;
     constructor() {
         this.cResolver = new collisionResolve();
     }
     update() {
-        for (let i = 0; i < 8; i++) {
+        for (const planet of this.listOfPlanetObjects) {
+            planet.planetRigidbody.isGrounded = false;
+        }
+        for (let i = 0; i < 15; i++) {
             this.resolveCollisionPlanetWithPlanet();
         }
         this.resolveCollisionPlanetWithBox();
     }
     //function: check if planet collides with box and return boolean value
-    detectCollisionPlanetWithBox(planet: Planet, planetBox: planetBox) {
+    detectCollisionPlanetWithBox(planet: Planet, gameBox: GameBox) {
         return (
             planet.planetRigidbody.position.y + planet.data.radius >=
-                planetBox.y + planetBox.boxHeight / 2 ||
-            planet.planetRigidbody.position.x - planet.data.radius <=
-                planetBox.x - planetBox.boxWidth / 2 ||
+                gameBox.gameBoxBounds.y + gameBox.gameBoxBounds.height ||
+            planet.planetRigidbody.position.x - planet.data.radius <= gameBox.gameBoxBounds.x ||
             planet.planetRigidbody.position.x + planet.data.radius >=
-                planetBox.x + planetBox.boxWidth / 2
+                gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width
         );
     }
 
@@ -39,9 +42,9 @@ export class collisionManager {
     //function: resolve the collision between planet and box
     resolveCollisionPlanetWithBox() {
         for (let i = 0; i < this.listOfPlanetObjects.length; i++) {
-            if (!this.detectCollisionPlanetWithBox(this.listOfPlanetObjects[i], this.planetBox))
+            if (!this.detectCollisionPlanetWithBox(this.listOfPlanetObjects[i], this.gameBox))
                 continue;
-            this.cResolver.resolvePlanetWithBox(this.listOfPlanetObjects[i], this.planetBox);
+            this.cResolver.resolvePlanetWithBox(this.listOfPlanetObjects[i], this.gameBox);
         }
     }
 
@@ -57,8 +60,8 @@ export class collisionManager {
             }
         }
     }
-    setComponentForCollision(ListOfPlanetObjects: Array<Planet>, planetBox: planetBox) {
+    setComponentForCollision(ListOfPlanetObjects: Array<Planet>, gameBox: GameBox) {
         this.listOfPlanetObjects = ListOfPlanetObjects;
-        this.planetBox = planetBox;
+        this.gameBox = gameBox;
     }
 }

@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Ticker } from "pixi.js";
 import { GameScene } from "./scenes/GameScene.ts";
 
 export class Game {
@@ -15,8 +15,9 @@ export class Game {
 
         this.app.stage.addChild(this.gameScene);
 
-        this.app.ticker.add(() => {
-            this.gameScene.update();
+        this.app.ticker.add((ticker) => {
+            const deltaTime = ticker.deltaMS / 1000;
+            this.gameScene.update(deltaTime);
         });
     }
 }

@@ -1,27 +1,63 @@
+import type { GameBox } from "../../ui/components/GameBox";
 import type { Planet } from "../planet/entities/Planet";
-import type { planetBox } from "../planet/entities/planetBox";
 
 export class collisionResolve {
-    resolvePlanetWithBox(planet: Planet, planetBox: planetBox) {
-        const left = planetBox.x - planetBox.boxWidth / 2;
-        const right = planetBox.x + planetBox.boxWidth / 2;
-        const bottom = planetBox.y + planetBox.boxHeight / 2;
+    resolvePlanetWithBox(planet: Planet, gameBox: GameBox) {
+        const left = gameBox.gameBoxBounds.x;
+        const right = gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width;
+        const bottom = gameBox.gameBoxBounds.y + gameBox.gameBoxBounds.height;
         const planetRadius = planet.data.radius;
         const planetPositionX = planet.planetRigidbody.position.x;
         const planetPositionY = planet.planetRigidbody.position.y;
         if (planetPositionX - planetRadius <= left) {
             planet.planetRigidbody.position.x = left + planetRadius;
+            planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
+
+            planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionX + planetRadius >= right) {
             planet.planetRigidbody.position.x = right - planetRadius;
+            planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
+
+            planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionY + planetRadius >= bottom) {
+            planet.planetRigidbody.isGrounded = true;
             planet.planetRigidbody.position.y = bottom - planetRadius;
-            if (Math.abs(planet.planetRigidbody.velocity.y) < 0.2)
+
+            if (Math.abs(planet.planetRigidbody.velocity.y) < 0.2) {
                 planet.planetRigidbody.velocity.y = 0;
-            else planet.planetRigidbody.velocity.y *= -planet.planetRigidbody.restitution;
+            } else {
+                if (Math.abs(planet.planetRigidbody.velocity.x) < 0.05) {
+                    planet.planetRigidbody.velocity.x = 0;
+                    planet.planetRigidbody.angularVelocity = 0;
+                }
+                planet.planetRigidbody.angularVelocity =
+                    planet.planetRigidbody.velocity.x / planet.data.radius;
+                planet.planetRigidbody.velocity.y *= -planet.planetRigidbody.restitution;
+            }
+
+            planet.planetRigidbody.velocity.x *= 0.99;
+            const planetRigidbody = planet.planetRigidbody;
+
+            if (
+                Math.abs(planetRigidbody.velocity.x) < 0.05 &&
+                Math.abs(planetRigidbody.velocity.y) < 0.05
+            ) {
+                planetRigidbody.sleepTimer++;
+            } else {
+                planetRigidbody.sleepTimer = 0;
+            }
+
+            if (planetRigidbody.sleepTimer > 20) {
+                planetRigidbody.isSleeping = true;
+
+                planetRigidbody.velocity.x = 0;
+                planetRigidbody.velocity.y = 0;
+
+                planetRigidbody.angularVelocity = 0;
+            }
         }
-        planet.planetRigidbody.velocity.x *= 0.8;
     }
     resolvePlanetWithPlanet(planet1: Planet, planet2: Planet) {
         const normal = this.calculateNormal(planet1, planet2);
@@ -52,8 +88,8 @@ export class collisionResolve {
             normal.ny,
         );
         planet1.planetRigidbody.position.x -= positionValues.cx * InverseMass1;
-        planet1.planetRigidbody.position.y -= positionValues.cy * InverseMass2;
-        planet2.planetRigidbody.position.x += positionValues.cx * InverseMass1;
+        planet1.planetRigidbody.position.y -= positionValues.cy * InverseMass1;
+        planet2.planetRigidbody.position.x += positionValues.cx * InverseMass2;
         planet2.planetRigidbody.position.y += positionValues.cy * InverseMass2;
     }
     applyFriction(
@@ -62,6 +98,12 @@ export class collisionResolve {
         normal: { nx: number; ny: number; distance: number },
         j: number,
     ) {
+        // planet1.planetRigidbody.isSleeping = false;
+        // planet2.planetRigidbody.isSleeping = false;
+
+        // planet1.planetRigidbody.sleepTimer = 0;
+        // planet2.planetRigidbody.sleepTimer = 0;
+
         const InverseMass1 = 1 / planet1.data.mass;
         const InverseMass2 = 1 / planet2.data.mass;
         const frictionValues = this.calculateFriction(
@@ -102,6 +144,10 @@ export class collisionResolve {
 
         planet2.planetRigidbody.velocity.x += result.impulseX * inverseMass2;
         planet2.planetRigidbody.velocity.y += result.impulseY * inverseMass2;
+        const spin = Math.abs(result.j) * 0.0000000001;
+
+        planet1.planetRigidbody.angularVelocity -= spin;
+        planet2.planetRigidbody.angularVelocity += spin;
 
         return result.j;
     }
@@ -182,7 +228,7 @@ export class collisionResolve {
         ny: number,
     ) {
         const k_slop = 0.1;
-        const k_percent = 0.8;
+        const k_percent = 0.7;
         const overLap = planet1.data.radius + planet2.data.radius - distance;
         const posCorrection =
             (Math.max(overLap - k_slop, 0) / (InverseMass1 + InverseMass2)) * k_percent;
