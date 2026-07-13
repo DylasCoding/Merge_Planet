@@ -1,6 +1,28 @@
 import type { Planet } from "../planet/entities/Planet";
+import type { planetBox } from "../planet/entities/planetBox";
 
 export class collisionResolve {
+    resolvePlanetWithBox(planet: Planet, planetBox: planetBox) {
+        const left = planetBox.x - planetBox.boxWidth / 2;
+        const right = planetBox.x + planetBox.boxWidth / 2;
+        const bottom = planetBox.y + planetBox.boxHeight / 2;
+        const planetRadius = planet.data.radius;
+        const planetPositionX = planet.planetRigidbody.position.x;
+        const planetPositionY = planet.planetRigidbody.position.y;
+        if (planetPositionX - planetRadius <= left) {
+            planet.planetRigidbody.position.x = left + planetRadius;
+        }
+        if (planetPositionX + planetRadius >= right) {
+            planet.planetRigidbody.position.x = right - planetRadius;
+        }
+        if (planetPositionY + planetRadius >= bottom) {
+            planet.planetRigidbody.position.y = bottom - planetRadius;
+            if (Math.abs(planet.planetRigidbody.velocity.y) < 0.2)
+                planet.planetRigidbody.velocity.y = 0;
+            else planet.planetRigidbody.velocity.y *= -planet.planetRigidbody.restitution;
+        }
+        planet.planetRigidbody.velocity.x *= 0.8;
+    }
     resolvePlanetWithPlanet(planet1: Planet, planet2: Planet) {
         const normal = this.calculateNormal(planet1, planet2);
 
@@ -107,7 +129,7 @@ export class collisionResolve {
 
         const nvelocity = rvx * nx + rvy * ny;
 
-        if (nvelocity > 0) return;
+        if (nvelocity > 0) return null;
         let eRestutition = Math.min(
             planet2.planetRigidbody.restitution,
             planet1.planetRigidbody.restitution,
