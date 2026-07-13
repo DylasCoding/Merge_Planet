@@ -10,6 +10,8 @@ async function main() {
     await app.init({
         resizeTo: window,
         background: "#fdfdfd",
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true,
     });
 
     StorageManager.load();
