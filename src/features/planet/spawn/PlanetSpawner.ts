@@ -41,7 +41,8 @@ export class PlanetSpawner {
             level,
             position: spawnPosition,
         });
-
+        planet.planetRigidbody.isSleeping = false;
+        planet.planetRigidbody.sleepTimer = 0;
         const dragController = new PlanetDragController(planet, this.mouseTracker, this.bounds);
 
         this.manager.add(planet);

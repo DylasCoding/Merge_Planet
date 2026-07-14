@@ -1,4 +1,4 @@
-import { Container, Graphics, Sprite, Texture } from "pixi.js";
+import { Container, Sprite, Texture } from "pixi.js";
 import { type PlanetData } from "../data/PlanetData";
 import { rigidBody } from "../../Physics/Rigidbody";
 import type { PlanetOptions } from "../types/PlanetOptions";
@@ -9,6 +9,7 @@ export class Planet extends Container {
 
     public planetRigidbody: rigidBody;
     public isDropPlanet: boolean;
+    public isMerge: boolean;
     constructor(options: PlanetOptions) {
         super();
         const { data, sprite } = options;
@@ -16,13 +17,10 @@ export class Planet extends Container {
         this.data = data;
         this.sprite = sprite;
         this.isDropPlanet = false;
-        this.planetRigidbody = new rigidBody(0, 0);
-
-        //temporary body for checking hitbox
-        // const planetBody = new Graphics().circle(0, 0, this.data.radius).fill("green");
+        this.isMerge = false;
+        this.planetRigidbody = new rigidBody(options.position!.x, options.position!.y);
 
         this.addChild(this.sprite);
-        // this.addChild(planetBody);
     }
     update(deltaTime: number) {
         if (this.isDropPlanet) {

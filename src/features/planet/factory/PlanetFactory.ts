@@ -16,7 +16,7 @@ export class PlanetFactory {
         const sprite = new Sprite(texture);
 
         sprite.anchor.set(0.5);
-        sprite.scale.set(0.5);
+        sprite.scale.set(0.02 * data.radius);
 
         return new Planet({
             data,

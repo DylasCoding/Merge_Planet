@@ -60,8 +60,10 @@ export class collisionManager {
                 const planet2 = this.listOfPlanetObjects[j];
                 if (!this.detectCollisionPlanetWithPlanet(planet1, planet2)) continue;
                 this.cResolver.resolvePlanetWithPlanet(planet1, planet2);
-                if (this.mergeManager.checkingPlanetType(planet1, planet2))
+                if (this.mergeManager.checkingPlanetType(planet1, planet2)) {
+                    console.log("MERGE DETECTED!");
                     this.mergeManager.pushMergeQueue(planet1, planet2);
+                }
             }
         }
     }

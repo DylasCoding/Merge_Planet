@@ -16,9 +16,16 @@ import gem_icon from "../assets/Shop_Assets/gems-tier-1-medium.png";
 import Asap_Bold from "../assets/Fonts/Asap-Bold.ttf";
 import Righteous_Regular from "../assets/Fonts/Righteous-Regular.ttf";
 
-import planet1 from "../assets/Icons/earth-128.png";
-import planet2 from "../assets/Icons/full-moon-128.png";
-import planet3 from "../assets/Icons/jupiter-128.png";
+import planet1 from "../assets/Icons/mercury-128.png";
+import planet2 from "../assets/Icons/venus-128.png";
+import planet3 from "../assets/Icons/earth-128.png";
+import planet4 from "../assets/Icons/mars-128.png";
+import planet5 from "../assets/Icons/jupiter-128.png";
+import planet6 from "../assets/Icons/saturn-128.png";
+import planet7 from "../assets/Icons/uranus-128.png";
+import planet8 from "../assets/Icons/neptune-128.png";
+import planet9 from "../assets/Icons/sun-128.png";
+import planet10 from "../assets/Icons/full-moon-128.png";
 
 import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-large 1.png";
 
@@ -76,13 +83,13 @@ export const manifest: AssetsManifest = {
                 planet1: planet1,
                 planet2: planet2,
                 planet3: planet3,
-                planet4: planet3,
-                planet5: planet3,
-                planet6: planet3,
-                planet7: planet3,
-                planet8: planet3,
-                planet9: planet3,
-                planet10: planet3,
+                planet4: planet4,
+                planet5: planet5,
+                planet6: planet6,
+                planet7: planet7,
+                planet8: planet8,
+                planet9: planet9,
+                planet10: planet10,
             },
         },
         {
