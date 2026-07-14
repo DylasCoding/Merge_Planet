@@ -1,4 +1,4 @@
-import { Application, Ticker } from "pixi.js";
+import { Application } from "pixi.js";
 import { GameScene } from "./scenes/GameScene.ts";
 
 export class Game {

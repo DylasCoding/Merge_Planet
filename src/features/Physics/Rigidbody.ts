@@ -24,16 +24,19 @@ export class rigidBody {
         if (this.isSleeping) return;
 
         this.isGrounded = false;
-        if(!this.isGrounded){
+        if (!this.isGrounded) {
             this.velocity.y += this.fallingSpeed * this.gravity * dt;
-        }
-        else{
+        } else {
             this.velocity.y = 0;
         }
         this.position.x += this.velocity.x * dt;
         this.position.y += this.velocity.y * dt;
 
         this.angularVelocity *= 0.98;
+
+        if (Math.abs(this.angularVelocity) < 0.2) {
+            this.angularVelocity = 0;
+        }
         this.rotation += this.angularVelocity * dt;
     }
 }
