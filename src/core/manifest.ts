@@ -36,6 +36,14 @@ import tool2_icon from "../assets/Icons/solar-system-1-64.png";
 import highscore_icon from "../assets/Icons/crown-gold-64.png";
 
 import add_icon from "../assets/Picto_Icons/Dark_Purple/add-32.png";
+import setting_icon from "../assets/Picto_Icons/White/settings-64.png";
+import setting_close from "../assets/Picto_Icons/White/cross-64.png";
+import setting_panel from "../assets/Containers/Large/setting-container-large.png";
+import sound_icon from "../assets/Picto_Icons/White/sound-64.png";
+import music_icon from "../assets/Picto_Icons/White/music-64.png";
+import sound_bar from "../assets/Settings_Menu_Components/Large/sound-bar-full-large.png";
+import sound_container from "../assets/Settings_Menu_Components/Large/sound-bar-container-large.png";
+import panel_line from "../assets/Settings_Menu_Components/Medium/settings-divider-medium.png";
 
 export const manifest: AssetsManifest = {
     bundles: [
@@ -71,6 +79,14 @@ export const manifest: AssetsManifest = {
                 tool2_icon: tool2_icon,
                 highscore_icon: highscore_icon,
                 add_icon: add_icon,
+                setting_icon: setting_icon,
+                setting_close: setting_close,
+                setting_panel: setting_panel,
+                sound_icon: sound_icon,
+                music_icon: music_icon,
+                sound_bar: sound_bar,
+                sound_container: sound_container,
+                panel_line: panel_line,
             },
         },
         {
