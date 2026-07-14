@@ -27,8 +27,10 @@ export class SettingsOverlay extends Container {
         const panelBg = Sprite.from("setting_panel");
         panelBg.anchor.set(0);
         panelBg.position.set(this.app.screen.width / 6 + 50, 100);
-        panelBg.scale.set(0.6, 0.6);
+        const targetWidth = this.app.screen.width * 0.6;
+        const scale = targetWidth / panelBg.width;
 
+        panelBg.scale.set(scale);
         this.closeBtn = new Button("", Sprite.from("setting_close"));
         this.closeBtn.scale.set(1);
         this.closeBtn.position.set(panelBg.x + panelBg.width - this.closeBtn.width, panelBg.y + 30);
