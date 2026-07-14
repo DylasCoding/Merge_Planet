@@ -11,7 +11,7 @@ export class HUD extends Container {
     private leftSideBar: LeftSideBar;
     private rightSideBar: RightSideBar;
 
-    constructor(app: Application, onOpenSettings: () => void) {
+    constructor(app: Application, onOpenSettings: () => void, onOpenSkinShop: () => void) {
         super();
         this.topBar = new TopBar(app);
         this.bottomProgress = new BottomProgress();
@@ -20,6 +20,7 @@ export class HUD extends Container {
 
         this.leftSideBar.pointToPlanet(2);
         this.topBar.settingsButton.onClick(onOpenSettings);
+        this.topBar.skinButton.onClick(onOpenSkinShop);
 
         this.addChild(this.topBar);
         this.addChild(this.bottomProgress);

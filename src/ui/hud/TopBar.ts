@@ -8,7 +8,7 @@ export class TopBar extends Container {
     private score: ScoreView;
     private gem: GemView;
     private nextPlanet: NextPlanetView;
-    private skinButton: Button;
+    public skinButton: Button;
     public settingsButton: Button;
 
     private readonly leftArea = new Container();
@@ -35,9 +35,9 @@ export class TopBar extends Container {
         this.nextPlanet.setPlanetIcon(Sprite.from("planet2"));
 
         this.skinButton = new Button("SKIN", Sprite.from("button_yellow"));
-        this.skinButton.onClick(() => {
-            console.log("abc");
-        });
+        // this.skinButton.onClick(() => {
+        //     console.log("abc");
+        // });
 
         this.leftArea.position.set(20, 20);
         this.centerArea.position.set(app.screen.width / 2, 20);
