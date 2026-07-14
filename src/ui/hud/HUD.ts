@@ -1,17 +1,17 @@
-import * as PIXI from "pixi.js";
+import { Container } from "pixi.js";
 import { TopBar } from "./TopBar";
 import { BottomProgress } from "./BottomProgress";
 import { Application } from "pixi.js";
 import { LeftSideBar } from "./LeftSideBar.ts";
 import { RightSideBar } from "./RightSideBar.ts";
 
-export class HUD extends PIXI.Container {
+export class HUD extends Container {
     private topBar: TopBar;
     private bottomProgress: BottomProgress;
     private leftSideBar: LeftSideBar;
     private rightSideBar: RightSideBar;
 
-    constructor(app: Application) {
+    constructor(app: Application, onOpenSettings: () => void) {
         super();
         this.topBar = new TopBar(app);
         this.bottomProgress = new BottomProgress();
@@ -19,6 +19,7 @@ export class HUD extends PIXI.Container {
         this.rightSideBar = new RightSideBar(app);
 
         this.leftSideBar.pointToPlanet(2);
+        this.topBar.settingsButton.onClick(onOpenSettings);
 
         this.addChild(this.topBar);
         this.addChild(this.bottomProgress);
