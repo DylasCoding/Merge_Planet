@@ -52,6 +52,9 @@ import sound_bar from "../assets/Settings_Menu_Components/Large/sound-bar-full-l
 import sound_container from "../assets/Settings_Menu_Components/Large/sound-bar-container-large.png";
 import panel_line from "../assets/Settings_Menu_Components/Medium/settings-divider-medium.png";
 
+import shop_bg from "../assets/Grid_Components/Medium/item-shop-container-medium.png";
+import skin1 from "../assets/Icons/astronaut-128.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -94,6 +97,8 @@ export const manifest: AssetsManifest = {
                 sound_bar: sound_bar,
                 sound_container: sound_container,
                 panel_line: panel_line,
+
+                shop_bg: shop_bg,
             },
         },
         {
@@ -109,6 +114,12 @@ export const manifest: AssetsManifest = {
                 planet8: planet8,
                 planet9: planet9,
                 planet10: planet10,
+            },
+        },
+        {
+            name: "skin1",
+            assets: {
+                skin1: skin1,
             },
         },
         {
