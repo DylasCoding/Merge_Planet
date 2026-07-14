@@ -5,7 +5,7 @@ import type { PlanetManager } from "../features/planet/manager/PlanetManager";
 import type { MergeRequest } from "../features/planet/types/mergeType";
 import type { GameScene } from "../scenes/GameScene";
 
-export class mergeManager {
+export class MergeManager {
     private MergePlanet: MergePlanet;
     private mergeQueue: MergeRequest[] = [];
     public planetManager: PlanetManager;

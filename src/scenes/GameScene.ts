@@ -11,9 +11,9 @@ import { PlanetInteractionManager } from "../features/planet/interaction/PlanetI
 import { PlanetSpawner } from "../features/planet/spawn/PlanetSpawner.ts";
 import { PlanetDragController } from "../features/planet/interaction/PlanetDragController.ts";
 import type { Planet } from "../features/planet/entities/Planet.ts";
-import { collisionManager } from "../core/collisionManager.ts";
-import { mergeManager } from "../core/mergeManager.ts";
-import { timerSpawner } from "../features/planet/spawn/timerSpawner.ts";
+import { CollisionManager } from "../core/collisionManager.ts";
+import { MergeManager } from "../core/mergeManager.ts";
+import { TimerSpawner } from "../features/planet/spawn/timerSpawner.ts";
 import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
 
@@ -29,11 +29,11 @@ export class GameScene extends BaseScene {
     private mouseInputManager!: MouseInputManager;
     private interactionManager!: PlanetInteractionManager;
     private planetSpawner!: PlanetSpawner;
-    private CollisionManager!: collisionManager;
-    private mergeManager!: mergeManager;
+    private CollisionManager!: CollisionManager;
+    private mergeManager!: MergeManager;
 
     private currentDragController: PlanetDragController | null = null;
-    private timer!: timerSpawner;
+    private timer!: TimerSpawner;
     private shouldSpawnNext = false;
     private currentPlanet!: Planet;
 
@@ -51,7 +51,7 @@ export class GameScene extends BaseScene {
         console.log(this.gameBox.position);
 
         this.planetManager = new PlanetManager();
-        this.CollisionManager = new collisionManager();
+        this.CollisionManager = new CollisionManager();
         this.mouseInputManager = new MouseInputManager(this.app);
         this.interactionManager = new PlanetInteractionManager(this.mouseInputManager);
 
@@ -59,10 +59,10 @@ export class GameScene extends BaseScene {
         const queue = new PlanetSpawnQueue(randomizer, 3);
         const factory = new PlanetFactory();
 
-        this.timer = new timerSpawner();
+        this.timer = new TimerSpawner();
         this.timer.setTimer(0.7);
 
-        this.mergeManager = new mergeManager(factory, this.planetManager, this);
+        this.mergeManager = new MergeManager(factory, this.planetManager, this);
 
         this.planetSpawner = new PlanetSpawner(
             queue,

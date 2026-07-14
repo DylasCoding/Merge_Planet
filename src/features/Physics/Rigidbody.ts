@@ -1,6 +1,6 @@
 import { Vector2 } from "../../utils/math/Vector2";
 
-export class rigidBody {
+export class RigidBody {
     public position: Vector2;
     public velocity: Vector2;
     public fallingSpeed: number;

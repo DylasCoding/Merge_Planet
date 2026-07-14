@@ -1,7 +1,7 @@
 import type { GameBox } from "../../ui/components/GameBox";
 import type { Planet } from "../planet/entities/Planet";
 
-export class collisionResolve {
+export class CollisionResolve {
     resolvePlanetWithBox(planet: Planet, gameBox: GameBox) {
         const left = gameBox.gameBoxBounds.x;
         const right = gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width;

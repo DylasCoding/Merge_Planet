@@ -1,17 +1,17 @@
 import { Planet } from "../features/planet/entities/Planet";
 
-import { collisionResolve } from "../features/Physics/collisionResolve";
+import { CollisionResolve } from "../features/Physics/collisionResolve";
 import type { GameBox } from "../ui/components/GameBox";
-import type { mergeManager } from "./mergeManager";
+import type { MergeManager } from "./mergeManager";
 
-export class collisionManager {
+export class CollisionManager {
     public listOfPlanetObjects!: Array<Planet>;
     public gameBox!: GameBox;
-    public cResolver: collisionResolve;
+    public cResolver: CollisionResolve;
 
-    public mergeManager!: mergeManager;
+    public mergeManager!: MergeManager;
     constructor() {
-        this.cResolver = new collisionResolve();
+        this.cResolver = new CollisionResolve();
     }
     update() {
         for (const planet of this.listOfPlanetObjects) {
@@ -70,7 +70,7 @@ export class collisionManager {
     setComponentForCollision(
         ListOfPlanetObjects: Array<Planet>,
         gameBox: GameBox,
-        mergeManager: mergeManager,
+        mergeManager: MergeManager,
     ) {
         this.listOfPlanetObjects = ListOfPlanetObjects;
         this.gameBox = gameBox;
