@@ -42,7 +42,7 @@ export class GameScene extends BaseScene {
     }
 
     public async initialize(): Promise<void> {
-        await Assets.loadBundle(["ui", "planets"]);
+        await Assets.loadBundle(["ui", "planets", "skin1"]);
 
         this.gameBox = new GameBox();
 
@@ -52,7 +52,7 @@ export class GameScene extends BaseScene {
 
         this.planetManager = new PlanetManager();
         this.CollisionManager = new collisionManager();
-        this.mouseInputManager = new MouseInputManager(this.app);
+        this.mouseInputManager = new MouseInputManager(this.app, this.gameBox.getBoundsAsObject());
         this.interactionManager = new PlanetInteractionManager(this.mouseInputManager);
 
         const randomizer = new PlanetRandomizer();

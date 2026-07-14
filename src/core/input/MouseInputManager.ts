@@ -7,9 +7,11 @@ export class MouseInputManager implements IMouseTracker {
     private moveCallbacks: Array<(position: Vector2) => void> = [];
     private clickCallbacks: Array<(position: Vector2) => void> = [];
     private readonly canvas: HTMLCanvasElement | null;
+    private readonly bounds: { x: number; y: number; width: number; height: number };
 
-    constructor(app: Application) {
+    constructor(app: Application, bounds: { x: number; y: number; width: number; height: number }) {
         this.canvas = this.resolveCanvas(app);
+        this.bounds = bounds;
         this.setupListeners();
     }
 
@@ -24,6 +26,15 @@ export class MouseInputManager implements IMouseTracker {
         return null;
     }
 
+    private isInsideBounds(position: Vector2): boolean {
+        return (
+            position.x >= this.bounds.x &&
+            position.x <= this.bounds.x + this.bounds.width &&
+            position.y >= this.bounds.y &&
+            position.y <= this.bounds.y + this.bounds.height
+        );
+    }
+
     private setupListeners(): void {
         if (!this.canvas) return;
 
@@ -33,7 +44,9 @@ export class MouseInputManager implements IMouseTracker {
             const y = event.clientY - rect.top;
 
             this.mousePosition.set(x, y);
+
             const position = new Vector2(x, y);
+            if (!this.isInsideBounds(position)) return;
 
             for (const callback of this.moveCallbacks) {
                 callback(position);
@@ -44,12 +57,14 @@ export class MouseInputManager implements IMouseTracker {
             const rect = this.canvas!.getBoundingClientRect();
             const position = new Vector2(event.clientX - rect.left, event.clientY - rect.top);
 
+            this.mousePosition.set(position.x, position.y);
+            if (!this.isInsideBounds(position)) return;
+
             for (const callback of this.clickCallbacks) {
                 callback(position);
             }
         });
 
-        //scroll block
         this.canvas.addEventListener("touchstart", (event) => event.preventDefault(), {
             passive: false,
         });
