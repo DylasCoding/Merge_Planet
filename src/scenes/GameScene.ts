@@ -13,6 +13,7 @@ import { PlanetDragController } from "../features/planet/interaction/PlanetDragC
 import type { Planet } from "../features/planet/entities/Planet.ts";
 import { collisionManager } from "../core/collisionManager.ts";
 import { mergeManager } from "../core/mergeManager.ts";
+import { timerSpawner } from "../features/planet/spawn/timerSpawner.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -26,9 +27,12 @@ export class GameScene extends BaseScene {
     private planetSpawner!: PlanetSpawner;
     private CollisionManager!: collisionManager;
     private mergeManager!: mergeManager;
+
     private currentDragController: PlanetDragController | null = null;
+    private timer!: timerSpawner;
     private shouldSpawnNext = false;
     private currentPlanet!: Planet;
+
     constructor(app: Application) {
         super(app);
     }
@@ -50,6 +54,9 @@ export class GameScene extends BaseScene {
         const randomizer = new PlanetRandomizer();
         const queue = new PlanetSpawnQueue(randomizer, 3);
         const factory = new PlanetFactory();
+
+        this.timer = new timerSpawner();
+        this.timer.setTimer(0.7);
 
         this.mergeManager = new mergeManager(factory, this.planetManager, this);
 
@@ -79,6 +86,7 @@ export class GameScene extends BaseScene {
                 this.planetManager.setDropPlanet(this.currentPlanet);
                 this.currentDragController.endDrag();
                 this.shouldSpawnNext = true;
+                this.timer.turnTimer();
             }
         });
     }
@@ -91,16 +99,24 @@ export class GameScene extends BaseScene {
         this.currentDragController = dragController;
         this.interactionManager.setDraggedPlanet(dragController);
     }
-
+    public addPlanet(planet: Planet) {
+        this.world.addChild(planet);
+    }
+    public removePlanet(planet1: Planet, planet2: Planet) {
+        this.world.removeChild(planet1);
+        this.world.removeChild(planet2);
+    }
     public update(deltaTime: number): void {
-        if (this.shouldSpawnNext) {
+        if (this.shouldSpawnNext && this.timer.timeUp()) {
+            this.timer.turnTimer();
             this.shouldSpawnNext = false;
             this.spawnNextPlanet();
             this.interactionManager.updateDrag();
         }
         this.planetManager.update(deltaTime);
         this.CollisionManager.update();
-        // this.mergeManager.update();
+        this.mergeManager.update();
+        this.timer.update(deltaTime);
         this.interactionManager.updateDrag();
     }
 }
