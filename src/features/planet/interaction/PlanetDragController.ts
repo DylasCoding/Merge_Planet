@@ -40,7 +40,7 @@ export class PlanetDragController implements IPlanetDraggable {
         this.clampPosition();
 
         this.planet.planetRigidbody.position.x = this.position.x;
-        this.planet.planetRigidbody.position.y = this.position.y;
+        this.planet.planetRigidbody.position.y = this.boundingBox.y;
     }
 
     public getPosition(): Vector2 {
