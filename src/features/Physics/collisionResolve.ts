@@ -12,14 +12,14 @@ export class collisionResolve {
         if (planetPositionX - planetRadius <= left) {
             planet.planetRigidbody.position.x = left + planetRadius;
             planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
-
-            planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
+            if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
+                planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionX + planetRadius >= right) {
             planet.planetRigidbody.position.x = right - planetRadius;
             planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
-
-            planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
+            if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
+                planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionY + planetRadius >= bottom) {
             planet.planetRigidbody.isGrounded = true;
@@ -28,7 +28,7 @@ export class collisionResolve {
             if (Math.abs(planet.planetRigidbody.velocity.y) < 0.2) {
                 planet.planetRigidbody.velocity.y = 0;
             } else {
-                if (Math.abs(planet.planetRigidbody.velocity.x) < 0.05) {
+                if (Math.abs(planet.planetRigidbody.velocity.x) < 1) {
                     planet.planetRigidbody.velocity.x = 0;
                     planet.planetRigidbody.angularVelocity = 0;
                 }
@@ -144,10 +144,10 @@ export class collisionResolve {
 
         planet2.planetRigidbody.velocity.x += result.impulseX * inverseMass2;
         planet2.planetRigidbody.velocity.y += result.impulseY * inverseMass2;
-        const spin = Math.abs(result.j) * 0.0000000001;
-        console.log(spin);
-        planet1.planetRigidbody.angularVelocity -= spin;
-        planet2.planetRigidbody.angularVelocity += spin;
+        // const spin = Math.abs(result.j) * 0.0000000001;
+        // console.log(spin);
+        // planet1.planetRigidbody.angularVelocity -= spin;
+        // planet2.planetRigidbody.angularVelocity += spin;
 
         return result.j;
     }
@@ -228,7 +228,7 @@ export class collisionResolve {
         ny: number,
     ) {
         const k_slop = 0.1;
-        const k_percent = 0.7;
+        const k_percent = 1.0;
         const overLap = planet1.data.radius + planet2.data.radius - distance;
         const posCorrection =
             (Math.max(overLap - k_slop, 0) / (InverseMass1 + InverseMass2)) * k_percent;

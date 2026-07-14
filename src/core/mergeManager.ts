@@ -40,6 +40,7 @@ export class mergeManager {
 
             this.planetManager.add(newMergePlanet!);
             this.gameScene.addPlanet(newMergePlanet!);
+            this.forceImpulsePlanet(newMergePlanet);
             this.gameScene.removePlanet(request.planet1, request.planet2);
         }
         this.mergeQueue.length = 0;
@@ -50,6 +51,25 @@ export class mergeManager {
                 this.gameScene.removeChild(this.planetManager.getAll()[i]);
                 this.planetManager.remove(this.planetManager.getAll()[i]);
             }
+        }
+    }
+    public forceImpulsePlanet(mergePlanet: Planet) {
+        for (const planet of this.planetManager.getAll()) {
+            if (planet === mergePlanet) continue;
+            if (planet.isMerge) continue;
+
+            const dx = planet.planetRigidbody.position.x - mergePlanet.planetRigidbody.position.x;
+            const dy = planet.planetRigidbody.position.y - mergePlanet.planetRigidbody.position.y;
+
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const explosionRadius = mergePlanet.data.radius * 2.5;
+            if (distance > explosionRadius || distance < 0.0001) continue;
+            const strength = (1 - distance / explosionRadius) * mergePlanet.data.radius * 12;
+            const nx = dx / distance;
+            const ny = dy / distance;
+
+            planet.planetRigidbody.velocity.x += nx * strength;
+            planet.planetRigidbody.velocity.y += ny * strength;
         }
     }
 }
