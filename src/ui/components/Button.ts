@@ -3,11 +3,13 @@ import { Font } from "../../core/Font.ts";
 
 export class Button extends Container {
     private baseScale = 1;
+    private buttonText: Text;
+    private icon: Sprite | undefined;
 
-    constructor(text: string, background: Sprite) {
+    constructor(text: string, background: Sprite, icon?: string) {
         super();
 
-        const buttonText = new Text({
+        this.buttonText = new Text({
             text: text,
             style: {
                 fontFamily: Font.Righteous_Regular,
@@ -17,11 +19,24 @@ export class Button extends Container {
         });
 
         background.anchor.set(0.5);
-        buttonText.anchor.set(0.5);
+        this.buttonText.anchor.set(0.5);
         background.scale.set(0.6);
-        buttonText.position.set(background.x, background.y);
+        this.buttonText.position.set(background.x, background.y);
 
-        this.addChild(background, buttonText);
+        this.addChild(background);
+
+        if (icon) {
+            this.icon = Sprite.from(icon);
+            this.icon.anchor.set(0.6);
+            this.icon.scale.set(0.35);
+            this.icon.position.set(background.x - 20, background.y + 5);
+
+            this.addChild(this.icon);
+
+            this.buttonText.position.set(this.icon.x + this.icon.width / 2, background.y);
+        }
+
+        this.addChild(this.buttonText);
 
         this.eventMode = "static";
         this.cursor = "pointer";
@@ -42,6 +57,17 @@ export class Button extends Container {
     public setButtonScale(scaleValue: number): void {
         this.baseScale = scaleValue;
         this.scale.set(scaleValue);
+    }
+
+    public setTextColor(color: number): void {
+        this.buttonText.style.fill = color;
+    }
+
+    public setBorderColor(color: number, width: number): void {
+        this.buttonText.style.stroke = {
+            color: color,
+            width: width,
+        };
     }
 
     public onClick(callback: () => void): void {
