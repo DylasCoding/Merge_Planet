@@ -20,6 +20,12 @@ export class ToolController {
         this.toolManager.cancel();
     }
 
+    private onToolFinished?: () => void;
+
+    public setOnToolFinished(callback: () => void): void {
+        this.onToolFinished = callback;
+    }
+
     public onPlanetClicked(planet: Planet): void {
         if (!this.toolManager.isUsingTool()) {
             return;
@@ -36,6 +42,8 @@ export class ToolController {
         }
 
         this.toolManager.cancel();
+
+        this.onToolFinished?.();
     }
 
     public isUsingTool(): boolean {
