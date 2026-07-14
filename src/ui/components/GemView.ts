@@ -9,6 +9,7 @@ export class GemView extends Container {
 
         const bg = Sprite.from("gem_bg");
         const icon = Sprite.from("gem_icon");
+        const addIcon = Sprite.from("add_icon");
 
         this.gemText = new Text({
             text: "0",
@@ -18,7 +19,7 @@ export class GemView extends Container {
                 fontSize: 24,
                 stroke: {
                     color: 0x000000,
-                    width: 2,
+                    width: 1.5,
                 },
             },
         });
@@ -26,19 +27,22 @@ export class GemView extends Container {
         bg.scale.x = 1;
         bg.scale.y = 0.7;
 
-        icon.scale.set(0.5);
+        icon.scale.set(0.45);
 
         bg.anchor.set(0, 0);
         icon.anchor.set(0.5);
+        addIcon.anchor.set(0.5);
         this.gemText.anchor.set(0.5);
 
         bg.position.set(0, 0);
 
         icon.position.set(25, bg.height / 2);
 
+        addIcon.position.set(bg.width - 20, bg.height / 2);
+
         this.gemText.position.set(bg.width * 0.5, bg.height / 2);
 
-        this.addChild(bg, icon, this.gemText);
+        this.addChild(bg, icon, addIcon, this.gemText);
     }
 
     public setGemText(gem: number): void {

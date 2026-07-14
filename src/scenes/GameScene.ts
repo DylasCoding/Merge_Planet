@@ -14,12 +14,16 @@ import type { Planet } from "../features/planet/entities/Planet.ts";
 import { collisionManager } from "../core/collisionManager.ts";
 import { mergeManager } from "../core/mergeManager.ts";
 import { timerSpawner } from "../features/planet/spawn/timerSpawner.ts";
+import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
+import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
 
     private hud!: HUD;
     private gameBox!: GameBox;
+    private settingsOverlay!: SettingsOverlay;
+    private skinShopOverlay!: SkinShopOverlay;
 
     private planetManager!: PlanetManager;
     private mouseInputManager!: MouseInputManager;
@@ -74,7 +78,11 @@ export class GameScene extends BaseScene {
             this.mergeManager,
         );
 
-        this.hud = new HUD(this.app);
+        this.hud = new HUD(this.app, this.openSettings.bind(this), this.openSkinShop.bind(this));
+        this.settingsOverlay = new SettingsOverlay(this.app);
+        this.skinShopOverlay = new SkinShopOverlay(this.app);
+        // this.settingsOverlay.show();
+        // this.skinShopOverlay.show();
 
         this.addChild(this.world);
         this.addChild(this.hud);
@@ -89,6 +97,16 @@ export class GameScene extends BaseScene {
                 this.timer.turnTimer();
             }
         });
+        this.addChild(this.settingsOverlay);
+        this.addChild(this.skinShopOverlay);
+    }
+
+    private openSettings(): void {
+        this.settingsOverlay.show();
+    }
+
+    private openSkinShop(): void {
+        this.skinShopOverlay.show();
     }
 
     private spawnNextPlanet(): void {
