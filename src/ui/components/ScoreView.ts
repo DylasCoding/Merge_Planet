@@ -1,5 +1,7 @@
 import { Container, Text, Sprite } from "pixi.js";
 import { Font } from "../../core/Font.ts";
+import { GameEvent, EventBus } from "../../core/event/GameEvent.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class ScoreView extends Container {
     private readonly scoreText: Text;
@@ -12,7 +14,7 @@ export class ScoreView extends Container {
         const highScoreIcon = Sprite.from("highscore_icon");
 
         this.highScoreText = new Text({
-            text: "0",
+            text: StorageManager.highScore.toString(),
             style: {
                 fontFamily: Font.Righteous_Regular,
                 fill: 0xffa500,
@@ -58,6 +60,14 @@ export class ScoreView extends Container {
         this.scoreText.position.set(-25, scoreY + bg.height * 0.5);
 
         this.addChild(highScoreIcon, this.highScoreText, icon, this.scoreText);
+
+        EventBus.instance.on(GameEvent.ScoreChanged, (score) => {
+            this.setScoreText(score);
+        });
+
+        EventBus.instance.on(GameEvent.HighScoreChanged, (score) => {
+            this.setHighScoreText(score);
+        });
     }
 
     public setScoreText(score: number): void {
