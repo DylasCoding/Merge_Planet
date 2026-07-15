@@ -1,15 +1,18 @@
 import { Planet } from "../planet/entities/Planet";
 import { ToolManager } from "./ToolManager";
 import { ToolType } from "./ToolType";
+import { PickaxeEffect } from "./effects/PickaxeEffect";
 import { PickaxeTool } from "./tools/PickaxeTool";
 
 export class ToolController {
     private readonly toolManager: ToolManager;
     private readonly pickaxeTool: PickaxeTool;
+    private readonly pickaxeEffect: PickaxeEffect;
 
-    constructor(toolManager: ToolManager, pickaxeTool: PickaxeTool) {
+    constructor(toolManager: ToolManager, pickaxeTool: PickaxeTool, pickaxeEffect: PickaxeEffect) {
         this.toolManager = toolManager;
         this.pickaxeTool = pickaxeTool;
+        this.pickaxeEffect = pickaxeEffect;
     }
 
     public selectTool(tool: ToolType): void {
@@ -26,13 +29,14 @@ export class ToolController {
         this.onToolFinished = callback;
     }
 
-    public onPlanetClicked(planet: Planet): void {
+    public async onPlanetClicked(planet: Planet): Promise<void> {
         if (!this.toolManager.isUsingTool()) {
             return;
         }
 
         switch (this.toolManager.getCurrentTool()) {
             case ToolType.Pickaxe:
+                await this.pickaxeEffect.play(planet);
                 this.pickaxeTool.use(planet);
                 break;
 
