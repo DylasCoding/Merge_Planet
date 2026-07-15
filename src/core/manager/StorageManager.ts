@@ -1,13 +1,15 @@
-export interface GameSaveData {
+import { EventBus, GameEvent } from "../event/GameEvent.ts";
+
+export interface IGameSaveData {
     highScore: number;
     gems: number;
 }
 
 export class StorageManager {
-    private static readonly SAVE_KEY = "pixi_space_game_save_v1";
-    private static data: GameSaveData;
+    private static readonly SAVE_KEY = "merge_planet_game_save_v1.0.0";
+    private static data: IGameSaveData;
 
-    private static readonly DEFAULT_DATA: GameSaveData = {
+    private static readonly DEFAULT_DATA: IGameSaveData = {
         highScore: 0,
         gems: 0,
     };
@@ -15,10 +17,9 @@ export class StorageManager {
     public static load(): void {
         try {
             const savedData = localStorage.getItem(this.SAVE_KEY);
-            if (savedData) {
-                const decodedString = atob(savedData);
-                const parsedData = JSON.parse(decodedString);
 
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
                 this.data = { ...this.DEFAULT_DATA, ...parsedData };
             } else {
                 this.data = { ...this.DEFAULT_DATA };
@@ -32,9 +33,7 @@ export class StorageManager {
     public static save(): void {
         try {
             const jsonString = JSON.stringify(this.data);
-
-            const encodedString = btoa(jsonString);
-            localStorage.setItem(this.SAVE_KEY, encodedString);
+            localStorage.setItem(this.SAVE_KEY, jsonString);
         } catch (error) {
             console.error("Save data error:", error);
         }
@@ -44,9 +43,10 @@ export class StorageManager {
         return this.data.gems;
     }
 
-    public static addGems(amount: number): void {
+    public static updateGems(amount: number): void {
         this.data.gems += amount;
         this.save();
+        EventBus.instance.emit(GameEvent.GemChanged, this.data.gems);
     }
 
     public static get highScore(): number {
@@ -57,6 +57,7 @@ export class StorageManager {
         if (score > this.data.highScore) {
             this.data.highScore = score;
             this.save();
+            EventBus.instance.emit(GameEvent.HighScoreChanged, this.data.highScore);
         }
     }
 }
