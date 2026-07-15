@@ -2,7 +2,7 @@ import { MergePlanet } from "../features/Physics/MergePlanet";
 import { Planet } from "../features/planet/entities/Planet";
 import type { PlanetFactory } from "../features/planet/factory/PlanetFactory";
 import type { PlanetManager } from "../features/planet/manager/PlanetManager";
-import type { MergeRequest } from "../features/planet/types/mergeType";
+import type { MergeRequest } from "../features/planet/types/MergeType";
 import type { GameScene } from "../scenes/GameScene";
 
 export class MergeManager {
@@ -40,7 +40,7 @@ export class MergeManager {
 
             this.planetManager.add(newMergePlanet!);
             this.gameScene.addPlanet(newMergePlanet!);
-            this.forceImpulsePlanet(newMergePlanet);
+            // this.forceImpulsePlanet(newMergePlanet);
             this.gameScene.removePlanet(request.planet1, request.planet2);
         }
         this.mergeQueue.length = 0;
@@ -53,23 +53,23 @@ export class MergeManager {
             }
         }
     }
-    public forceImpulsePlanet(mergePlanet: Planet) {
-        for (const planet of this.planetManager.getAll()) {
-            if (planet === mergePlanet) continue;
-            if (planet.isMerge) continue;
+    // public forceImpulsePlanet(mergePlanet: Planet) {
+    //     for (const planet of this.planetManager.getAll()) {
+    //         if (planet === mergePlanet) continue;
+    //         if (planet.isMerge) continue;
 
-            const dx = planet.planetRigidbody.position.x - mergePlanet.planetRigidbody.position.x;
-            const dy = planet.planetRigidbody.position.y - mergePlanet.planetRigidbody.position.y;
+    //         const dx = planet.planetRigidbody.position.x - mergePlanet.planetRigidbody.position.x;
+    //         const dy = planet.planetRigidbody.position.y - mergePlanet.planetRigidbody.position.y;
 
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const explosionRadius = mergePlanet.data.radius * 2.5;
-            if (distance > explosionRadius || distance < 0.0001) continue;
-            const strength = (1 - distance / explosionRadius) * mergePlanet.data.radius * 12;
-            const nx = dx / distance;
-            const ny = dy / distance;
+    //         const distance = Math.sqrt(dx * dx + dy * dy);
+    //         const explosionRadius = mergePlanet.data.radius * 2.5;
+    //         if (distance > explosionRadius || distance < 0.0001) continue;
+    //         const strength = (1 - distance / explosionRadius) * mergePlanet.data.radius * 12;
+    //         const nx = dx / distance;
+    //         const ny = dy / distance;
 
-            planet.planetRigidbody.velocity.x += nx * strength;
-            planet.planetRigidbody.velocity.y += ny * strength;
-        }
-    }
+    //         planet.planetRigidbody.velocity.x += nx * strength;
+    //         planet.planetRigidbody.velocity.y += ny * strength;
+    //     }
+    // }
 }
