@@ -6,29 +6,18 @@ export class ToolOverlayWithPickaxe extends Container {
     private readonly darkLayerRight = new Graphics();
     private readonly darkLayerBottom = new Graphics();
 
-    private readonly top = new TilingSprite({
-        texture: Assets.get("overlay"),
-        width: 1,
-        height: 1,
-    });
+    private createOverlayPart(): TilingSprite {
+        return new TilingSprite({
+            texture: Assets.get("overlay"),
+            width: 1,
+            height: 1,
+        });
+    }
 
-    private readonly left = new TilingSprite({
-        texture: Assets.get("overlay"),
-        width: 1,
-        height: 1,
-    });
-
-    private readonly right = new TilingSprite({
-        texture: Assets.get("overlay"),
-        width: 1,
-        height: 1,
-    });
-
-    private readonly bottom = new TilingSprite({
-        texture: Assets.get("overlay"),
-        width: 1,
-        height: 1,
-    });
+    private readonly top = this.createOverlayPart();
+    private readonly left = this.createOverlayPart();
+    private readonly right = this.createOverlayPart();
+    private readonly bottom = this.createOverlayPart();
 
     constructor() {
         super();
