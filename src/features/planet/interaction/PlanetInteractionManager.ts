@@ -37,7 +37,6 @@ export class PlanetInteractionManager {
     }
 
     public onPlanetClicked(planet: Planet): void {
-        console.log("Planet clicked");
         this.toolController.onPlanetClicked(planet);
     }
 
