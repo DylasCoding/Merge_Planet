@@ -23,6 +23,7 @@ import { ToolManager } from "../features/tool/ToolManager.ts";
 import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
 import { ToolType } from "../features/tool/ToolType.ts";
+import { PickaxeEffect } from "../features/tool/effects/PickaxeEffect.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -43,6 +44,8 @@ export class GameScene extends BaseScene {
     private toolManager!: ToolManager;
     private pickaxeTool!: PickaxeTool;
     private toolOverlay!: ToolOverlayWithPickaxe;
+
+    private pickaxeEffect!: PickaxeEffect;
 
     private currentDragController: PlanetDragController | null = null;
     private timer!: TimerSpawner;
@@ -76,7 +79,8 @@ export class GameScene extends BaseScene {
 
         this.toolManager = new ToolManager();
         this.pickaxeTool = new PickaxeTool(this.planetManager);
-        this.toolController = new ToolController(this.toolManager, this.pickaxeTool);
+        this.pickaxeEffect = new PickaxeEffect();
+        this.toolController = new ToolController(this.toolManager, this.pickaxeTool, this.pickaxeEffect);
         this.toolController.setOnToolFinished(() => {
             this.toolOverlay.hide();
         });
@@ -119,7 +123,6 @@ export class GameScene extends BaseScene {
         this.toolOverlay = new ToolOverlayWithPickaxe();
         this.toolOverlay.redraw(this.app.screen, this.gameBox.getBoundsAsObject());
 
-        this.addChild(this.toolOverlay);
         this.settingsOverlay = new SettingsOverlay(this.app);
         this.skinShopOverlay = new SkinShopOverlay(this.app, this.planetManager);
         SkinManager.getInstance().onSkinChanged = () => {
@@ -129,6 +132,7 @@ export class GameScene extends BaseScene {
         // this.skinShopOverlay.show();
 
         this.addChild(this.world);
+        this.addChild(this.pickaxeEffect);
         this.addChild(this.toolOverlay);
         this.addChild(this.hud);
 
