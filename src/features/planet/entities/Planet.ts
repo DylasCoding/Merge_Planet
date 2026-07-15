@@ -20,6 +20,9 @@ export class Planet extends Container {
         this.isMerge = false;
         this.planetRigidbody = new RigidBody(options.position!.x, options.position!.y);
 
+        // Initialize the position of the Planet container to match the rigidBody's position
+        this.position.set(this.planetRigidbody.position.x, this.planetRigidbody.position.y);
+
         this.addChild(this.sprite);
     }
     update(deltaTime: number) {

@@ -18,6 +18,11 @@ import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
 import { SkinManager } from "../features/planet/skin/SkinManager.ts";
 import { particleManager } from "../core/ParticleManager.ts";
+import { ToolController } from "../features/tool/ToolController.ts";
+import { ToolManager } from "../features/tool/ToolManager.ts";
+import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
+import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
+import { ToolType } from "../features/tool/ToolType.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -34,6 +39,10 @@ export class GameScene extends BaseScene {
     private CollisionManager!: CollisionManager;
     private mergeManager!: MergeManager;
     private particleManager!: particleManager;
+    private toolController!: ToolController;
+    private toolManager!: ToolManager;
+    private pickaxeTool!: PickaxeTool;
+    private toolOverlay!: ToolOverlayWithPickaxe;
 
     private currentDragController: PlanetDragController | null = null;
     private timer!: TimerSpawner;
@@ -56,7 +65,6 @@ export class GameScene extends BaseScene {
         this.planetManager = new PlanetManager();
         this.CollisionManager = new CollisionManager();
         this.mouseInputManager = new MouseInputManager(this.app, this.gameBox.getBoundsAsObject());
-        this.interactionManager = new PlanetInteractionManager(this.mouseInputManager);
         this.particleManager = new particleManager(this);
 
         const randomizer = new PlanetRandomizer();
@@ -66,10 +74,23 @@ export class GameScene extends BaseScene {
         this.timer = new TimerSpawner();
         this.timer.setTimer(0.7);
 
+        this.toolManager = new ToolManager();
+        this.pickaxeTool = new PickaxeTool(this.planetManager);
+        this.toolController = new ToolController(this.toolManager, this.pickaxeTool);
+        this.toolController.setOnToolFinished(() => {
+            this.toolOverlay.hide();
+        });
+
+        this.interactionManager = new PlanetInteractionManager(
+            this.mouseInputManager,
+            this.toolController,
+        );
+
         this.mergeManager = new MergeManager(
             factory,
             this.planetManager,
             this,
+            randomizer,
             this.particleManager,
         );
 
@@ -79,6 +100,7 @@ export class GameScene extends BaseScene {
             this.planetManager,
             this.gameBox.getBoundsAsObject(),
             this.mouseInputManager,
+            this.interactionManager,
         );
 
         this.CollisionManager.setComponentForCollision(
@@ -87,7 +109,16 @@ export class GameScene extends BaseScene {
             this.mergeManager,
         );
 
-        this.hud = new HUD(this.app, this.openSettings.bind(this), this.openSkinShop.bind(this));
+        this.hud = new HUD(
+            this.app,
+            this.openSettings.bind(this),
+            this.openSkinShop.bind(this),
+            () => this.toggleTool(ToolType.Pickaxe),
+        );
+        this.toolOverlay = new ToolOverlayWithPickaxe();
+        this.toolOverlay.redraw(this.app.screen, this.gameBox.getBoundsAsObject());
+
+        this.addChild(this.toolOverlay);
         this.settingsOverlay = new SettingsOverlay(this.app);
         this.skinShopOverlay = new SkinShopOverlay(this.app, this.planetManager);
         SkinManager.getInstance().onSkinChanged = () => {
@@ -97,11 +128,16 @@ export class GameScene extends BaseScene {
         // this.skinShopOverlay.show();
 
         this.addChild(this.world);
+        this.addChild(this.toolOverlay);
         this.addChild(this.hud);
 
         this.spawnNextPlanet();
 
         this.mouseInputManager.onMouseClick(() => {
+            if (this.toolController.isUsingTool()) {
+                return;
+            }
+
             if (this.currentDragController) {
                 this.planetManager.setDropPlanet(this.currentPlanet);
                 this.currentDragController.endDrag();
@@ -136,6 +172,17 @@ export class GameScene extends BaseScene {
         this.world.removeChild(planet1);
         this.world.removeChild(planet2);
     }
+
+    private toggleTool(tool: ToolType): void {
+        this.toolController.toggleTool(tool);
+
+        if (this.toolController.isUsingTool()) {
+            this.toolOverlay.show();
+        } else {
+            this.toolOverlay.hide();
+        }
+    }
+
     public update(deltaTime: number): void {
         if (this.shouldSpawnNext && this.timer.timeUp()) {
             this.timer.turnTimer();
@@ -149,5 +196,9 @@ export class GameScene extends BaseScene {
         this.particleManager.update(deltaTime);
         this.timer.update(deltaTime);
         this.interactionManager.updateDrag();
+
+        if (this.toolOverlay.visible) {
+            this.toolOverlay.update(deltaTime);
+        }
     }
 }

@@ -70,6 +70,8 @@ import panel_line from "../assets/Settings_Menu_Components/Medium/settings-divid
 
 import shop_bg from "../assets/Grid_Components/Medium/item-shop-container-medium.png";
 
+import overlay from "../ui/overlays/assets/overlay.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -85,6 +87,7 @@ export const manifest: AssetsManifest = {
                 button_pink: button_pink,
                 button_yellow: button_yellow,
                 button_purple: button_purple,
+                overlay: overlay,
 
                 score_star: score_star,
                 score_bg: score_bg,
