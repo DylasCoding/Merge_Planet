@@ -1,5 +1,6 @@
 import { Assets, Texture } from "pixi.js";
 import { SKIN_LIST } from "../data/SkinConfig.ts";
+import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
 
 export class SkinManager {
     private static instance: SkinManager;
@@ -24,6 +25,8 @@ export class SkinManager {
             this.currentPrefix = skinInfo ? skinInfo.prefix : "";
 
             if (this.onSkinChanged) this.onSkinChanged();
+
+            EventBus.instance.emit(GameEvent.SkinChanged);
         } catch (error) {
             console.error(error);
         }

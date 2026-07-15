@@ -2,17 +2,27 @@ import { Application, Container, Sprite, Text } from "pixi.js";
 import { Button } from "../components/Button.ts";
 import { Font } from "../../core/Font.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
+import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
 
 export class SkinContainer extends Container {
     private app: Application;
     private bg: Sprite;
     private skinIcon: Sprite;
     private skinName: Text;
-    private price: number;
     private buyButton: Button;
-    constructor(app: Application, bg: Sprite, icon: Sprite, skinName: string, price: number) {
+    private bundleId: string;
+
+    constructor(
+        app: Application,
+        bg: Sprite,
+        icon: Sprite,
+        skinName: string,
+        price: number,
+        bundleId: string,
+    ) {
         super();
         this.app = app;
+        this.bundleId = bundleId;
 
         this.bg = bg;
         const bgScale = ScaleUtils.getScaleByTargetWidth(this.app, this.bg.width, 0.08);
@@ -36,14 +46,22 @@ export class SkinContainer extends Container {
         );
         const nameScale = ScaleUtils.getScaleByTargetWidth(this.app, this.skinName.width, 0.07);
         this.skinName.scale.set(nameScale);
-        this.price = price;
 
         this.buyButton = new Button(
-            this.price.toString(),
-            Sprite.from("button_yellow"),
-            "gem_icon",
+            price === 0 ? "Select" : price.toString(),
+            price === 0 ? Sprite.from("button_purple") : Sprite.from("button_yellow"),
+            price === 0 ? undefined : "gem_icon",
         );
-        this.buyButton.setTextColor(0x80ffff);
+
+        this.buyButton.eventMode = "static";
+        this.buyButton.onClick(async () => {
+            this.buyButton.eventMode = "none"; // block spam
+            await SkinManager.getInstance().changeSkin(this.bundleId);
+
+            this.buyButton.eventMode = "static";
+        });
+
+        this.buyButton.setTextColor(price === 0 ? 0xffffff : 0x80ffff);
         this.buyButton.setBorderColor(0x000000, 1.5);
 
         this.buyButton.setButtonScale(1.2);

@@ -2,6 +2,8 @@ import { type Application, Container, Graphics, Sprite } from "pixi.js";
 import { Button } from "../components/Button.ts";
 import { SkinContainer } from "./SkinContainer.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
+import type { PlanetManager } from "../../features/planet/manager/PlanetManager.ts";
+import { SKIN_LIST } from "../../features/planet/data/SkinConfig.ts";
 
 export class SkinShopOverlay extends Container {
     private app: Application;
@@ -9,11 +11,13 @@ export class SkinShopOverlay extends Container {
     private panel: Container;
     private closeBtn: Button;
     private skinContainer: SkinContainer;
+    private planetManager: PlanetManager;
 
-    constructor(app: Application) {
+    constructor(app: Application, planetManager: PlanetManager) {
         super();
 
         this.app = app;
+        this.planetManager = planetManager;
 
         this.backdrop = new Graphics()
             .rect(0, 0, this.app.screen.width, this.app.screen.height)
@@ -43,9 +47,10 @@ export class SkinShopOverlay extends Container {
         this.skinContainer = new SkinContainer(
             this.app,
             Sprite.from("shop_bg"),
-            Sprite.from("skin1"),
+            Sprite.from("planet1"),
             "Skin Name",
             100,
+            "planets",
         );
 
         const columns = 4;
@@ -62,18 +67,23 @@ export class SkinShopOverlay extends Container {
         const spacingX = (availableWidth - columns * itemWidth) / (columns - 1);
         const spacingY = 20;
 
-        for (let i = 0; i < 8; i++) {
+        SKIN_LIST.forEach((skinInfo, i) => {
             const col = i % columns;
             const row = Math.floor(i / columns);
             const x = panelBg.x + paddingX + col * (itemWidth + spacingX);
+            const y = startY + row * (itemHeight + spacingY);
 
             const skinContainer = this.createSkinContainer(
                 x,
-                startY + row * (itemHeight + spacingY),
+                y,
+                skinInfo.id,
+                skinInfo.name,
+                skinInfo.icon,
+                skinInfo.price,
             );
 
             this.panel.addChild(skinContainer);
-        }
+        });
 
         this.addChild(this.backdrop, this.panel);
 
@@ -88,13 +98,21 @@ export class SkinShopOverlay extends Container {
         this.visible = false;
     }
 
-    private createSkinContainer(x: number, y: number): SkinContainer {
+    private createSkinContainer(
+        x: number,
+        y: number,
+        bundleId: string,
+        name: string,
+        iconKey: string,
+        price: number,
+    ): SkinContainer {
         const skinContainer = new SkinContainer(
             this.app,
             Sprite.from("shop_bg"),
-            Sprite.from("skin1"),
-            "Skin Name",
-            100,
+            Sprite.from(iconKey),
+            name,
+            price,
+            bundleId,
         );
         skinContainer.position.set(x, y);
         return skinContainer;
