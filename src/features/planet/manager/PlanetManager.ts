@@ -1,4 +1,6 @@
 import { Planet } from "../entities/Planet";
+import { Assets } from "pixi.js";
+import { SkinManager } from "../skin/SkinManager.ts";
 
 export class PlanetManager {
     public readonly planets: Array<Planet> = [];
@@ -30,5 +32,14 @@ export class PlanetManager {
 
     public getCount(): number {
         return this.planets.length;
+    }
+
+    public refreshAllPlanetTextures(): void {
+        this.planets.forEach((planet) => {
+            const newTexture = SkinManager.getInstance().getPlanetTexture(planet.data.textureKey);
+            if (newTexture) {
+                planet.setTexture(newTexture);
+            }
+        });
     }
 }
