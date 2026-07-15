@@ -2,6 +2,7 @@ import { Assets, Sprite } from "pixi.js";
 import { PLANET_CONFIG } from "../data/PlanetConfig";
 import { Planet } from "../entities/Planet";
 import { type PlanetCreateOptions } from "../types/PlanetCreateOptions";
+import { SkinManager } from "../skin/SkinManager.ts";
 
 export class PlanetFactory {
     public create(options: PlanetCreateOptions): Planet {
@@ -11,7 +12,7 @@ export class PlanetFactory {
             throw new Error(`Planet level ${options.level} not found.`);
         }
 
-        const texture = Assets.get(data.textureKey);
+        const texture = SkinManager.getInstance().getPlanetTexture(data.textureKey);
 
         const sprite = new Sprite(texture);
 
