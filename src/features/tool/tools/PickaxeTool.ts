@@ -15,6 +15,7 @@ export class PickaxeTool implements Tool {
         console.log("Destroy planet");
 
         this.planetManager.remove(target);
+        target.parent?.removeChild(target);
         target.destroy();
     }
 }
