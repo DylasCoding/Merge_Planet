@@ -1,5 +1,7 @@
 import { Container, Sprite, Text } from "pixi.js";
 import { Font } from "../../core/Font.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 
 export class GemView extends Container {
     private readonly gemText: Text;
@@ -12,7 +14,7 @@ export class GemView extends Container {
         const addIcon = Sprite.from("add_icon");
 
         this.gemText = new Text({
-            text: "0",
+            text: StorageManager.gems.toString(),
             style: {
                 fontFamily: Font.Righteous_Regular,
                 fill: 0x80ffff,
@@ -40,9 +42,25 @@ export class GemView extends Container {
 
         addIcon.position.set(bg.width - 20, bg.height / 2);
 
+        addIcon.eventMode = "static";
+        addIcon.cursor = "pointer";
+
+        addIcon.on("pointertap", () => {
+            this.onAddGemClick();
+        });
+
         this.gemText.position.set(bg.width * 0.5, bg.height / 2);
 
         this.addChild(bg, icon, addIcon, this.gemText);
+
+        EventBus.instance.on(GameEvent.GemChanged, (gems: number) => {
+            this.setGemText(gems);
+        });
+    }
+
+    private onAddGemClick(): void {
+        const addGemCount = 100;
+        StorageManager.updateGems(addGemCount);
     }
 
     public setGemText(gem: number): void {
