@@ -72,7 +72,7 @@ import shop_bg from "../assets/Grid_Components/Medium/item-shop-container-medium
 
 import overlay from "../ui/overlays/assets/overlay.png";
 
-export const manifest: AssetsManifest = {
+export const Manifest: AssetsManifest = {
     bundles: [
         {
             name: "backgrounds",

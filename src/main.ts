@@ -1,6 +1,6 @@
 import { Application, Assets, Sprite } from "pixi.js";
 import { Game } from "./Game";
-import { manifest } from "./core/manifest.ts";
+import { Manifest } from "./core/Manifest.ts";
 import { StorageManager } from "./core/manager/StorageManager.ts";
 import "./style.css";
 
@@ -16,7 +16,7 @@ async function main() {
 
     StorageManager.load();
 
-    await Assets.init({ manifest });
+    await Assets.init({ manifest: Manifest });
     await Assets.loadBundle(["backgrounds", "fonts"]);
     const background = Sprite.from("background_sky");
 
