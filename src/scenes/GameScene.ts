@@ -16,6 +16,7 @@ import { mergeManager } from "../core/mergeManager.ts";
 import { timerSpawner } from "../features/planet/spawn/timerSpawner.ts";
 import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
+import { SkinManager } from "../features/planet/skin/SkinManager.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -42,7 +43,7 @@ export class GameScene extends BaseScene {
     }
 
     public async initialize(): Promise<void> {
-        await Assets.loadBundle(["ui", "planets", "skin1"]);
+        await Assets.loadBundle(["ui", "planets", "spaces"]);
 
         this.gameBox = new GameBox();
 
@@ -80,7 +81,10 @@ export class GameScene extends BaseScene {
 
         this.hud = new HUD(this.app, this.openSettings.bind(this), this.openSkinShop.bind(this));
         this.settingsOverlay = new SettingsOverlay(this.app);
-        this.skinShopOverlay = new SkinShopOverlay(this.app);
+        this.skinShopOverlay = new SkinShopOverlay(this.app, this.planetManager);
+        SkinManager.getInstance().onSkinChanged = () => {
+            this.planetManager.refreshAllPlanetTextures();
+        };
         // this.settingsOverlay.show();
         // this.skinShopOverlay.show();
 

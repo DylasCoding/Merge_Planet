@@ -1,7 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
 import { ToolButton } from "../components/ToolButton.ts";
-import { Button } from "../components/Button.ts";
 
 export class RightSideBar extends Container {
     constructor(app: Application) {
@@ -10,7 +9,7 @@ export class RightSideBar extends Container {
         this.x = app.screen.width;
         this.y = 0;
 
-        const bg = Sprite.from("right_sidebar_bg");
+        const bg = new Sprite();
         bg.anchor.set(1, 0);
         bg.height = app.screen.height;
 

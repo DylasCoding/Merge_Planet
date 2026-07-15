@@ -15,7 +15,7 @@ export class GameBox extends Container {
         this.addChild(this.background);
     }
 
-    public InitAreaBounds(): Rectangle {
+    public initAreaBounds(): Rectangle {
         const width = this.background.width - 145;
         const height = this.background.height - 131;
         this.gameBoxBounds = new Rectangle(this.x - width / 2, this.y - height / 2, width, height);
@@ -23,7 +23,7 @@ export class GameBox extends Container {
     }
 
     public getBoundsAsObject(): { x: number; y: number; width: number; height: number } {
-        this.InitAreaBounds();
+        this.initAreaBounds();
         return {
             x: this.gameBoxBounds.x,
             y: this.gameBoxBounds.y,

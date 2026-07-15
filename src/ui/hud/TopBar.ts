@@ -3,6 +3,7 @@ import { GemView } from "../components/GemView.ts";
 import { Container, Application, Sprite } from "pixi.js";
 import { NextPlanetView } from "../components/NextPlanetView.ts";
 import { Button } from "../components/Button.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class TopBar extends Container {
     private score: ScoreView;
@@ -19,7 +20,7 @@ export class TopBar extends Container {
         super();
 
         this.gem = new GemView();
-        this.gem.setGemText(5000);
+        // this.gem.setGemText(StorageManager.gems);
 
         this.settingsButton = new Button("", Sprite.from("setting_icon"));
         this.settingsButton.position.set(
@@ -28,16 +29,13 @@ export class TopBar extends Container {
         );
 
         this.score = new ScoreView();
-        this.score.setScoreText(120);
-        this.score.setHighScoreText(1000);
+        // this.score.setScoreText(120);
+        // this.score.setHighScoreText(1000);
 
         this.nextPlanet = new NextPlanetView();
-        this.nextPlanet.setPlanetIcon(Sprite.from("planet2"));
+        // this.nextPlanet.setPlanetIcon("planet2");
 
         this.skinButton = new Button("SKIN", Sprite.from("button_yellow"));
-        // this.skinButton.onClick(() => {
-        //     console.log("abc");
-        // });
 
         this.leftArea.position.set(20, 20);
         this.centerArea.position.set(app.screen.width / 2, 20);
