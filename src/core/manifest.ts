@@ -27,6 +27,19 @@ import planet8 from "../assets/Icons/neptune-128.png";
 import planet9 from "../assets/Icons/sun-128.png";
 import planet10 from "../assets/Icons/full-moon-128.png";
 
+import space1 from "../assets/Icons/astronaut-128.png";
+import space2 from "../assets/Icons/alien-128.png";
+import space3 from "../assets/Icons/black-hole-128.png";
+import space4 from "../assets/Icons/rocket-128.png";
+import space5 from "../assets/Icons/plant-128.png";
+import space6 from "../assets/Icons/mushroom-128.png";
+import space7 from "../assets/Icons/ufo-2-128.png";
+import space8 from "../assets/Icons/ufo-1-128.png";
+import space9 from "../assets/Icons/new-moon-128.png";
+import space10 from "../assets/Icons/scope-128.png";
+
+import lockicon from "../assets/Icons/lock-2-128.png";
+
 import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-large 1.png";
 
 import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-large.png";
@@ -53,7 +66,6 @@ import sound_container from "../assets/Settings_Menu_Components/Large/sound-bar-
 import panel_line from "../assets/Settings_Menu_Components/Medium/settings-divider-medium.png";
 
 import shop_bg from "../assets/Grid_Components/Medium/item-shop-container-medium.png";
-import skin1 from "../assets/Icons/astronaut-128.png";
 
 export const manifest: AssetsManifest = {
     bundles: [
@@ -99,6 +111,7 @@ export const manifest: AssetsManifest = {
                 panel_line: panel_line,
 
                 shop_bg: shop_bg,
+                lock_icon: lockicon,
             },
         },
         {
@@ -117,9 +130,18 @@ export const manifest: AssetsManifest = {
             },
         },
         {
-            name: "skin1",
+            name: "spaces",
             assets: {
-                skin1: skin1,
+                s_planet1: space1,
+                s_planet2: space2,
+                s_planet3: space3,
+                s_planet4: space4,
+                s_planet5: space5,
+                s_planet6: space6,
+                s_planet7: space7,
+                s_planet8: space8,
+                s_planet9: space9,
+                s_planet10: space10,
             },
         },
         {
