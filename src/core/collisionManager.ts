@@ -1,9 +1,9 @@
 import { Planet } from "../features/planet/entities/Planet";
 
-import { CollisionResolve } from "../features/Physics/CollisionResolve";
+import { CollisionResolve } from "../features/physics/CollisionResolve";
 import type { GameBox } from "../ui/components/GameBox";
 import type { MergeManager } from "../core/MergeManager";
-import { Collider } from "../features/Physics/Collider";
+import { Collider } from "../features/physics/Collider";
 
 export class CollisionManager {
     public listOfPlanetObjects!: Array<Planet>;
@@ -21,7 +21,7 @@ export class CollisionManager {
         for (const planet of this.listOfPlanetObjects) {
             planet.planetRigidbody.isGrounded = false;
         }
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 3; i++) {
             this.resolveCollisionPlanetWithPlanet();
         }
         this.resolveCollisionPlanetWithBox();

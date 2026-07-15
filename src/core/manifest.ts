@@ -31,6 +31,9 @@ import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-l
 
 import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-large.png";
 
+import star from "../assets/Other_Images/Extra_Large/sparkle-extra-large.png";
+import buble from "../assets/Other_Images/Extra_Large/transparent-round-extra-large.png";
+
 // import sidebar_bg from "../assets/Settings_Menu_Components/Large/vertical-scroll-bar-handle-large.png";
 import sidebar_bg from "../assets/leftsidebar.png";
 import arrow_icon from "../assets/Icons/arrowicon.png";
@@ -116,6 +119,13 @@ export const manifest: AssetsManifest = {
             assets: {
                 Asap_Bold: Asap_Bold,
                 Righteous_Regular: Righteous_Regular,
+            },
+        },
+        {
+            name: "particle",
+            assets: {
+                explode: star,
+                transparentCircle: buble,
             },
         },
     ],

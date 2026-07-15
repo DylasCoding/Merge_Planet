@@ -1,19 +1,27 @@
-import { MergePlanet } from "../features/Physics/MergePlanet";
+import { MergePlanet } from "../features/physics/MergePlanet";
 import { Planet } from "../features/planet/entities/Planet";
 import type { PlanetFactory } from "../features/planet/factory/PlanetFactory";
 import type { PlanetManager } from "../features/planet/manager/PlanetManager";
 import type { MergeRequest } from "../features/planet/types/MergeType";
 import type { GameScene } from "../scenes/GameScene";
+import type { particleManager } from "./ParticleManager";
 
 export class MergeManager {
     private MergePlanet: MergePlanet;
     private mergeQueue: MergeRequest[] = [];
     public planetManager: PlanetManager;
+    public particleManager: particleManager;
     public gameScene: GameScene;
-    constructor(planetFactory: PlanetFactory, planetManager: PlanetManager, gameScene: GameScene) {
+    constructor(
+        planetFactory: PlanetFactory,
+        planetManager: PlanetManager,
+        gameScene: GameScene,
+        particleManager: particleManager,
+    ) {
         this.MergePlanet = new MergePlanet(planetFactory);
         this.planetManager = planetManager;
         this.gameScene = gameScene;
+        this.particleManager = particleManager;
     }
     public checkingPlanetType(planet1: Planet, planet2: Planet) {
         return planet1.data.level === planet2.data.level;
@@ -40,6 +48,7 @@ export class MergeManager {
 
             this.planetManager.add(newMergePlanet!);
             this.gameScene.addPlanet(newMergePlanet!);
+            this.otherEventWithParticle(newMergePlanet!);
             // this.forceImpulsePlanet(newMergePlanet);
             this.gameScene.removePlanet(request.planet1, request.planet2);
         }
@@ -52,6 +61,16 @@ export class MergeManager {
                 this.planetManager.remove(this.planetManager.getAll()[i]);
             }
         }
+    }
+    public otherEventWithParticle(planet: Planet) {
+        this.particleManager.spawnWhenMerge(
+            planet.planetRigidbody.position.x,
+            planet.planetRigidbody.position.y,
+            10,
+            200,
+            planet.data.radius,
+        );
+        console.log("phat hien cham gui tin spawn particle");
     }
     // public forceImpulsePlanet(mergePlanet: Planet) {
     //     for (const planet of this.planetManager.getAll()) {

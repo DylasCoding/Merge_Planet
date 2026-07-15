@@ -5,7 +5,7 @@ export class RigidBody {
     public velocity: Vector2;
     public fallingSpeed: number;
     public gravity: number;
-    public restitution: number = 0.15;
+    public restitution: number = 0.25;
 
     public rotation: number = 0;
     public angularVelocity: number = 0;
@@ -15,7 +15,7 @@ export class RigidBody {
     public sleepTimer = 0;
 
     constructor(x: number, y: number) {
-        this.fallingSpeed = 65;
+        this.fallingSpeed = 500;
         this.gravity = 9.8;
         this.position = new Vector2(x, y);
         this.velocity = new Vector2(0, 0);
@@ -25,7 +25,7 @@ export class RigidBody {
 
         this.isGrounded = false;
         if (!this.isGrounded) {
-            this.velocity.y += this.fallingSpeed * this.gravity * dt;
+            this.velocity.y += this.fallingSpeed * dt;
         } else {
             this.velocity.y = 0;
         }
