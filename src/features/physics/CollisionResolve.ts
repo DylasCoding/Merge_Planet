@@ -145,7 +145,7 @@ export class CollisionResolve {
         planet2.planetRigidbody.velocity.y += result.impulseY * inverseMass2;
         if (Math.abs(result.j) > 5) {
             const spin = Math.abs(result.j) * 0.0000000001;
-            console.log(spin);
+
             planet1.planetRigidbody.angularVelocity -= spin;
             planet2.planetRigidbody.angularVelocity += spin;
         }

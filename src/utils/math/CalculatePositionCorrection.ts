@@ -11,7 +11,7 @@ export class PositionCorrectionResolve {
         const InverseMass1 = 1 / planet1.data.mass;
         const InverseMass2 = 1 / planet2.data.mass;
         const k_slop = 0.1;
-        const k_percent = 0.8;
+        const k_percent = 0.5;
         const overLap = planet1.data.radius + planet2.data.radius - distance;
         const posCorrection =
             (Math.max(overLap - k_slop, 0) / (InverseMass1 + InverseMass2)) * k_percent;

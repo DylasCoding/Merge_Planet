@@ -22,6 +22,5 @@ export class particleManager {
     ) {
         this.particleSpawner.spawnZoomEffects(xCoord, yCoord, radius);
         this.particleSpawner.spawnEplodeEffect(xCoord, yCoord, numberOfParticle, speed);
-        console.log("nhan duoc tin bat dau spawn");
     }
 }

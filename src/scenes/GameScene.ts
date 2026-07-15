@@ -13,7 +13,7 @@ import { PlanetDragController } from "../features/planet/interaction/PlanetDragC
 import type { Planet } from "../features/planet/entities/Planet.ts";
 import { CollisionManager } from "../core/CollisionManager.ts";
 import { MergeManager } from "../core/MergeManager.ts";
-import { TimerSpawner } from "../features/planet/spawn/TimerSpawner.ts";
+import { Timer } from "../features/planet/spawn/TimerSpawner.ts";
 import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
 import { SkinManager } from "../features/planet/skin/SkinManager.ts";
@@ -23,12 +23,14 @@ import { ToolManager } from "../features/tool/ToolManager.ts";
 import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
 import { ToolType } from "../features/tool/ToolType.ts";
+import { WarningLine } from "../ui/components/WarningLine.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
 
     private hud!: HUD;
     private gameBox!: GameBox;
+    private warningLine!: WarningLine;
     private settingsOverlay!: SettingsOverlay;
     private skinShopOverlay!: SkinShopOverlay;
 
@@ -45,7 +47,7 @@ export class GameScene extends BaseScene {
     private toolOverlay!: ToolOverlayWithPickaxe;
 
     private currentDragController: PlanetDragController | null = null;
-    private timer!: TimerSpawner;
+    private timer!: Timer;
     private shouldSpawnNext = false;
     private currentPlanet!: Planet;
 
@@ -71,7 +73,7 @@ export class GameScene extends BaseScene {
         const queue = new PlanetSpawnQueue(randomizer, 3);
         const factory = new PlanetFactory();
 
-        this.timer = new TimerSpawner();
+        this.timer = new Timer();
         this.timer.setTimer(0.7);
 
         this.toolManager = new ToolManager();
@@ -102,11 +104,16 @@ export class GameScene extends BaseScene {
             this.mouseInputManager,
             this.interactionManager,
         );
-
+        this.warningLine = new WarningLine(
+            this.gameBox.getBoundsAsObject().x,
+            this.gameBox.getBoundsAsObject().y + 30,
+        );
+        this.addChild(this.warningLine);
         this.CollisionManager.setComponentForCollision(
             this.planetManager.planets,
             this.gameBox,
             this.mergeManager,
+            this.warningLine,
         );
 
         this.hud = new HUD(
@@ -196,6 +203,7 @@ export class GameScene extends BaseScene {
         this.particleManager.update(deltaTime);
         this.timer.update(deltaTime);
         this.interactionManager.updateDrag();
+        this.warningLine.update(deltaTime);
 
         if (this.toolOverlay.visible) {
             this.toolOverlay.update(deltaTime);

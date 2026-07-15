@@ -16,7 +16,6 @@ export class ExplodeParticle extends Particle {
         );
     }
     public override update(deltaTime: number) {
-        console.log("particle hoat doong");
         this.position.x += this.velocity.x * deltaTime;
         this.position.y += this.velocity.y * deltaTime;
 

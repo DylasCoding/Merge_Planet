@@ -1,4 +1,5 @@
 import type { GameBox } from "../../ui/components/GameBox";
+import type { WarningLine } from "../../ui/components/WarningLine";
 import type { Planet } from "../planet/entities/Planet";
 
 export class Collider {
@@ -17,5 +18,17 @@ export class Collider {
         const distanceSquare = dx * dx + dy * dy;
         const radiusSum = planet1.data.radius + planet2.data.radius;
         return distanceSquare <= radiusSum * radiusSum;
+    }
+    public detectCollisionPlanetWithWarningLines(Planet: Planet, warningLines: WarningLine) {
+        const top = warningLines.y;
+
+        const planetTop = Planet.y - Planet.data.radius;
+        return planetTop <= top;
+    }
+    public WarningBeforeCollisionPlanetWithWarningLines(Planet: Planet, warningLines: WarningLine) {
+        const top = warningLines.y + 200;
+
+        const planetTop = Planet.y - Planet.data.radius;
+        return planetTop <= top;
     }
 }
