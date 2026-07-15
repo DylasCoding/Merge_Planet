@@ -6,6 +6,7 @@ import type { MergeRequest } from "../features/planet/types/MergeType";
 import type { GameScene } from "../scenes/GameScene";
 import type { particleManager } from "./ParticleManager";
 import type { PlanetRandomizer } from "../features/planet/random/PlanetRandomizer.ts";
+import type { PlanetInteractionManager } from "../features/planet/interaction/PlanetInteractionManager.ts";
 
 export class MergeManager {
     private MergePlanet: MergePlanet;
@@ -14,18 +15,21 @@ export class MergeManager {
     public particleManager: particleManager;
     public gameScene: GameScene;
     private readonly planetRandomizer: PlanetRandomizer;
+    private readonly planetInteractionManager: PlanetInteractionManager;
     constructor(
         planetFactory: PlanetFactory,
         planetManager: PlanetManager,
         gameScene: GameScene,
         planetRandomizer: PlanetRandomizer,
         particleManager: particleManager,
+        planetInteractionManager: PlanetInteractionManager,
     ) {
         this.MergePlanet = new MergePlanet(planetFactory);
         this.planetManager = planetManager;
         this.gameScene = gameScene;
         this.particleManager = particleManager;
         this.planetRandomizer = planetRandomizer;
+        this.planetInteractionManager = planetInteractionManager;
     }
     public checkingPlanetType(planet1: Planet, planet2: Planet) {
         return planet1.data.level === planet2.data.level;
@@ -57,6 +61,7 @@ export class MergeManager {
             this.planetManager.add(newMergePlanet!);
             this.gameScene.addPlanet(newMergePlanet!);
             this.otherEventWithParticle(newMergePlanet!);
+            this.planetInteractionManager.registerPlanet(newMergePlanet!);
             // this.forceImpulsePlanet(newMergePlanet);
             this.gameScene.removePlanet(request.planet1, request.planet2);
         }

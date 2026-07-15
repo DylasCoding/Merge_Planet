@@ -92,6 +92,7 @@ export class GameScene extends BaseScene {
             this,
             randomizer,
             this.particleManager,
+            this.interactionManager,
         );
 
         this.planetSpawner = new PlanetSpawner(
