@@ -1,5 +1,8 @@
-import { Container, Graphics, Sprite } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { SKIN_LIST } from "../../features/planet/data/SkinConfig.ts";
+import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
 
 export class LeftSideBar extends Container {
     private arrowIcon: Sprite;
@@ -53,6 +56,18 @@ export class LeftSideBar extends Container {
 
         planetsContainer.addChild(this.arrowIcon);
         this.pointToPlanet(1);
+
+        EventBus.instance.on(GameEvent.SkinChanged, () => {
+            this.onSkinChanged();
+        });
+    }
+
+    private onSkinChanged(): void {
+        const skinManager = SkinManager.getInstance();
+
+        for (let i = 0; i < this.planets.length; i++) {
+            this.planets[i].texture = skinManager.getPlanetTexture(`planet${i + 1}`);
+        }
     }
 
     public pointToPlanet(planetNumber: number) {
