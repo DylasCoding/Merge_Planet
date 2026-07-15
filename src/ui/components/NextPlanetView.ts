@@ -1,5 +1,6 @@
 import { type Application, Container, Sprite, Text } from "pixi.js";
 import { Font } from "../../core/Font.ts";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 
 export class NextPlanetView extends Container {
     private icon: Sprite;
@@ -32,9 +33,15 @@ export class NextPlanetView extends Container {
         text.position.set(bg.x, bg.y - 8);
 
         this.addChild(bg, this.icon, text);
+
+        this.setPlanetIcon("planet5");
+
+        EventBus.instance.on(GameEvent.NextPlanetChanged, (planetTexture: string) => {
+            this.setPlanetIcon(planetTexture);
+        });
     }
 
-    public setPlanetIcon(planetTexture: Sprite): void {
-        this.icon.texture = planetTexture.texture;
+    public setPlanetIcon(planetTexture: string): void {
+        this.icon.texture = Sprite.from(planetTexture).texture;
     }
 }
