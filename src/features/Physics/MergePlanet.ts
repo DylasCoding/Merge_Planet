@@ -1,6 +1,8 @@
 import { Vector2 } from "../../utils/math/Vector2";
 import type { Planet } from "../planet/entities/Planet";
 import { PlanetFactory } from "../planet/factory/PlanetFactory";
+import { GameSession } from "../../core/manager/GameSession.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class MergePlanet {
     planetFactory: PlanetFactory;
@@ -13,11 +15,20 @@ export class MergePlanet {
 
         const y = (planet1.planetRigidbody.position.y + planet2.planetRigidbody.position.y) / 2;
 
+        GameSession.Instance.score = (planet1.data.level + planet2.data.level) * 10;
+        this.updateHighScore(GameSession.Instance.score);
+
         const MergePlanetPosition = new Vector2(x, y);
         const newLevel = planet1.data.level + 1;
         return this.planetFactory.create({
             level: newLevel,
             position: MergePlanetPosition,
         });
+    }
+
+    private updateHighScore(score: number): void {
+        if (score > StorageManager.highScore) {
+            StorageManager.updateHighScore(score);
+        }
     }
 }
