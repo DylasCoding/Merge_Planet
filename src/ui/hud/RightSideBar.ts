@@ -1,11 +1,10 @@
 import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
 import { ToolButton } from "../components/ToolButton.ts";
-import { Button } from "../components/Button.ts";
 
 export class RightSideBar extends Container {
     public pickaxeButton: ToolButton;
-    constructor(app: Application, onPickaxeClick: () => void,) {
+    constructor(app: Application, onPickaxeClick: () => void) {
         super();
 
         this.x = app.screen.width;
@@ -29,7 +28,7 @@ export class RightSideBar extends Container {
         toolsContainer.y = app.screen.height - toolsContainer.height;
 
         this.addChild(bg, toolsContainer);
-        
+
         this.pickaxeButton.on("pointertap", () => {
             this.emit("Pickaxe");
         });
