@@ -52,6 +52,8 @@ import sound_bar from "../assets/Settings_Menu_Components/Large/sound-bar-full-l
 import sound_container from "../assets/Settings_Menu_Components/Large/sound-bar-container-large.png";
 import panel_line from "../assets/Settings_Menu_Components/Medium/settings-divider-medium.png";
 
+import overlay from "../ui/overlays/assets/overlay.png";
+
 export const manifest: AssetsManifest = {
     bundles: [
         {
@@ -67,6 +69,7 @@ export const manifest: AssetsManifest = {
                 button_pink: button_pink,
                 button_yellow: button_yellow,
                 button_purple: button_purple,
+                overlay: overlay,
 
                 score_star: score_star,
                 score_bg: score_bg,
