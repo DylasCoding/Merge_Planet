@@ -1,7 +1,18 @@
 import type { GameBox } from "../../ui/components/GameBox";
+import { FrictionResolve } from "../../utils/math/CalculateFriction";
+import { ImpulseResolve } from "../../utils/math/CalculateImpulse";
+import { PositionCorrectionResolve } from "../../utils/math/CalculatePositionCorrection";
 import type { Planet } from "../planet/entities/Planet";
 
-export class collisionResolve {
+export class CollisionResolve {
+    public impulse: ImpulseResolve;
+    public friction: FrictionResolve;
+    public position: PositionCorrectionResolve;
+    constructor() {
+        this.impulse = new ImpulseResolve();
+        this.friction = new FrictionResolve();
+        this.position = new PositionCorrectionResolve();
+    }
     resolvePlanetWithBox(planet: Planet, gameBox: GameBox) {
         const left = gameBox.gameBoxBounds.x;
         const right = gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width;
@@ -12,14 +23,14 @@ export class collisionResolve {
         if (planetPositionX - planetRadius <= left) {
             planet.planetRigidbody.position.x = left + planetRadius;
             planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
-
-            planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
+            if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
+                planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionX + planetRadius >= right) {
             planet.planetRigidbody.position.x = right - planetRadius;
             planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
-
-            planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
+            if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
+                planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionY + planetRadius >= bottom) {
             planet.planetRigidbody.isGrounded = true;
@@ -28,7 +39,7 @@ export class collisionResolve {
             if (Math.abs(planet.planetRigidbody.velocity.y) < 0.2) {
                 planet.planetRigidbody.velocity.y = 0;
             } else {
-                if (Math.abs(planet.planetRigidbody.velocity.x) < 0.05) {
+                if (Math.abs(planet.planetRigidbody.velocity.x) < 3) {
                     planet.planetRigidbody.velocity.x = 0;
                     planet.planetRigidbody.angularVelocity = 0;
                 }
@@ -78,12 +89,10 @@ export class collisionResolve {
     ) {
         const InverseMass1 = 1 / planet1.data.mass;
         const InverseMass2 = 1 / planet2.data.mass;
-        const positionValues = this.caculatePositionalCorrection(
+        const positionValues = this.position.calculatePositionCorrection(
             planet1,
             planet2,
             normal.distance,
-            InverseMass1,
-            InverseMass2,
             normal.nx,
             normal.ny,
         );
@@ -106,13 +115,11 @@ export class collisionResolve {
 
         const InverseMass1 = 1 / planet1.data.mass;
         const InverseMass2 = 1 / planet2.data.mass;
-        const frictionValues = this.calculateFriction(
+        const frictionValues = this.friction.calculateFriction(
             planet1,
             planet2,
             normal.nx,
             normal.ny,
-            InverseMass1,
-            InverseMass2,
             j,
         );
         planet1.planetRigidbody.velocity.x -= frictionValues.frictionX * InverseMass1;
@@ -128,15 +135,7 @@ export class collisionResolve {
         const inverseMass1 = 1 / planet1.data.mass;
         const inverseMass2 = 1 / planet2.data.mass;
 
-        const result = this.calculateImpulse(
-            planet1,
-            planet2,
-            normal.nx,
-            normal.ny,
-            inverseMass1,
-            inverseMass2,
-        );
-
+        const result = this.impulse.calculateImpulse(planet1, planet2, normal.nx, normal.ny);
         if (!result) return null;
 
         planet1.planetRigidbody.velocity.x -= result.impulseX * inverseMass1;
@@ -144,10 +143,12 @@ export class collisionResolve {
 
         planet2.planetRigidbody.velocity.x += result.impulseX * inverseMass2;
         planet2.planetRigidbody.velocity.y += result.impulseY * inverseMass2;
-        const spin = Math.abs(result.j) * 0.0000000001;
-        console.log(spin);
-        planet1.planetRigidbody.angularVelocity -= spin;
-        planet2.planetRigidbody.angularVelocity += spin;
+        if (Math.abs(result.j) > 5) {
+            const spin = Math.abs(result.j) * 0.0000000001;
+            console.log(spin);
+            planet1.planetRigidbody.angularVelocity -= spin;
+            planet2.planetRigidbody.angularVelocity += spin;
+        }
 
         return result.j;
     }
@@ -162,82 +163,82 @@ export class collisionResolve {
             distance,
         };
     }
-    public calculateImpulse(
-        planet1: Planet,
-        planet2: Planet,
-        nx: number,
-        ny: number,
-        InverseMass1: number,
-        InverseMass2: number,
-    ) {
-        const rvx = planet2.planetRigidbody.velocity.x - planet1.planetRigidbody.velocity.x;
-        const rvy = planet2.planetRigidbody.velocity.y - planet1.planetRigidbody.velocity.y;
+    // public calculateImpulse(
+    //     planet1: Planet,
+    //     planet2: Planet,
+    //     nx: number,
+    //     ny: number,
+    //     InverseMass1: number,
+    //     InverseMass2: number,
+    // ) {
+    //     const rvx = planet2.planetRigidbody.velocity.x - planet1.planetRigidbody.velocity.x;
+    //     const rvy = planet2.planetRigidbody.velocity.y - planet1.planetRigidbody.velocity.y;
 
-        const nvelocity = rvx * nx + rvy * ny;
+    //     const nvelocity = rvx * nx + rvy * ny;
 
-        if (nvelocity > 0) return null;
-        let eRestutition = Math.min(
-            planet2.planetRigidbody.restitution,
-            planet1.planetRigidbody.restitution,
-        );
-        if (Math.abs(nvelocity) < 1.0) {
-            eRestutition = 0.0;
-        }
-        const j = (-(1 + eRestutition) * nvelocity) / (InverseMass1 + InverseMass2);
-        const impulseX = j * nx;
-        const impulseY = j * ny;
+    //     if (nvelocity > 0) return null;
+    //     let eRestutition = Math.min(
+    //         planet2.planetRigidbody.restitution,
+    //         planet1.planetRigidbody.restitution,
+    //     );
+    //     if (Math.abs(nvelocity) < 1.0) {
+    //         eRestutition = 0.0;
+    //     }
+    //     const j = (-(1 + eRestutition) * nvelocity) / (InverseMass1 + InverseMass2);
+    //     const impulseX = j * nx;
+    //     const impulseY = j * ny;
 
-        return {
-            impulseX,
-            impulseY,
-            j,
-        };
-    }
-    public calculateFriction(
-        planet1: Planet,
-        planet2: Planet,
-        nx: number,
-        ny: number,
-        InverseMass1: number,
-        InverseMass2: number,
-        j: number,
-    ) {
-        const rvx = planet2.planetRigidbody.velocity.x - planet1.planetRigidbody.velocity.x;
-        const rvy = planet2.planetRigidbody.velocity.y - planet1.planetRigidbody.velocity.y;
-        const tx = -ny;
-        const ty = nx;
-        const tVelocity = rvx * tx + rvy * ty;
-        let jt = -tVelocity / (InverseMass1 + InverseMass2);
-        const mu = 0.05;
-        const maxFriction = mu * j;
-        jt = Math.max(-maxFriction, Math.min(maxFriction, jt));
-        const frictionX = jt * tx;
-        const frictionY = jt * ty;
-        return {
-            frictionX,
-            frictionY,
-        };
-    }
-    public caculatePositionalCorrection(
-        planet1: Planet,
-        planet2: Planet,
-        distance: number,
-        InverseMass1: number,
-        InverseMass2: number,
-        nx: number,
-        ny: number,
-    ) {
-        const k_slop = 0.1;
-        const k_percent = 0.7;
-        const overLap = planet1.data.radius + planet2.data.radius - distance;
-        const posCorrection =
-            (Math.max(overLap - k_slop, 0) / (InverseMass1 + InverseMass2)) * k_percent;
+    //     return {
+    //         impulseX,
+    //         impulseY,
+    //         j,
+    //     };
+    // }
+    // public calculateFriction(
+    //     planet1: Planet,
+    //     planet2: Planet,
+    //     nx: number,
+    //     ny: number,
+    //     InverseMass1: number,
+    //     InverseMass2: number,
+    //     j: number,
+    // ) {
+    //     const rvx = planet2.planetRigidbody.velocity.x - planet1.planetRigidbody.velocity.x;
+    //     const rvy = planet2.planetRigidbody.velocity.y - planet1.planetRigidbody.velocity.y;
+    //     const tx = -ny;
+    //     const ty = nx;
+    //     const tVelocity = rvx * tx + rvy * ty;
+    //     let jt = -tVelocity / (InverseMass1 + InverseMass2);
+    //     const mu = 0.05;
+    //     const maxFriction = mu * j;
+    //     jt = Math.max(-maxFriction, Math.min(maxFriction, jt));
+    //     const frictionX = jt * tx;
+    //     const frictionY = jt * ty;
+    //     return {
+    //         frictionX,
+    //         frictionY,
+    //     };
+    // }
+    // public caculatePositionalCorrection(
+    //     planet1: Planet,
+    //     planet2: Planet,
+    //     distance: number,
+    //     InverseMass1: number,
+    //     InverseMass2: number,
+    //     nx: number,
+    //     ny: number,
+    // ) {
+    //     const k_slop = 0.1;
+    //     const k_percent = 0.8;
+    //     const overLap = planet1.data.radius + planet2.data.radius - distance;
+    //     const posCorrection =
+    //         (Math.max(overLap - k_slop, 0) / (InverseMass1 + InverseMass2)) * k_percent;
 
-        const cx = nx * posCorrection;
-        const cy = ny * posCorrection;
-        return {
-            cx,
-            cy,
-        };
-    }
+    //     const cx = nx * posCorrection;
+    //     const cy = ny * posCorrection;
+    //     return {
+    //         cx,
+    //         cy,
+    //     };
+    // }
 }

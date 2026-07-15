@@ -19,6 +19,8 @@ export class PlanetFactory {
         sprite.anchor.set(0.5);
         sprite.scale.set(0.02 * data.radius);
 
+        
+
         return new Planet({
             data,
             sprite,

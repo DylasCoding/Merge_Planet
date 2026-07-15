@@ -1,4 +1,4 @@
-export class timerSpawner {
+export class TimerSpawner {
     public timer: number = 0;
     //set-up spawn per time 2 seconds
     public timerAccount!: number;

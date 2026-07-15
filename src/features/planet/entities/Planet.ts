@@ -1,13 +1,13 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import { type PlanetData } from "../data/PlanetData";
-import { rigidBody } from "../../Physics/Rigidbody";
+import { RigidBody } from "../../physics/Rigidbody";
 import type { PlanetOptions } from "../types/PlanetOptions";
 
 export class Planet extends Container {
     public readonly data: PlanetData;
     public readonly sprite: Sprite;
 
-    public planetRigidbody: rigidBody;
+    public planetRigidbody: RigidBody;
     public isDropPlanet: boolean;
     public isMerge: boolean;
     constructor(options: PlanetOptions) {
@@ -18,7 +18,7 @@ export class Planet extends Container {
         this.sprite = sprite;
         this.isDropPlanet = false;
         this.isMerge = false;
-        this.planetRigidbody = new rigidBody(options.position!.x, options.position!.y);
+        this.planetRigidbody = new RigidBody(options.position!.x, options.position!.y);
 
         this.addChild(this.sprite);
     }

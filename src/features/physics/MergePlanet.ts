@@ -13,7 +13,9 @@ export class MergePlanet {
     public mergePlanet(planet1: Planet, planet2: Planet) {
         const x = (planet1.planetRigidbody.position.x + planet2.planetRigidbody.position.x) / 2;
 
-        const y = (planet1.planetRigidbody.position.y + planet2.planetRigidbody.position.y) / 2;
+        const y =
+            (planet1.planetRigidbody.position.y + planet2.planetRigidbody.position.y) / 2 -
+            planet1.data.radius * 0.8;
 
         GameSession.Instance.score = (planet1.data.level + planet2.data.level) * 10;
         this.updateHighScore(GameSession.Instance.score);
