@@ -4,7 +4,8 @@ import { ToolButton } from "../components/ToolButton.ts";
 
 export class RightSideBar extends Container {
     public pickaxeButton: ToolButton;
-    constructor(app: Application, onPickaxeClick: () => void) {
+    public shuffleButton: ToolButton;
+    constructor(app: Application, onPickaxeClick: () => void, onShuffleClick: () => void) {
         super();
 
         this.x = app.screen.width;
@@ -17,13 +18,13 @@ export class RightSideBar extends Container {
         const toolsContainer = new Container();
 
         this.pickaxeButton = new ToolButton("tool1_icon", 100, onPickaxeClick);
-        const tool2 = new ToolButton("tool2_icon", 350, () => {});
+        this.shuffleButton = new ToolButton("tool2_icon", 350, onShuffleClick);
 
         const toolSpacing = 100;
         this.pickaxeButton.y = 0;
-        tool2.y = this.pickaxeButton.y + toolSpacing;
+        this.shuffleButton.y = this.pickaxeButton.y + toolSpacing;
 
-        toolsContainer.addChild(this.pickaxeButton, tool2);
+        toolsContainer.addChild(this.pickaxeButton, this.shuffleButton);
         toolsContainer.x = -bg.width / 2 - 50;
         toolsContainer.y = app.screen.height - toolsContainer.height;
 
@@ -31,6 +32,10 @@ export class RightSideBar extends Container {
 
         this.pickaxeButton.on("pointertap", () => {
             this.emit("Pickaxe");
+        });
+
+        this.shuffleButton.on("pointertap", () => {
+            this.emit("Shuffle");
         });
     }
 }
