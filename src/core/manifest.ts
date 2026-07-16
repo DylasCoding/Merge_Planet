@@ -12,7 +12,7 @@ import score_bg from "../assets/Containers/Small/pause-container-small.png";
 
 import gem_bg from "../assets/Button_Images/Pressed_Sprites/Medium/medium-yellow-pressed-medium.png";
 import gem_icon from "../assets/Shop_Assets/gems-tier-1-medium.png";
-
+import warning_icon from "../assets/Other_Images/Extra_Large/warning-alert-icons-extra-large.png";
 import Asap_Bold from "../assets/Fonts/Asap-Bold.ttf";
 import Righteous_Regular from "../assets/Fonts/Righteous-Regular.ttf";
 
@@ -118,6 +118,7 @@ export const manifest: AssetsManifest = {
 
                 shop_bg: shop_bg,
                 lock_icon: lockicon,
+                warningAlert_icon: warning_icon,
             },
         },
         {

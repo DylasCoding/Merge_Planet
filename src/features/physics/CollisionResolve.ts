@@ -20,53 +20,59 @@ export class CollisionResolve {
         const planetRadius = planet.data.radius;
         const planetPositionX = planet.planetRigidbody.position.x;
         const planetPositionY = planet.planetRigidbody.position.y;
+        const planetRG = planet.planetRigidbody;
+        const EPS_V = 0.2;
+        const EPS_ROLL = 0.3;
         if (planetPositionX - planetRadius <= left) {
-            planet.planetRigidbody.position.x = left + planetRadius;
-            planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
-            if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
-                planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
+            planetRG.position.x = left + planetRadius;
+            planetRG.velocity.x *= -planet.planetRigidbody.restitution;
+            if (Math.abs(planetRG.velocity.x) > EPS_ROLL) {
+                planetRG.angularVelocity += planetRG.velocity.y * 0.02;
+            } else if (Math.abs(planetRG.velocity.y) < EPS_V) {
+                planetRG.angularVelocity = 0;
+            }
         }
         if (planetPositionX + planetRadius >= right) {
-            planet.planetRigidbody.position.x = right - planetRadius;
-            planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
-            if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
-                planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
+            planetRG.position.x = right - planetRadius;
+            planetRG.velocity.x *= -planetRG.restitution;
+            if (Math.abs(planetRG.velocity.x) > EPS_ROLL) {
+                planetRG.angularVelocity -= planetRG.velocity.y * 0.02;
+            } else if (Math.abs(planetRG.velocity.y) < EPS_V) {
+                planetRG.angularVelocity = 0;
+            }
         }
         if (planetPositionY + planetRadius >= bottom) {
-            planet.planetRigidbody.isGrounded = true;
-            planet.planetRigidbody.position.y = bottom - planetRadius;
+            planetRG.isGrounded = true;
+            planet.notUntilCount = true;
 
-            if (Math.abs(planet.planetRigidbody.velocity.y) < 0.2) {
-                planet.planetRigidbody.velocity.y = 0;
+            planetRG.position.y = bottom - planetRadius;
+
+            if (Math.abs(planetRG.velocity.y) < EPS_V) {
+                planetRG.velocity.y = 0;
             } else {
                 if (Math.abs(planet.planetRigidbody.velocity.x) < 3) {
-                    planet.planetRigidbody.velocity.x = 0;
-                    planet.planetRigidbody.angularVelocity = 0;
+                    planetRG.velocity.x = 0;
+                    planetRG.angularVelocity = 0;
                 }
-                planet.planetRigidbody.angularVelocity =
-                    planet.planetRigidbody.velocity.x / planet.data.radius;
-                planet.planetRigidbody.velocity.y *= -planet.planetRigidbody.restitution;
+                planetRG.angularVelocity = planetRG.velocity.x / planet.data.radius;
+                planetRG.velocity.y *= -planetRG.restitution;
             }
 
-            planet.planetRigidbody.velocity.x *= 0.99;
-            const planetRigidbody = planet.planetRigidbody;
+            planetRG.velocity.x *= 0.99;
 
-            if (
-                Math.abs(planetRigidbody.velocity.x) < 0.05 &&
-                Math.abs(planetRigidbody.velocity.y) < 0.05
-            ) {
-                planetRigidbody.sleepTimer++;
+            if (Math.abs(planetRG.velocity.x) < 0.05 && Math.abs(planetRG.velocity.y) < 0.05) {
+                planetRG.sleepTimer++;
             } else {
-                planetRigidbody.sleepTimer = 0;
+                planetRG.sleepTimer = 0;
             }
 
-            if (planetRigidbody.sleepTimer > 20) {
-                planetRigidbody.isSleeping = true;
+            if (planetRG.sleepTimer > 20) {
+                planetRG.isSleeping = true;
 
-                planetRigidbody.velocity.x = 0;
-                planetRigidbody.velocity.y = 0;
+                planetRG.velocity.x = 0;
+                planetRG.velocity.y = 0;
 
-                planetRigidbody.angularVelocity = 0;
+                planetRG.angularVelocity = 0;
             }
         }
     }
@@ -74,13 +80,13 @@ export class CollisionResolve {
         const normal = this.calculateNormal(planet1, planet2);
 
         if (!normal) return;
+        this.applyPositionCorrection(planet1, planet2, normal);
 
         const j = this.applyImpulse(planet1, planet2, normal);
 
         if (j === null) return;
 
         this.applyFriction(planet1, planet2, normal, j);
-        this.applyPositionCorrection(planet1, planet2, normal);
     }
     applyPositionCorrection(
         planet1: Planet,
@@ -107,11 +113,11 @@ export class CollisionResolve {
         normal: { nx: number; ny: number; distance: number },
         j: number,
     ) {
-        // planet1.planetRigidbody.isSleeping = false;
-        // planet2.planetRigidbody.isSleeping = false;
+        planet1.planetRigidbody.isSleeping = false;
+        planet2.planetRigidbody.isSleeping = false;
 
-        // planet1.planetRigidbody.sleepTimer = 0;
-        // planet2.planetRigidbody.sleepTimer = 0;
+        planet1.planetRigidbody.sleepTimer = 0;
+        planet2.planetRigidbody.sleepTimer = 0;
 
         const InverseMass1 = 1 / planet1.data.mass;
         const InverseMass2 = 1 / planet2.data.mass;
@@ -143,12 +149,6 @@ export class CollisionResolve {
 
         planet2.planetRigidbody.velocity.x += result.impulseX * inverseMass2;
         planet2.planetRigidbody.velocity.y += result.impulseY * inverseMass2;
-        if (Math.abs(result.j) > 5) {
-            const spin = Math.abs(result.j) * 0.0000000001;
-
-            planet1.planetRigidbody.angularVelocity -= spin;
-            planet2.planetRigidbody.angularVelocity += spin;
-        }
 
         return result.j;
     }

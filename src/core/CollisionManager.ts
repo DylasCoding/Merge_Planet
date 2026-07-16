@@ -26,10 +26,11 @@ export class CollisionManager {
         for (let i = 0; i < 15; i++) {
             this.resolveCollisionPlanetWithPlanet();
         }
+        this.resolveCollisionPlanetWithBox();
+
         // this.DetectCollisionToGameOver();
         this.warningLine.isPlanetAbobeWarningLines = this.hasPlanetAboveWarningLine();
         this.warningLine.isWarning = this.WarningbeforeCollision();
-        this.resolveCollisionPlanetWithBox();
     }
 
     DetectCollisionToGameOver() {
@@ -58,7 +59,7 @@ export class CollisionManager {
     public hasPlanetAboveWarningLine(): boolean {
         for (const planet of this.listOfPlanetObjects) {
             if (
-                planet.isDropPlanet &&
+                planet.notUntilCount &&
                 this.Collider.detectCollisionPlanetWithWarningLines(planet, this.warningLine)
             ) {
                 return true;
@@ -69,7 +70,7 @@ export class CollisionManager {
     public WarningbeforeCollision(): boolean {
         for (const planet of this.listOfPlanetObjects) {
             if (
-                planet.isDropPlanet &&
+                planet.notUntilCount &&
                 this.Collider.WarningBeforeCollisionPlanetWithWarningLines(planet, this.warningLine)
             ) {
                 return true;
@@ -103,6 +104,9 @@ export class CollisionManager {
                 if (this.mergeManager.checkingPlanetType(planet1, planet2)) {
                     this.mergeManager.pushMergeQueue(planet1, planet2);
                 }
+
+                planet1.notUntilCount = true;
+                planet2.notUntilCount = true;
             }
         }
     }
