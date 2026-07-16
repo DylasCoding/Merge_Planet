@@ -3,6 +3,8 @@ import { EventBus, GameEvent } from "../event/GameEvent.ts";
 export interface IGameSaveData {
     highScore: number;
     gems: number;
+    soundVolume: number;
+    musicVolume: number;
 }
 
 export class StorageManager {
@@ -12,6 +14,8 @@ export class StorageManager {
     private static readonly DEFAULT_DATA: IGameSaveData = {
         highScore: 0,
         gems: 0,
+        soundVolume: 0.5,
+        musicVolume: 0.5,
     };
 
     public static load(): void {
@@ -59,5 +63,25 @@ export class StorageManager {
             this.save();
             EventBus.instance.emit(GameEvent.HighScoreChanged, this.data.highScore);
         }
+    }
+
+    public static get soundVolume(): number {
+        return this.data.soundVolume;
+    }
+
+    public static updateSoundVolume(volume: number): void {
+        this.data.soundVolume = volume;
+        this.save();
+        EventBus.instance.emit(GameEvent.SoundVolumeChanged, volume);
+    }
+
+    public static get musicVolume(): number {
+        return this.data.musicVolume;
+    }
+
+    public static updateMusicVolume(volume: number): void {
+        this.data.musicVolume = volume;
+        this.save();
+        EventBus.instance.emit(GameEvent.MusicVolumeChanged, volume);
     }
 }

@@ -13,7 +13,7 @@ import { PlanetDragController } from "../features/planet/interaction/PlanetDragC
 import type { Planet } from "../features/planet/entities/Planet.ts";
 import { CollisionManager } from "../core/CollisionManager.ts";
 import { MergeManager } from "../core/MergeManager.ts";
-import { TimerSpawner } from "../features/planet/spawn/TimerSpawner.ts";
+import { Timer } from "../features/planet/spawn/TimerSpawner.ts";
 import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
 import { SkinManager } from "../features/planet/skin/SkinManager.ts";
@@ -23,6 +23,9 @@ import { ToolManager } from "../features/tool/ToolManager.ts";
 import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
 import { ToolType } from "../features/tool/ToolType.ts";
+import { GameOverOverlay } from "../ui/GameOverOverlay.ts";
+import { EventBus, GameEvent } from "../core/event/GameEvent.ts";
+import { WarningLine } from "../ui/components/WarningLine.ts";
 import { PickaxeEffect } from "../features/tool/effects/PickaxeEffect.ts";
 import { ShakeBoxEffect } from "../features/tool/effects/ShakeBoxEffect.ts";
 import { ShuffleTool } from "../features/tool/tools/ShuffleTool.ts";
@@ -33,6 +36,7 @@ export class GameScene extends BaseScene {
 
     private hud!: HUD;
     private gameBox!: GameBox;
+    private warningLine!: WarningLine;
     private settingsOverlay!: SettingsOverlay;
     private skinShopOverlay!: SkinShopOverlay;
 
@@ -55,9 +59,13 @@ export class GameScene extends BaseScene {
     private isShuffling = false;
 
     private currentDragController: PlanetDragController | null = null;
-    private timer!: TimerSpawner;
+    private timer!: Timer;
     private shouldSpawnNext = false;
     private currentPlanet!: Planet;
+
+    private isInputLocked = false;
+
+    private gameOverOverlay!: GameOverOverlay;
 
     constructor(app: Application) {
         super(app);
@@ -84,7 +92,7 @@ export class GameScene extends BaseScene {
         const queue = new PlanetSpawnQueue(randomizer, 3);
         const factory = new PlanetFactory();
 
-        this.timer = new TimerSpawner();
+        this.timer = new Timer();
         this.timer.setTimer(0.7);
 
         this.toolManager = new ToolManager();
@@ -109,6 +117,8 @@ export class GameScene extends BaseScene {
             this.toolController,
         );
 
+        this.interactionManager.isLockedCheck = () => this.isInputLocked;
+
         this.mergeManager = new MergeManager(
             factory,
             this.planetManager,
@@ -126,11 +136,16 @@ export class GameScene extends BaseScene {
             this.mouseInputManager,
             this.interactionManager,
         );
-
+        this.warningLine = new WarningLine(
+            this.gameBox.getBoundsAsObject().x,
+            this.gameBox.getBoundsAsObject().y + 30,
+        );
+        this.addChild(this.warningLine);
         this.CollisionManager.setComponentForCollision(
             this.planetManager.planets,
             this.gameBox,
             this.mergeManager,
+            this.warningLine,
         );
 
         this.hud = new HUD(
@@ -148,8 +163,18 @@ export class GameScene extends BaseScene {
         this.toolOverlay = new ToolOverlayWithPickaxe();
         this.toolOverlay.redraw(this.app.screen, this.gameBox.getBoundsAsObject());
 
+        this.gameOverOverlay = new GameOverOverlay(this.app);
+
+        // this.triggerGameOver(100);
+
         this.settingsOverlay = new SettingsOverlay(this.app);
+        this.settingsOverlay.onClose = () => {
+            this.blockInput();
+        };
         this.skinShopOverlay = new SkinShopOverlay(this.app, this.planetManager);
+        this.skinShopOverlay.onClose = () => {
+            this.blockInput();
+        };
         SkinManager.getInstance().onSkinChanged = () => {
             this.planetManager.refreshAllPlanetTextures();
         };
@@ -164,6 +189,10 @@ export class GameScene extends BaseScene {
         this.spawnNextPlanet();
 
         this.mouseInputManager.onMouseClick(() => {
+            if (this.isInputLocked) {
+                return;
+            }
+
             if (this.toolController.isUsingTool()) {
                 return;
             }
@@ -181,14 +210,27 @@ export class GameScene extends BaseScene {
         });
         this.addChild(this.settingsOverlay);
         this.addChild(this.skinShopOverlay);
+        this.addChild(this.gameOverOverlay);
+
+        EventBus.instance.on(GameEvent.GameOver, (finalScore: number) => {
+            this.triggerGameOver(finalScore);
+        });
     }
 
     private openSettings(): void {
         this.settingsOverlay.show();
+        this.isInputLocked = true;
     }
 
     private openSkinShop(): void {
         this.skinShopOverlay.show();
+        this.isInputLocked = true;
+    }
+
+    private blockInput(): void {
+        setTimeout(() => {
+            this.isInputLocked = false;
+        }, 50);
     }
 
     private spawnNextPlanet(): void {
@@ -227,6 +269,22 @@ export class GameScene extends BaseScene {
         this.isShuffling = false;
     }
 
+    public triggerGameOver(finalScore: number): void {
+        this.isInputLocked = true;
+
+        if (this.currentDragController) {
+            this.currentDragController.endDrag();
+            this.currentDragController = null;
+        }
+
+        if (this.currentPlanet) {
+            this.currentPlanet.visible = false;
+        }
+
+        this.gameOverOverlay.setScore(finalScore);
+        this.gameOverOverlay.show();
+    }
+
     public update(deltaTime: number): void {
         if (!this.isShuffling && this.shouldSpawnNext && this.timer.timeUp()) {
             this.timer.turnTimer();
@@ -242,6 +300,7 @@ export class GameScene extends BaseScene {
         this.particleManager.update(deltaTime);
         this.timer.update(deltaTime);
         this.interactionManager.updateDrag();
+        this.warningLine.update(deltaTime);
 
         if (this.toolOverlay.visible) {
             this.toolOverlay.update(deltaTime);

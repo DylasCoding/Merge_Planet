@@ -1,4 +1,5 @@
 import { PlanetRandomizer } from "../random/PlanetRandomizer";
+import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
 
 export class PlanetSpawnQueue {
     private readonly queue: number[] = [];
@@ -18,9 +19,15 @@ export class PlanetSpawnQueue {
             throw new Error("Spawn queue is empty.");
         }
 
+        EventBus.instance.emit(GameEvent.NextPlanetLevelChanged, this.peekNextLevel());
+
         this.queue.push(this.randomizer.nextLevel());
 
         return level;
+    }
+
+    public peekNextLevel(): number {
+        return this.queue[0];
     }
 
     public getQueue(): readonly number[] {

@@ -6,7 +6,6 @@ export class ZoomOutEffects extends ParticleList {
     constructor(xCoord: number, yCoord: number, Radius: number) {
         super(xCoord, yCoord);
         this.createEffect(Radius);
-        console.log("particle duoc tao ra");
     }
     createEffect(Radius: number) {
         const particle = new ZoomOutParticle(0, 0, Radius);

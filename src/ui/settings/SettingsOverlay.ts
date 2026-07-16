@@ -3,6 +3,8 @@ import { type Application } from "pixi.js";
 import { Button } from "../components/Button.ts";
 import { SettingRow } from "./SettingRow.ts";
 import { SettingActionButtons } from "./SettingActionButtons.ts";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class SettingsOverlay extends Container {
     private backdrop: Graphics;
@@ -10,6 +12,8 @@ export class SettingsOverlay extends Container {
     private closeBtn: Button;
     private actionButtons: SettingActionButtons;
     private app: Application;
+
+    public onClose?: () => void;
 
     constructor(app: Application) {
         super();
@@ -39,8 +43,15 @@ export class SettingsOverlay extends Container {
             this.hide();
         });
 
-        const soundRow = new SettingRow("sound_icon", "Sound", 15, (v) => this.onSoundChange(v));
-        const musicRow = new SettingRow("music_icon", "Music", 10, (v) => this.onMusicChange(v));
+        const initialSoundStep = Math.round(StorageManager.soundVolume * 20);
+        const initialMusicStep = Math.round(StorageManager.musicVolume * 20);
+
+        const soundRow = new SettingRow(this.app, "sound_icon", "Sound", initialSoundStep, (v) =>
+            this.onSoundChange(v),
+        );
+        const musicRow = new SettingRow(this.app, "music_icon", "Music", initialMusicStep, (v) =>
+            this.onMusicChange(v),
+        );
 
         soundRow.position.set(panelBg.x + 120, panelBg.y + 100);
         musicRow.position.set(panelBg.x + 120, panelBg.y + 150);
@@ -56,7 +67,7 @@ export class SettingsOverlay extends Container {
         );
 
         const centerX = panelBg.x + (panelBg.width - this.actionButtons.width) / 2 + 80;
-        this.actionButtons.position.set(centerX, soundLine.y + soundLine.height + 50);
+        this.actionButtons.position.set(centerX, soundLine.y + soundLine.height * 20);
 
         this.panel.addChild(
             panelBg,
@@ -71,21 +82,24 @@ export class SettingsOverlay extends Container {
         this.visible = false;
     }
 
-    private onSoundChange(value: number): void {}
+    private onSoundChange(value: number): void {
+        StorageManager.updateSoundVolume(value);
+    }
 
-    private onMusicChange(value: number): void {}
+    private onMusicChange(value: number): void {
+        StorageManager.updateMusicVolume(value);
+    }
 
     private handleRestart(): void {
-        console.log("Restart game");
+        EventBus.instance.emit(GameEvent.GameStart);
     }
 
     private handleContinue(): void {
-        console.log("Continue game");
-        // this.hide();
+        this.hide();
     }
 
     private handleReturn(): void {
-        console.log("Return to Main Menu");
+        this.hide();
     }
 
     public show(): void {
@@ -94,5 +108,6 @@ export class SettingsOverlay extends Container {
 
     public hide(): void {
         this.visible = false;
+        if (this.onClose) this.onClose();
     }
 }

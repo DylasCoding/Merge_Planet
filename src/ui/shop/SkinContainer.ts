@@ -58,6 +58,8 @@ export class SkinContainer extends Container {
             this.buyButton.eventMode = "none"; // block spam
             await SkinManager.getInstance().changeSkin(this.bundleId);
 
+            // this.buyButton.setTextureBackground(Sprite.from("button_p").texture);
+
             this.buyButton.eventMode = "static";
         });
 

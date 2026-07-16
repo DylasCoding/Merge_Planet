@@ -1,13 +1,16 @@
-import { Container, Sprite, Text } from "pixi.js";
+import { Container, Sprite, Text, type Texture } from "pixi.js";
 import { Font } from "../../core/Font.ts";
 
 export class Button extends Container {
     private baseScale = 1;
     private buttonText: Text;
-    private icon: Sprite | undefined;
+    private icon!: Sprite;
+    private background: Sprite;
 
     constructor(text: string, background: Sprite, icon?: string) {
         super();
+
+        this.background = background;
 
         this.buttonText = new Text({
             text: text,
@@ -18,22 +21,22 @@ export class Button extends Container {
             },
         });
 
-        background.anchor.set(0.5);
+        this.background.anchor.set(0.5);
         this.buttonText.anchor.set(0.5);
-        background.scale.set(0.6);
-        this.buttonText.position.set(background.x, background.y);
+        this.background.scale.set(0.6);
+        this.buttonText.position.set(this.background.x, this.background.y);
 
-        this.addChild(background);
+        this.addChild(this.background);
 
         if (icon) {
             this.icon = Sprite.from(icon);
             this.icon.anchor.set(0.6);
             this.icon.scale.set(0.35);
-            this.icon.position.set(background.x - 20, background.y + 5);
+            this.icon.position.set(this.background.x - 20, this.background.y + 5);
 
             this.addChild(this.icon);
 
-            this.buttonText.position.set(this.icon.x + this.icon.width / 2, background.y);
+            this.buttonText.position.set(this.icon.x + this.icon.width / 2, this.background.y);
         }
 
         this.addChild(this.buttonText);

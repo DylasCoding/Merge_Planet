@@ -8,5 +8,5 @@ export interface ISkinInfo {
 
 export const SKIN_LIST: ISkinInfo[] = [
     { id: "planets", name: "Default Skin", icon: "planet10", price: 0, prefix: "" },
-    { id: "spaces", name: "Space Skin", icon: "s_planet3", price: 100, prefix: "s_" },
+    { id: "spaces", name: "Space Skin", icon: "s_planet3", price: 0, prefix: "s_" },
 ];

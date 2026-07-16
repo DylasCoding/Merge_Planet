@@ -9,11 +9,16 @@ export class PlanetInteractionManager {
     private draggedPlanet: PlanetDragController | null = null;
     private readonly mouseTracker: IMouseTracker;
     private readonly toolController: ToolController;
+    public isLockedCheck?: () => boolean;
 
     constructor(mouseTracker: IMouseTracker, toolController: ToolController) {
         this.mouseTracker = mouseTracker;
         this.toolController = toolController;
         this.mouseTracker.onMouseClick(() => {
+            if (this.isLockedCheck && this.isLockedCheck()) {
+                return;
+            }
+
             if (this.draggedPlanet) {
                 this.draggedPlanet.endDrag();
                 this.draggedPlanet = null;

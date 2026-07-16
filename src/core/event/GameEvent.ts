@@ -5,11 +5,14 @@ export const GameEvent = {
     HighScoreChanged: "HighScoreChanged",
     ScoreChanged: "ScoreChanged",
     NextPlanetChanged: "NextPlanetChanged",
+    NextPlanetLevelChanged: "NextPlanetLevelChanged",
     GameOver: "GameOver",
     GameStart: "GameStart",
-    GamePause: "GamePause",
-    GameResume: "GameResume",
     SkinChanged: "SkinChanged",
+    LevelChanged: "LevelChanged",
+    SoundVolumeChanged: "SoundVolumeChanged",
+    MusicVolumeChanged: "MusicVolumeChanged",
+    PlanetMerged: "PlanetMerged",
 } as const;
 
 export class EventBus {

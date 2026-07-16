@@ -19,7 +19,6 @@ export class ParticleSpawner {
         const explode = new ExplodeEffects(xCoord, yCoord, numberOfParticle, speed);
         this.listOfEffects.push(explode);
         this.gameScene.addChild(explode);
-        console.log("da tao particle");
     }
     public spawnZoomEffects(xCoord: number, yCoord: number, Radius: number) {
         const zoomout = new ZoomOutEffects(xCoord, yCoord, Radius);

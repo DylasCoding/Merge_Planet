@@ -13,6 +13,8 @@ export class SkinShopOverlay extends Container {
     private skinContainer: SkinContainer;
     private planetManager: PlanetManager;
 
+    public onClose?: () => void;
+
     constructor(app: Application, planetManager: PlanetManager) {
         super();
 
@@ -96,6 +98,7 @@ export class SkinShopOverlay extends Container {
 
     public hide(): void {
         this.visible = false;
+        if (this.onClose) this.onClose();
     }
 
     private createSkinContainer(

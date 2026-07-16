@@ -5,7 +5,6 @@ export class ExplodeEffects extends ParticleList {
     constructor(xCoord: number, yCoord: number, numberOfParticle: number, speed: number) {
         super(xCoord, yCoord);
         this.createEffect(numberOfParticle, speed);
-        console.log("particle duoc tao ra");
     }
     createEffect(numberOfParticle: number, speed: number) {
         for (let i = 0; i < numberOfParticle; i++) {
@@ -14,7 +13,6 @@ export class ExplodeEffects extends ParticleList {
             const particle = new ExplodeParticle(
                 Math.sin(angle),
                 Math.cos(angle),
-
                 angle,
                 Pariclespeed,
             );
