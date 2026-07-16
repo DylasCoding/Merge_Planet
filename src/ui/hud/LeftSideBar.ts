@@ -60,6 +60,10 @@ export class LeftSideBar extends Container {
         EventBus.instance.on(GameEvent.SkinChanged, () => {
             this.onSkinChanged();
         });
+
+        EventBus.instance.on(GameEvent.LevelChanged, (level: number) => {
+            this.pointToPlanet(level);
+        });
     }
 
     private onSkinChanged(): void {

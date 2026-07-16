@@ -8,9 +8,8 @@ export const GameEvent = {
     NextPlanetLevelChanged: "NextPlanetLevelChanged",
     GameOver: "GameOver",
     GameStart: "GameStart",
-    GamePause: "GamePause",
-    GameResume: "GameResume",
     SkinChanged: "SkinChanged",
+    LevelChanged: "LevelChanged",
 } as const;
 
 export class EventBus {

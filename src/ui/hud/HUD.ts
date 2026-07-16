@@ -9,13 +9,17 @@ export class HUD extends Container {
     private leftSideBar: LeftSideBar;
     public rightSideBar: RightSideBar;
 
-    constructor(app: Application, onOpenSettings: () => void, onOpenSkinShop: () => void, onPickaxeClick: () => void) {
+    constructor(
+        app: Application,
+        onOpenSettings: () => void,
+        onOpenSkinShop: () => void,
+        onPickaxeClick: () => void,
+    ) {
         super();
         this.topBar = new TopBar(app);
         this.leftSideBar = new LeftSideBar(app);
         this.rightSideBar = new RightSideBar(app, onPickaxeClick);
 
-        this.leftSideBar.pointToPlanet(2);
         this.topBar.settingsButton.onClick(onOpenSettings);
         this.topBar.skinButton.onClick(onOpenSkinShop);
 
