@@ -26,6 +26,7 @@ import { ToolType } from "../features/tool/ToolType.ts";
 import { PickaxeEffect } from "../features/tool/effects/PickaxeEffect.ts";
 import { ShakeBoxEffect } from "../features/tool/effects/ShakeBoxEffect.ts";
 import { ShuffleTool } from "../features/tool/tools/ShuffleTool.ts";
+import { PickaxeCursor } from "../features/tool/effects/PickaxeCursor.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -48,6 +49,7 @@ export class GameScene extends BaseScene {
     private toolOverlay!: ToolOverlayWithPickaxe;
 
     private pickaxeEffect!: PickaxeEffect;
+    private pickaxeCursor!: PickaxeCursor;
     private shuffleTool!: ShuffleTool;
     private shakeBoxEffect!: ShakeBoxEffect;
     private isShuffling = false;
@@ -63,6 +65,9 @@ export class GameScene extends BaseScene {
 
     public async initialize(): Promise<void> {
         await Assets.loadBundle(["ui", "planets", "particle", "spaces"]);
+
+        this.pickaxeCursor = new PickaxeCursor();
+        this.app.stage.addChild(this.pickaxeCursor);
 
         this.gameBox = new GameBox();
 
@@ -91,6 +96,7 @@ export class GameScene extends BaseScene {
             this.toolManager,
             this.pickaxeTool,
             this.pickaxeEffect,
+            this.pickaxeCursor,
             this.shuffleTool,
             this.shakeBoxEffect,
         );
@@ -132,7 +138,12 @@ export class GameScene extends BaseScene {
             this.openSettings.bind(this),
             this.openSkinShop.bind(this),
             () => this.toggleTool(ToolType.Pickaxe),
-            () => this.onShuffleClick(),
+            () => {
+                if (this.toolController.isUsingTool()) {
+                    return;
+                }
+                this.onShuffleClick();
+            },
         );
         this.toolOverlay = new ToolOverlayWithPickaxe();
         this.toolOverlay.redraw(this.app.screen, this.gameBox.getBoundsAsObject());
@@ -197,6 +208,10 @@ export class GameScene extends BaseScene {
     }
 
     private toggleTool(tool: ToolType): void {
+        if (this.isShuffling) {
+            return;
+        }
+
         this.toolController.toggleTool(tool);
 
         if (this.toolController.isUsingTool()) {
@@ -230,6 +245,11 @@ export class GameScene extends BaseScene {
 
         if (this.toolOverlay.visible) {
             this.toolOverlay.update(deltaTime);
+        }
+
+        if (this.pickaxeCursor.visible) {
+            const mouse = this.mouseInputManager.getMousePosition();
+            this.pickaxeCursor.follow(mouse.x, mouse.y);
         }
     }
 }
