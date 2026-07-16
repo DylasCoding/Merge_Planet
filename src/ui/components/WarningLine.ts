@@ -14,7 +14,7 @@ export class WarningLine extends Container {
     constructor(xCoord: number, yCoord: number) {
         super();
         this.timer = new Timer();
-        this.timer.setTimer(3);
+        this.timer.setTimer(5);
         const texture = Assets.get("warningLines");
 
         this.sprite = new Sprite(texture);

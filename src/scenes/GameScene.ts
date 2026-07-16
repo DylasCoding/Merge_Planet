@@ -93,7 +93,7 @@ export class GameScene extends BaseScene {
         const factory = new PlanetFactory();
 
         this.timer = new Timer();
-        this.timer.setTimer(0.7);
+        this.timer.setTimer(0.4);
 
         this.toolManager = new ToolManager();
         this.pickaxeTool = new PickaxeTool(this.planetManager);
