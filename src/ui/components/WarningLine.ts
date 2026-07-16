@@ -1,5 +1,7 @@
 import { Assets, Container, Sprite } from "pixi.js";
 import { Timer } from "../../features/planet/spawn/TimerSpawner";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { GameSession } from "../../core/manager/GameSession.ts";
 
 export class WarningLine extends Container {
     public sprite: Sprite;
@@ -29,7 +31,7 @@ export class WarningLine extends Container {
             this.flashTime = 0;
             this.sprite.alpha = 0.3;
         }
-        console.log(this.sprite.alpha);
+        // console.log(this.sprite.alpha);
         if (this.isPlanetAbobeWarningLines) {
             this.timer.onOffTimer(true);
         } else {
@@ -39,7 +41,8 @@ export class WarningLine extends Container {
 
         this.timer.update(deltaTime);
         if (this.timer.timeUp()) {
-            console.log("Game Over");
+            // console.log("Game Over");
+            EventBus.instance.emit(GameEvent.GameOver, GameSession.Instance.score);
         }
     }
 }
