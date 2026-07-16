@@ -1,6 +1,7 @@
-import { Container, Graphics, Sprite, Text } from "pixi.js";
+import { Application, Container, Graphics, Sprite, Text } from "pixi.js";
 import type { FederatedPointerEvent } from "pixi.js";
 import { Font } from "../../core/Font.ts";
+import { ScaleUtils } from "../../utils/ScaleUtils.ts";
 
 export class SettingRow extends Container {
     private readonly TOTAL_STEPS = 20;
@@ -14,6 +15,7 @@ export class SettingRow extends Container {
     private onValueChange?: (value: number) => void;
 
     constructor(
+        app: Application,
         iconName: string,
         label: string,
         initialStep = 10,
@@ -25,13 +27,16 @@ export class SettingRow extends Container {
         this.onValueChange = onValueChange;
 
         this.icon = Sprite.from(iconName);
-        this.icon.scale.set(0.6);
+        const iconScale = ScaleUtils.getScaleByTargetWidth(app, this.icon.texture.width, 0.03);
+        this.icon.scale.set(iconScale);
         this.addChild(this.icon);
 
         this.labelText = new Text({
             text: label,
             style: { fontFamily: Font.Asap_Bold, fill: 0xffffff, fontSize: 24 },
         });
+        const labelScale = ScaleUtils.getScaleByTargetWidth(app, this.labelText.width, 0.05);
+        this.labelText.scale.set(labelScale);
         this.labelText.position.set(this.icon.width + 10, 5);
         this.addChild(this.labelText);
 
@@ -40,11 +45,17 @@ export class SettingRow extends Container {
         this.barContainer.cursor = "pointer";
 
         this.barBg = Sprite.from("sound_container");
-        this.barBg.scale.set(0.6);
+        const barScale = ScaleUtils.getScaleByTargetWidth(app, this.barBg.texture.width, 0.35);
+        this.barBg.scale.set(barScale);
         this.barBg.position.set(this.labelText.x + this.labelText.width + 20, 0);
 
         this.barFill = Sprite.from("sound_bar");
-        this.barFill.scale.set(0.6);
+        const barFillScale = ScaleUtils.getScaleByTargetWidth(
+            app,
+            this.barFill.texture.width,
+            0.35,
+        );
+        this.barFill.scale.set(barFillScale);
         this.barFill.position.set(this.barBg.x + 10, this.barBg.y + 13);
 
         this.barMask = new Graphics()

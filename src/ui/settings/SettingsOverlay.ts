@@ -3,6 +3,7 @@ import { type Application } from "pixi.js";
 import { Button } from "../components/Button.ts";
 import { SettingRow } from "./SettingRow.ts";
 import { SettingActionButtons } from "./SettingActionButtons.ts";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 
 export class SettingsOverlay extends Container {
     private backdrop: Graphics;
@@ -39,11 +40,14 @@ export class SettingsOverlay extends Container {
         this.closeBtn.eventMode = "static";
         this.closeBtn.onClick(() => {
             this.hide();
-            if (this.onClose) this.onClose();
         });
 
-        const soundRow = new SettingRow("sound_icon", "Sound", 15, (v) => this.onSoundChange(v));
-        const musicRow = new SettingRow("music_icon", "Music", 10, (v) => this.onMusicChange(v));
+        const soundRow = new SettingRow(this.app, "sound_icon", "Sound", 15, (v) =>
+            this.onSoundChange(v),
+        );
+        const musicRow = new SettingRow(this.app, "music_icon", "Music", 10, (v) =>
+            this.onMusicChange(v),
+        );
 
         soundRow.position.set(panelBg.x + 120, panelBg.y + 100);
         musicRow.position.set(panelBg.x + 120, panelBg.y + 150);
@@ -79,16 +83,15 @@ export class SettingsOverlay extends Container {
     private onMusicChange(value: number): void {}
 
     private handleRestart(): void {
-        console.log("Restart game");
+        EventBus.instance.emit(GameEvent.GameStart);
     }
 
     private handleContinue(): void {
-        console.log("Continue game");
-        // this.hide();
+        this.hide();
     }
 
     private handleReturn(): void {
-        console.log("Return to Main Menu");
+        this.hide();
     }
 
     public show(): void {
@@ -97,5 +100,6 @@ export class SettingsOverlay extends Container {
 
     public hide(): void {
         this.visible = false;
+        if (this.onClose) this.onClose();
     }
 }

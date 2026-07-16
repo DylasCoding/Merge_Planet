@@ -62,7 +62,7 @@ export class GameOverOverlay extends Container {
         });
         const scoreTitle = new Text({ text: "SCORE", style: scoreTitleStyle });
         scoreTitle.anchor.set(0.5);
-        scoreTitle.position.set(realWidth / 1.25, realHeight / 2);
+        scoreTitle.position.set(titleText.x + titleText.width / 2, realHeight / 2);
 
         const scoreValueStyle = new TextStyle({
             fontFamily: Font.Asap_Bold,
@@ -73,7 +73,10 @@ export class GameOverOverlay extends Container {
         });
         this.scoreValueText = new Text({ text: "0", style: scoreValueStyle });
         this.scoreValueText.anchor.set(0.5);
-        this.scoreValueText.position.set(realWidth / 1.25, scoreTitle.width * 1.5);
+        this.scoreValueText.position.set(
+            titleText.x + titleText.width / 2,
+            scoreTitle.y + scoreTitle.height * 1.5,
+        );
 
         this.restartBtn = new Button("RESTART", Sprite.from("button_purple"));
         this.restartBtn.setButtonScale(
@@ -84,6 +87,8 @@ export class GameOverOverlay extends Container {
             this.scoreValueText.position.x,
             this.scoreValueText.y + this.restartBtn.height * 2,
         );
+
+        this.onRestartClick();
 
         this.panel.addChild(panelBg, titleText, scoreTitle, this.scoreValueText, this.restartBtn);
 
