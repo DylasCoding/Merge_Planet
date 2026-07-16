@@ -43,7 +43,7 @@ import lockicon from "../assets/Icons/lock-2-128.png";
 import nextPlanet_bg from "../assets/Grid_Components/Large/inventory-highlight-large 1.png";
 
 import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-large.png";
-
+import warninglines from "../assets/Other_Images/Extra_Large/warning-lines-extra-large.png";
 import star from "../assets/Other_Images/Extra_Large/sparkle-extra-large.png";
 import buble from "../assets/Other_Images/Extra_Large/transparent-round-extra-large.png";
 
@@ -98,7 +98,7 @@ export const manifest: AssetsManifest = {
                 nextPlanet_bg: nextPlanet_bg,
 
                 box: box,
-
+                warningLines: warninglines,
                 sidebar_bg: sidebar_bg,
                 arrow_icon: arrow_icon,
 
