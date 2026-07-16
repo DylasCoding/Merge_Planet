@@ -17,20 +17,36 @@ export class CollisionResolve {
         const left = gameBox.gameBoxBounds.x;
         const right = gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width;
         const bottom = gameBox.gameBoxBounds.y + gameBox.gameBoxBounds.height;
+        const top = gameBox.gameBoxBounds.y - 15;
         const planetRadius = planet.data.radius;
         const planetPositionX = planet.planetRigidbody.position.x;
         const planetPositionY = planet.planetRigidbody.position.y;
         if (planetPositionX - planetRadius <= left) {
             planet.planetRigidbody.position.x = left + planetRadius;
-            planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
+            // planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
+            planet.planetRigidbody.velocity.x =
+                gameBox.velocityX -
+                planet.planetRigidbody.velocity.x * planet.planetRigidbody.restitution;
             if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
                 planet.planetRigidbody.angularVelocity += planet.planetRigidbody.velocity.y * 0.02;
         }
         if (planetPositionX + planetRadius >= right) {
             planet.planetRigidbody.position.x = right - planetRadius;
-            planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
+            // planet.planetRigidbody.velocity.x *= -planet.planetRigidbody.restitution;
+            planet.planetRigidbody.velocity.x =
+                gameBox.velocityX -
+                planet.planetRigidbody.velocity.x * planet.planetRigidbody.restitution;
             if (Math.abs(planet.planetRigidbody.velocity.x) > 2)
                 planet.planetRigidbody.angularVelocity -= planet.planetRigidbody.velocity.y * 0.02;
+        }
+        if (planetPositionY - planetRadius <= top) {
+            planet.planetRigidbody.position.y = top + planetRadius;
+
+            if (planet.planetRigidbody.velocity.y < 0) {
+                // nảy nhẹ
+                planet.planetRigidbody.velocity.y *= 0;
+            }
+            planet.planetRigidbody.velocity.x *= 0.98;
         }
         if (planetPositionY + planetRadius >= bottom) {
             planet.planetRigidbody.isGrounded = true;
@@ -145,7 +161,7 @@ export class CollisionResolve {
         planet2.planetRigidbody.velocity.y += result.impulseY * inverseMass2;
         if (Math.abs(result.j) > 5) {
             const spin = Math.abs(result.j) * 0.0000000001;
-            console.log(spin);
+            // console.log(spin);
             planet1.planetRigidbody.angularVelocity -= spin;
             planet2.planetRigidbody.angularVelocity += spin;
         }
