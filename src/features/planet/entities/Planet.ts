@@ -13,6 +13,7 @@ export class Planet extends Container {
     public notUntilCount: boolean;
     private baseScale!: number;
     private spawnScale: number = 0;
+    private aliveTime: number = 0;
     constructor(options: PlanetOptions) {
         super();
         const { data, sprite } = options;
@@ -33,6 +34,10 @@ export class Planet extends Container {
         this.addChild(this.sprite);
     }
     update(deltaTime: number) {
+        this.aliveTime += deltaTime;
+        if (this.aliveTime >= 1.3) {
+            this.notUntilCount = true;
+        }
         this.spawnScale += deltaTime * 7;
 
         const t = Math.min(this.spawnScale, 1);
