@@ -42,7 +42,6 @@ export class SkinShopOverlay extends Container {
         this.closeBtn.eventMode = "static";
         this.closeBtn.onClick(() => {
             this.hide();
-            if (this.onClose) this.onClose();
         });
 
         this.panel.addChild(panelBg, this.closeBtn);
@@ -99,6 +98,7 @@ export class SkinShopOverlay extends Container {
 
     public hide(): void {
         this.visible = false;
+        if (this.onClose) this.onClose();
     }
 
     private createSkinContainer(

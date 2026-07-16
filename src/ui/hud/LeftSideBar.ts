@@ -1,7 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
 import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
-import { SKIN_LIST } from "../../features/planet/data/SkinConfig.ts";
 import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
 
 export class LeftSideBar extends Container {
