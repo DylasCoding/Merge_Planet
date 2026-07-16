@@ -34,7 +34,7 @@ export class Planet extends Container {
         this.addChild(this.sprite);
     }
     update(deltaTime: number) {
-        this.aliveTime += deltaTime;
+        if (this.isDropPlanet) this.aliveTime += deltaTime;
         if (this.aliveTime >= 1.3) {
             this.notUntilCount = true;
         }
