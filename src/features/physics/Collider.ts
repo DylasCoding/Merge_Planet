@@ -8,7 +8,8 @@ export class Collider {
                 gameBox.gameBoxBounds.y + gameBox.gameBoxBounds.height ||
             planet.planetRigidbody.position.x - planet.data.radius <= gameBox.gameBoxBounds.x ||
             planet.planetRigidbody.position.x + planet.data.radius >=
-                gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width
+                gameBox.gameBoxBounds.x + gameBox.gameBoxBounds.width ||
+            planet.planetRigidbody.position.y - planet.data.radius <= gameBox.gameBoxBounds.y
         );
     }
     public detectCollisionPlanetWithPlanet(planet1: Planet, planet2: Planet) {
