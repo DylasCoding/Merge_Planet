@@ -49,6 +49,8 @@ export class GameScene extends BaseScene {
     private shouldSpawnNext = false;
     private currentPlanet!: Planet;
 
+    private isInputLocked = false;
+
     constructor(app: Application) {
         super(app);
     }
@@ -86,6 +88,8 @@ export class GameScene extends BaseScene {
             this.toolController,
         );
 
+        this.interactionManager.isLockedCheck = () => this.isInputLocked;
+
         this.mergeManager = new MergeManager(
             factory,
             this.planetManager,
@@ -120,7 +124,17 @@ export class GameScene extends BaseScene {
 
         this.addChild(this.toolOverlay);
         this.settingsOverlay = new SettingsOverlay(this.app);
+        this.settingsOverlay.onClose = () => {
+            setTimeout(() => {
+                this.isInputLocked = false;
+            }, 50);
+        };
         this.skinShopOverlay = new SkinShopOverlay(this.app, this.planetManager);
+        this.skinShopOverlay.onClose = () => {
+            setTimeout(() => {
+                this.isInputLocked = false;
+            }, 50);
+        };
         SkinManager.getInstance().onSkinChanged = () => {
             this.planetManager.refreshAllPlanetTextures();
         };
@@ -134,6 +148,10 @@ export class GameScene extends BaseScene {
         this.spawnNextPlanet();
 
         this.mouseInputManager.onMouseClick(() => {
+            if (this.isInputLocked) {
+                return;
+            }
+
             if (this.toolController.isUsingTool()) {
                 return;
             }
@@ -151,10 +169,12 @@ export class GameScene extends BaseScene {
 
     private openSettings(): void {
         this.settingsOverlay.show();
+        this.isInputLocked = true;
     }
 
     private openSkinShop(): void {
         this.skinShopOverlay.show();
+        this.isInputLocked = true;
     }
 
     private spawnNextPlanet(): void {

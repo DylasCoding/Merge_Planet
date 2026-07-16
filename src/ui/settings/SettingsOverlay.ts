@@ -11,6 +11,8 @@ export class SettingsOverlay extends Container {
     private actionButtons: SettingActionButtons;
     private app: Application;
 
+    public onClose?: () => void;
+
     constructor(app: Application) {
         super();
 
@@ -37,6 +39,7 @@ export class SettingsOverlay extends Container {
         this.closeBtn.eventMode = "static";
         this.closeBtn.onClick(() => {
             this.hide();
+            if (this.onClose) this.onClose();
         });
 
         const soundRow = new SettingRow("sound_icon", "Sound", 15, (v) => this.onSoundChange(v));

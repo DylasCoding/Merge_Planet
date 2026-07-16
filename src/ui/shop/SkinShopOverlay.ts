@@ -13,6 +13,8 @@ export class SkinShopOverlay extends Container {
     private skinContainer: SkinContainer;
     private planetManager: PlanetManager;
 
+    public onClose?: () => void;
+
     constructor(app: Application, planetManager: PlanetManager) {
         super();
 
@@ -40,6 +42,7 @@ export class SkinShopOverlay extends Container {
         this.closeBtn.eventMode = "static";
         this.closeBtn.onClick(() => {
             this.hide();
+            if (this.onClose) this.onClose();
         });
 
         this.panel.addChild(panelBg, this.closeBtn);
