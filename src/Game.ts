@@ -1,23 +1,37 @@
 import { Application } from "pixi.js";
 import { GameScene } from "./scenes/GameScene.ts";
+import { EventBus, GameEvent } from "./core/event/GameEvent.ts";
 
 export class Game {
     private readonly app: Application;
-    private readonly gameScene: GameScene;
+    private gameScene!: GameScene;
 
     constructor(app: Application) {
         this.app = app;
-        this.gameScene = new GameScene(this.app);
     }
 
     public async initialize(): Promise<void> {
-        await this.gameScene.initialize();
+        EventBus.instance.on(GameEvent.GameStart, this.reloadGameScene, this);
 
-        this.app.stage.addChild(this.gameScene);
+        await this.reloadGameScene();
 
         this.app.ticker.add((ticker) => {
             const deltaTime = ticker.deltaMS / 1000;
-            this.gameScene.update(deltaTime);
+            if (this.gameScene) {
+                this.gameScene.update(deltaTime);
+            }
         });
+    }
+
+    private async reloadGameScene(): Promise<void> {
+        if (this.gameScene) {
+            this.app.stage.removeChild(this.gameScene);
+            this.gameScene.destroy({ children: true });
+        }
+
+        this.gameScene = new GameScene(this.app);
+        await this.gameScene.initialize();
+
+        this.app.stage.addChild(this.gameScene);
     }
 }
