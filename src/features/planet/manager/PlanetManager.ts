@@ -1,5 +1,4 @@
 import { Planet } from "../entities/Planet";
-import { Assets } from "pixi.js";
 import { SkinManager } from "../skin/SkinManager.ts";
 
 export class PlanetManager {
