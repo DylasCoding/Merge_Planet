@@ -3,6 +3,9 @@ import { Container, Sprite, Assets, Rectangle } from "pixi.js";
 export class GameBox extends Container {
     private background: Sprite;
     public gameBoxBounds!: Rectangle;
+
+    private previousX = 0;
+    public velocityX = 0;
     constructor() {
         super();
 
@@ -30,5 +33,12 @@ export class GameBox extends Container {
             width: this.gameBoxBounds.width,
             height: this.gameBoxBounds.height,
         };
+    }
+
+    update() {
+        this.velocityX = this.x - this.previousX;
+        this.previousX = this.x;
+
+        this.initAreaBounds();
     }
 }
