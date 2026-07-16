@@ -1,6 +1,6 @@
-export class TimerSpawner {
+export class Timer {
     public timer: number = 0;
-    //set-up spawn per time 2 seconds
+
     public timerAccount!: number;
     public isCounting!: boolean;
     constructor() {}
@@ -20,7 +20,13 @@ export class TimerSpawner {
         }
         return (this.isCounting = true);
     }
+    public onOffTimer(boolean: boolean) {
+        return (this.isCounting = boolean);
+    }
     public setTimer(timeAccount: number) {
         this.timerAccount = timeAccount;
+    }
+    public resetTimer() {
+        this.timer = 0;
     }
 }

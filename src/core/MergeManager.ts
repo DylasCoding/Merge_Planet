@@ -78,7 +78,6 @@ export class MergeManager {
             200,
             planet.data.radius,
         );
-        console.log("phat hien cham gui tin spawn particle");
     }
     // public forceImpulsePlanet(mergePlanet: Planet) {
     //     for (const planet of this.planetManager.getAll()) {
