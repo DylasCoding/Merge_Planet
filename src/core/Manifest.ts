@@ -47,6 +47,8 @@ import box from "../assets/Grid_Components/Extra Large/level-highlight-extra-lar
 import star from "../assets/Other_Images/Extra_Large/sparkle-extra-large.png";
 import buble from "../assets/Other_Images/Extra_Large/transparent-round-extra-large.png";
 
+import restart_button from "../assets/Picto_Icons/Light_Purple/try-again-64.png";
+import game_over_bg from "../assets/Containers/Large/pause-container-large.png";
 // import sidebar_bg from "../assets/Settings_Menu_Components/Large/vertical-scroll-bar-handle-large.png";
 import sidebar_bg from "../assets/leftsidebar.png";
 import arrow_icon from "../assets/Icons/arrowicon.png";
@@ -118,6 +120,8 @@ export const Manifest: AssetsManifest = {
 
                 shop_bg: shop_bg,
                 lock_icon: lockicon,
+                game_over_bg: game_over_bg,
+                restart_button: restart_button,
             },
         },
         {
