@@ -2,6 +2,7 @@ import { Application } from "pixi.js";
 import { GameScene } from "./scenes/GameScene.ts";
 import { EventBus, GameEvent } from "./core/event/GameEvent.ts";
 import { GameSession } from "./core/manager/GameSession.ts";
+import { SoundManager } from "./core/SoundManager.ts";
 
 export class Game {
     private readonly app: Application;
@@ -12,6 +13,9 @@ export class Game {
     }
 
     public async initialize(): Promise<void> {
+        SoundManager.initialize();
+        SoundManager.registerEvents();
+
         EventBus.instance.on(GameEvent.GameStart, this.reloadGameScene, this);
 
         await this.reloadGameScene();
@@ -27,6 +31,8 @@ export class Game {
     private async reloadGameScene(): Promise<void> {
         EventBus.instance.removeAllListeners();
         EventBus.instance.on(GameEvent.GameStart, this.reloadGameScene, this);
+
+        SoundManager.registerEvents();
 
         GameSession.Instance.reset();
 

@@ -4,6 +4,7 @@ import { Button } from "../components/Button.ts";
 import { SettingRow } from "./SettingRow.ts";
 import { SettingActionButtons } from "./SettingActionButtons.ts";
 import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class SettingsOverlay extends Container {
     private backdrop: Graphics;
@@ -42,10 +43,13 @@ export class SettingsOverlay extends Container {
             this.hide();
         });
 
-        const soundRow = new SettingRow(this.app, "sound_icon", "Sound", 15, (v) =>
+        const initialSoundStep = Math.round(StorageManager.soundVolume * 20);
+        const initialMusicStep = Math.round(StorageManager.musicVolume * 20);
+
+        const soundRow = new SettingRow(this.app, "sound_icon", "Sound", initialSoundStep, (v) =>
             this.onSoundChange(v),
         );
-        const musicRow = new SettingRow(this.app, "music_icon", "Music", 10, (v) =>
+        const musicRow = new SettingRow(this.app, "music_icon", "Music", initialMusicStep, (v) =>
             this.onMusicChange(v),
         );
 
@@ -63,7 +67,7 @@ export class SettingsOverlay extends Container {
         );
 
         const centerX = panelBg.x + (panelBg.width - this.actionButtons.width) / 2 + 80;
-        this.actionButtons.position.set(centerX, soundLine.y + soundLine.height + 50);
+        this.actionButtons.position.set(centerX, soundLine.y + soundLine.height * 20);
 
         this.panel.addChild(
             panelBg,
@@ -78,9 +82,13 @@ export class SettingsOverlay extends Container {
         this.visible = false;
     }
 
-    private onSoundChange(value: number): void {}
+    private onSoundChange(value: number): void {
+        StorageManager.updateSoundVolume(value);
+    }
 
-    private onMusicChange(value: number): void {}
+    private onMusicChange(value: number): void {
+        StorageManager.updateMusicVolume(value);
+    }
 
     private handleRestart(): void {
         EventBus.instance.emit(GameEvent.GameStart);
