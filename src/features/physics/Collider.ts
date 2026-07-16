@@ -26,6 +26,12 @@ export class Collider {
         const planetTop = Planet.y - Planet.data.radius;
         return planetTop <= top;
     }
+    public crossTheWarningLines(Planet: Planet, warningLines: WarningLine) {
+        const top = warningLines.y + 50;
+
+        const planetTop = Planet.y - Planet.data.radius;
+        return planetTop <= top;
+    }
     public WarningBeforeCollisionPlanetWithWarningLines(Planet: Planet, warningLines: WarningLine) {
         const top = warningLines.y + 200;
 

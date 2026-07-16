@@ -1,4 +1,4 @@
-import { Assets, Sprite } from "pixi.js";
+import { Sprite } from "pixi.js";
 import { PLANET_CONFIG } from "../data/PlanetConfig";
 import { Planet } from "../entities/Planet";
 import { type PlanetCreateOptions } from "../types/PlanetCreateOptions";
@@ -18,8 +18,6 @@ export class PlanetFactory {
 
         sprite.anchor.set(0.5);
         sprite.scale.set(0.02 * data.radius);
-
-        
 
         return new Planet({
             data,
