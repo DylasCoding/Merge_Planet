@@ -17,7 +17,7 @@ async function main() {
     StorageManager.load();
 
     await Assets.init({ manifest: Manifest });
-    await Assets.loadBundle(["backgrounds", "fonts"]);
+    await Assets.loadBundle(["backgrounds", "fonts", "sounds"]);
     const background = Sprite.from("background_sky");
 
     function resizeBackground() {

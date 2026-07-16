@@ -49,7 +49,6 @@ import buble from "../assets/Other_Images/Extra_Large/transparent-round-extra-la
 
 import restart_button from "../assets/Picto_Icons/Light_Purple/try-again-64.png";
 import game_over_bg from "../assets/Containers/Large/pause-container-large.png";
-// import sidebar_bg from "../assets/Settings_Menu_Components/Large/vertical-scroll-bar-handle-large.png";
 import sidebar_bg from "../assets/leftsidebar.png";
 import arrow_icon from "../assets/Icons/arrowicon.png";
 
@@ -73,6 +72,9 @@ import panel_line from "../assets/Settings_Menu_Components/Medium/settings-divid
 import shop_bg from "../assets/Grid_Components/Medium/item-shop-container-medium.png";
 
 import overlay from "../ui/overlays/assets/overlay.png";
+
+import background_sound from "../assets/Music/background_music1.mp3";
+import merge_sound from "../assets/Music/merge_music1.mp3";
 
 export const Manifest: AssetsManifest = {
     bundles: [
@@ -166,6 +168,13 @@ export const Manifest: AssetsManifest = {
             assets: {
                 explode: star,
                 transparentCircle: buble,
+            },
+        },
+        {
+            name: "sounds",
+            assets: {
+                background_sound: background_sound,
+                merge_sound: merge_sound,
             },
         },
     ],
