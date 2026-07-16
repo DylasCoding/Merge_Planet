@@ -23,6 +23,8 @@ import { ToolManager } from "../features/tool/ToolManager.ts";
 import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
 import { ToolType } from "../features/tool/ToolType.ts";
+import { GameOverOverlay } from "../ui/GameOverOverlay.ts";
+import { EventBus, GameEvent } from "../core/event/GameEvent.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -50,6 +52,8 @@ export class GameScene extends BaseScene {
     private currentPlanet!: Planet;
 
     private isInputLocked = false;
+
+    private gameOverOverlay!: GameOverOverlay;
 
     constructor(app: Application) {
         super(app);
@@ -122,24 +126,21 @@ export class GameScene extends BaseScene {
         this.toolOverlay = new ToolOverlayWithPickaxe();
         this.toolOverlay.redraw(this.app.screen, this.gameBox.getBoundsAsObject());
 
-        this.addChild(this.toolOverlay);
+        this.gameOverOverlay = new GameOverOverlay(this.app);
+
+        // this.triggerGameOver(100);
+
         this.settingsOverlay = new SettingsOverlay(this.app);
         this.settingsOverlay.onClose = () => {
-            setTimeout(() => {
-                this.isInputLocked = false;
-            }, 50);
+            this.blockInput();
         };
         this.skinShopOverlay = new SkinShopOverlay(this.app, this.planetManager);
         this.skinShopOverlay.onClose = () => {
-            setTimeout(() => {
-                this.isInputLocked = false;
-            }, 50);
+            this.blockInput();
         };
         SkinManager.getInstance().onSkinChanged = () => {
             this.planetManager.refreshAllPlanetTextures();
         };
-        // this.settingsOverlay.show();
-        // this.skinShopOverlay.show();
 
         this.addChild(this.world);
         this.addChild(this.toolOverlay);
@@ -165,6 +166,11 @@ export class GameScene extends BaseScene {
         });
         this.addChild(this.settingsOverlay);
         this.addChild(this.skinShopOverlay);
+        this.addChild(this.gameOverOverlay);
+
+        EventBus.instance.on(GameEvent.GameOver, (finalScore: number) => {
+            this.triggerGameOver(finalScore);
+        });
     }
 
     private openSettings(): void {
@@ -175,6 +181,12 @@ export class GameScene extends BaseScene {
     private openSkinShop(): void {
         this.skinShopOverlay.show();
         this.isInputLocked = true;
+    }
+
+    private blockInput(): void {
+        setTimeout(() => {
+            this.isInputLocked = false;
+        }, 50);
     }
 
     private spawnNextPlanet(): void {
@@ -201,6 +213,22 @@ export class GameScene extends BaseScene {
         } else {
             this.toolOverlay.hide();
         }
+    }
+
+    public triggerGameOver(finalScore: number): void {
+        this.isInputLocked = true;
+
+        if (this.currentDragController) {
+            this.currentDragController.endDrag();
+            this.currentDragController = null;
+        }
+
+        if (this.currentPlanet) {
+            this.currentPlanet.visible = false;
+        }
+
+        this.gameOverOverlay.setScore(finalScore);
+        this.gameOverOverlay.show();
     }
 
     public update(deltaTime: number): void {
