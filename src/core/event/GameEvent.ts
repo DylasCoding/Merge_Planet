@@ -5,6 +5,7 @@ export const GameEvent = {
     HighScoreChanged: "HighScoreChanged",
     ScoreChanged: "ScoreChanged",
     NextPlanetChanged: "NextPlanetChanged",
+    NextPlanetLevelChanged: "NextPlanetLevelChanged",
     GameOver: "GameOver",
     GameStart: "GameStart",
     GamePause: "GamePause",
