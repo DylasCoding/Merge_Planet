@@ -24,6 +24,8 @@ import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
 import { ToolType } from "../features/tool/ToolType.ts";
 import { PickaxeEffect } from "../features/tool/effects/PickaxeEffect.ts";
+import { ShakeBoxEffect } from "../features/tool/effects/ShakeBoxEffect.ts";
+import { ShuffleTool } from "../features/tool/tools/ShuffleTool.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -46,6 +48,9 @@ export class GameScene extends BaseScene {
     private toolOverlay!: ToolOverlayWithPickaxe;
 
     private pickaxeEffect!: PickaxeEffect;
+    private shuffleTool!: ShuffleTool;
+    private shakeBoxEffect!: ShakeBoxEffect;
+    private isShuffling = false;
 
     private currentDragController: PlanetDragController | null = null;
     private timer!: TimerSpawner;
@@ -80,7 +85,15 @@ export class GameScene extends BaseScene {
         this.toolManager = new ToolManager();
         this.pickaxeTool = new PickaxeTool(this.planetManager);
         this.pickaxeEffect = new PickaxeEffect();
-        this.toolController = new ToolController(this.toolManager, this.pickaxeTool, this.pickaxeEffect);
+        this.shuffleTool = new ShuffleTool(this.planetManager);
+        this.shakeBoxEffect = new ShakeBoxEffect(this.gameBox);
+        this.toolController = new ToolController(
+            this.toolManager,
+            this.pickaxeTool,
+            this.pickaxeEffect,
+            this.shuffleTool,
+            this.shakeBoxEffect,
+        );
         this.toolController.setOnToolFinished(() => {
             this.toolOverlay.hide();
         });
@@ -119,6 +132,7 @@ export class GameScene extends BaseScene {
             this.openSettings.bind(this),
             this.openSkinShop.bind(this),
             () => this.toggleTool(ToolType.Pickaxe),
+            () => this.onShuffleClick(),
         );
         this.toolOverlay = new ToolOverlayWithPickaxe();
         this.toolOverlay.redraw(this.app.screen, this.gameBox.getBoundsAsObject());
@@ -140,6 +154,10 @@ export class GameScene extends BaseScene {
 
         this.mouseInputManager.onMouseClick(() => {
             if (this.toolController.isUsingTool()) {
+                return;
+            }
+
+            if (this.isShuffling) {
                 return;
             }
 
@@ -188,13 +206,21 @@ export class GameScene extends BaseScene {
         }
     }
 
+    private async onShuffleClick(): Promise<void> {
+        this.isShuffling = true;
+        await this.toolController.useShuffle();
+        this.isShuffling = false;
+    }
+
     public update(deltaTime: number): void {
-        if (this.shouldSpawnNext && this.timer.timeUp()) {
+        if (!this.isShuffling && this.shouldSpawnNext && this.timer.timeUp()) {
             this.timer.turnTimer();
             this.shouldSpawnNext = false;
             this.spawnNextPlanet();
             this.interactionManager.updateDrag();
         }
+        this.gameBox.update();
+
         this.planetManager.update(deltaTime);
         this.CollisionManager.update();
         this.mergeManager.update();
