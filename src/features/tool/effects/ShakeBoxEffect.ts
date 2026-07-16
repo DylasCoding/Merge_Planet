@@ -1,8 +1,8 @@
-import { Container } from "pixi.js";
+import type { GameBox } from "../../../ui/components/GameBox";
 
 export class ShakeBoxEffect {
-    private readonly gameBox: Container;
-    constructor(gameBox: Container) {
+    private readonly gameBox: GameBox;
+    constructor(gameBox: GameBox) {
         this.gameBox = gameBox;
     }
 
