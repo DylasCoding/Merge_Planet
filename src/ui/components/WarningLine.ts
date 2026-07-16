@@ -8,9 +8,11 @@ export class WarningLine extends Container {
     public sprite: Sprite;
     public isWarning: boolean = false;
     public isPlanetAbobeWarningLines: boolean = false;
+    public isWorkingAllowed: boolean = true;
     public timer: Timer;
     private flashTime: number = 0;
     private warningAlertIcon: WarningAlert;
+
     constructor(xCoord: number, yCoord: number) {
         super();
         this.timer = new Timer();
@@ -29,6 +31,7 @@ export class WarningLine extends Container {
         // this.addChild(testGrahics);
     }
     update(deltaTime: number) {
+        if (!this.isWorkingAllowed) return;
         this.warningAlertIcon.update(deltaTime);
         if (this.isWarning) {
             this.flashTime += deltaTime * 1.8;
@@ -52,5 +55,14 @@ export class WarningLine extends Container {
             // console.log("Game Over");
             EventBus.instance.emit(GameEvent.GameOver, GameSession.Instance.score);
         }
+    }
+    public turnWorking() {
+        if (!this.isWorkingAllowed) {
+            this.visible = true;
+            this.isWorkingAllowed = true;
+            return;
+        }
+        this.isWorkingAllowed = false;
+        this.visible = false;
     }
 }

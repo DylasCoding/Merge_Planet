@@ -157,6 +157,8 @@ export class GameScene extends BaseScene {
                 if (this.toolController.isUsingTool()) {
                     return;
                 }
+                this.warningLine.turnWorking();
+
                 this.onShuffleClick();
             },
         );
@@ -267,6 +269,7 @@ export class GameScene extends BaseScene {
         this.isShuffling = true;
         await this.toolController.useShuffle();
         this.isShuffling = false;
+        this.warningLine.turnWorking();
     }
 
     public triggerGameOver(finalScore: number): void {
