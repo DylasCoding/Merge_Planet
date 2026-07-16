@@ -92,7 +92,7 @@ export class CollisionManager {
         }
     }
 
-    //function: resolve the collision between plante and planet
+    //function: resolve the collision between plant and planet
     resolveCollisionPlanetWithPlanet() {
         for (let i = 0; i < this.listOfPlanetObjects.length; i++) {
             const planet1 = this.listOfPlanetObjects[i];
@@ -104,12 +104,10 @@ export class CollisionManager {
                 if (this.mergeManager.checkingPlanetType(planet1, planet2)) {
                     this.mergeManager.pushMergeQueue(planet1, planet2);
                 }
-
-                planet1.notUntilCount = true;
-                planet2.notUntilCount = true;
             }
         }
     }
+
     setComponentForCollision(
         ListOfPlanetObjects: Array<Planet>,
         gameBox: GameBox,
