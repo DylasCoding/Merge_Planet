@@ -14,12 +14,19 @@ export class RigidBody {
     public isSleeping = false;
     public sleepTimer = 0;
 
+    private containerVelocityX = 0;
+
     constructor(x: number, y: number) {
         this.fallingSpeed = 500;
         this.gravity = 9.8;
         this.position = new Vector2(x, y);
         this.velocity = new Vector2(0, 0);
     }
+
+    public addExternalVelocity(x: number): void {
+        this.velocity.x += x;
+    }
+
     update(dt: number) {
         if (this.isSleeping) return;
 
@@ -34,9 +41,13 @@ export class RigidBody {
 
         this.angularVelocity *= 0.98;
 
+        this.velocity.x -= this.containerVelocityX * 0.8;
+
         if (Math.abs(this.angularVelocity) < 0.2) {
             this.angularVelocity = 0;
         }
         this.rotation += this.angularVelocity * dt;
+
+        this.containerVelocityX = 0;
     }
 }
