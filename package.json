@@ -24,7 +24,11 @@
   },
   "dependencies": {
     "@pixi/sound": "^6.0.1",
+<<<<<<< HEAD
     "matter-js": "^0.20.0",
+=======
+    "gsap": "^3.15.0",
+>>>>>>> 83e49e93bdc63fd96d8c13b457637d5c153c39c0
     "pixi.js": "^8.19.0"
   }
 }

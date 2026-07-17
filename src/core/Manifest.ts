@@ -75,6 +75,7 @@ import overlay from "../ui/overlays/assets/overlay.png";
 
 import background_sound from "../assets/Music/background_music1.mp3";
 import merge_sound from "../assets/Music/merge_music1.mp3";
+import gameover_sound from "../assets/Music/gameover_music.mp3";
 
 export const Manifest: AssetsManifest = {
     bundles: [
@@ -176,6 +177,7 @@ export const Manifest: AssetsManifest = {
             assets: {
                 background_sound: background_sound,
                 merge_sound: merge_sound,
+                game_over_sound: gameover_sound,
             },
         },
     ],
