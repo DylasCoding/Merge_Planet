@@ -65,6 +65,7 @@ export class GameScene extends BaseScene {
     private currentPlanet!: Planet;
 
     private isInputLocked = false;
+    private isGameOver = false;
 
     private gameOverOverlay!: GameOverOverlay;
 
@@ -274,6 +275,7 @@ export class GameScene extends BaseScene {
 
     public triggerGameOver(finalScore: number): void {
         this.isInputLocked = true;
+        this.isGameOver = true;
 
         if (this.currentDragController) {
             this.currentDragController.endDrag();
@@ -303,7 +305,9 @@ export class GameScene extends BaseScene {
         this.particleManager.update(deltaTime);
         this.timer.update(deltaTime);
         this.interactionManager.updateDrag();
-        this.warningLine.update(deltaTime);
+        if (!this.isGameOver) {
+            this.warningLine.update(deltaTime);
+        }
 
         if (this.toolOverlay.visible) {
             this.toolOverlay.update(deltaTime);
@@ -313,5 +317,7 @@ export class GameScene extends BaseScene {
             const mouse = this.mouseInputManager.getMousePosition();
             this.pickaxeCursor.follow(mouse.x, mouse.y);
         }
+
+        this.gameOverOverlay.update(deltaTime);
     }
 }
