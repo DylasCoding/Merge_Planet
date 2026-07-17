@@ -1,11 +1,13 @@
 import { Planet } from "../planet/entities/Planet";
 import { ToolManager } from "./ToolManager";
-import { ToolType } from "./ToolType";
+import { ToolPrice, ToolType } from "./ToolType";
 import type { PickaxeCursor } from "./effects/PickaxeCursor";
 import { PickaxeEffect } from "./effects/PickaxeEffect";
 import type { ShakeBoxEffect } from "./effects/ShakeBoxEffect";
 import { PickaxeTool } from "./tools/PickaxeTool";
 import type { ShuffleTool } from "./tools/ShuffleTool";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class ToolController {
     private readonly toolManager: ToolManager;
@@ -58,6 +60,8 @@ export class ToolController {
                 this.pickaxeCursor.hide();
                 await this.pickaxeEffect.play(planet);
                 this.pickaxeTool.use(planet);
+                StorageManager.updateGems(-ToolPrice[ToolType.Pickaxe]);
+                EventBus.instance.emit(GameEvent.GemChanged, StorageManager.gems);
                 break;
 
             case ToolType.None:
