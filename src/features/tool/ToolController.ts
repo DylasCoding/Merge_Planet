@@ -55,6 +55,10 @@ export class ToolController {
             return;
         }
 
+        if (StorageManager.gems < ToolPrice[ToolType.Pickaxe]) {
+            return;
+        }
+
         switch (this.toolManager.getCurrentTool()) {
             case ToolType.Pickaxe:
                 this.pickaxeCursor.hide();

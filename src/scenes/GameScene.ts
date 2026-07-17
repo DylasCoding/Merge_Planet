@@ -258,6 +258,10 @@ export class GameScene extends BaseScene {
             return;
         }
 
+        if (StorageManager.gems < ToolPrice[ToolType.Pickaxe]) {
+            return;
+        }
+
         this.toolController.toggleTool(tool);
 
         if (this.toolController.isUsingTool()) {
@@ -268,6 +272,10 @@ export class GameScene extends BaseScene {
     }
 
     private async onShuffleClick(): Promise<void> {
+        if (StorageManager.gems < ToolPrice[ToolType.Shuffle]) {
+            this.warningLine.turnWorking();
+            return;
+        }
         this.isShuffling = true;
         StorageManager.updateGems(-ToolPrice[ToolType.Shuffle]);
         EventBus.instance.emit(GameEvent.GemChanged, StorageManager.gems);
