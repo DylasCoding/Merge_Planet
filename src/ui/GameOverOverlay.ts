@@ -3,6 +3,7 @@ import { Button } from "./components/Button.ts";
 import { ScaleUtils } from "../utils/ScaleUtils.ts";
 import { Font } from "../core/Font.ts";
 import { EventBus, GameEvent } from "../core/event/GameEvent.ts";
+import { gsap } from "gsap/gsap-core";
 
 export class GameOverOverlay extends Container {
     private app: Application;
@@ -10,6 +11,9 @@ export class GameOverOverlay extends Container {
     private panel: Container;
     private scoreValueText: Text;
     private restartBtn: Button;
+
+    private isAnimating = false;
+    private animationTime = 0;
 
     // public onGameOver: () => void;
 
@@ -110,10 +114,33 @@ export class GameOverOverlay extends Container {
     public show(): void {
         this.visible = true;
         this.eventMode = "static";
+
+        this.backdrop.alpha = 0;
+        this.panel.scale.set(0);
+
+        this.animationTime = 0;
+        this.isAnimating = true;
+
+        gsap.to(this.backdrop, {
+            alpha: 0.8,
+            duration: 0.3,
+        });
+
+        gsap.to(this.panel.scale, {
+            x: 1,
+            y: 1,
+            duration: 0.6,
+            ease: "back.out(2)",
+        });
     }
 
     public hide(): void {
         this.visible = false;
         this.eventMode = "none";
+    }
+
+    public update(deltaTime: number): void {
+        if (!this.isAnimating) return;
+        this.animationTime += deltaTime;
     }
 }
