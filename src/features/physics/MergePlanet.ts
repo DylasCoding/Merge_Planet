@@ -24,7 +24,10 @@ export class MergePlanet {
         this.updateHighScore(GameSession.Instance.score);
 
         const MergePlanetPosition = new Vector2(x, y);
-        const newLevel = planet1.data.level + 1;
+        let newLevel = planet1.data.level + 1;
+        if (newLevel > 10) {
+            newLevel = 10;
+        }
         return this.planetFactory.create({
             level: newLevel,
             position: MergePlanetPosition,
