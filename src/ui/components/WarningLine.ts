@@ -11,6 +11,8 @@ export class WarningLine extends Container {
     public timer: Timer;
     private flashTime: number = 0;
     private warningAlertIcon: WarningAlert;
+    private hasGameOver = false;
+
     constructor(xCoord: number, yCoord: number) {
         super();
         this.timer = new Timer();
@@ -50,7 +52,10 @@ export class WarningLine extends Container {
         this.timer.update(deltaTime);
         if (this.timer.timeUp()) {
             // console.log("Game Over");
-            EventBus.instance.emit(GameEvent.GameOver, GameSession.Instance.score);
+            if (!this.hasGameOver) {
+                EventBus.instance.emit(GameEvent.GameOver, GameSession.Instance.score);
+                this.hasGameOver = true;
+            }
         }
     }
 }

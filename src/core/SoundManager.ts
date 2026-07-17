@@ -29,6 +29,7 @@ export class SoundManager {
         EventBus.instance.on(GameEvent.MusicVolumeChanged, this.applyMusicVolume, this);
         EventBus.instance.on(GameEvent.SoundVolumeChanged, this.applySoundVolume, this);
         EventBus.instance.on(GameEvent.PlanetMerged, this.playMergeSound, this);
+        EventBus.instance.on(GameEvent.GameOver, this.playGameOverMusic, this);
     }
 
     private static applyMusicVolume(volume: number): void {
@@ -53,6 +54,12 @@ export class SoundManager {
         if (!SoundManager.isBackgroundMusicPlaying && sound.exists("background_sound")) {
             sound.play("background_sound", { loop: true });
             SoundManager.isBackgroundMusicPlaying = true;
+        }
+    }
+
+    private static playGameOverMusic(): void {
+        if (sound.exists("game_over_sound")) {
+            sound.play("game_over_sound");
         }
     }
 }
