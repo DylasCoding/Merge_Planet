@@ -5,6 +5,7 @@ import { SettingRow } from "./SettingRow.ts";
 import { SettingActionButtons } from "./SettingActionButtons.ts";
 import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 import { StorageManager } from "../../core/manager/StorageManager.ts";
+import { ScaleUtils } from "../../utils/ScaleUtils.ts";
 
 export class SettingsOverlay extends Container {
     private backdrop: Graphics;
@@ -58,7 +59,8 @@ export class SettingsOverlay extends Container {
 
         const soundLine = Sprite.from("panel_line");
         soundLine.position.set(musicRow.x - 20, musicRow.y + 60);
-        soundLine.scale.set(1.2, 1.2);
+        const linescale = ScaleUtils.getScaleByTargetWidth(this.app, soundLine.width, 0.47);
+        soundLine.scale.set(linescale, linescale);
 
         this.actionButtons = new SettingActionButtons(
             () => this.handleRestart(),
