@@ -28,34 +28,10 @@ export class CollisionManager {
         }
         this.resolveCollisionPlanetWithBox();
 
-        // this.DetectCollisionToGameOver();
         this.warningLine.isPlanetAbobeWarningLines = this.hasPlanetAboveWarningLine();
         this.warningLine.isWarning = this.WarningbeforeCollision();
     }
 
-    DetectCollisionToGameOver() {
-        for (const planet of this.listOfPlanetObjects) {
-            if (
-                this.Collider.WarningBeforeCollisionPlanetWithWarningLines(planet, this.warningLine)
-            ) {
-                this.warningLine.isWarning = true;
-            } else {
-                this.warningLine.isWarning = false;
-            }
-            if (
-                this.Collider.detectCollisionPlanetWithWarningLines(planet, this.warningLine) &&
-                planet.isDropPlanet
-            ) {
-                const top = this.warningLine.y + 100;
-                console.log("top warning:" + top);
-                const planetTop = planet.y - planet.data.radius;
-                console.log("Planet top:" + planetTop);
-                this.warningLine.isPlanetAbobeWarningLines = true;
-                continue;
-            }
-            this.warningLine.isPlanetAbobeWarningLines = false;
-        }
-    }
     public hasPlanetAboveWarningLine(): boolean {
         for (const planet of this.listOfPlanetObjects) {
             if (
