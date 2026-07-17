@@ -51,6 +51,7 @@ export class NextPlanetView extends Container {
         const data = PLANET_CONFIG[level];
         if (data) {
             this.icon.texture = SkinManager.getInstance().getPlanetTexture(data.textureKey);
+            this.icon.scale.set(1 - (10 - level) / 10);
         }
     }
 }
