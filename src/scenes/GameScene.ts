@@ -2,34 +2,39 @@ import { BaseScene } from "./BaseScene.ts";
 import { type Application, Assets, Container } from "pixi.js";
 import { HUD } from "../ui/hud/HUD.ts";
 import { GameBox } from "../ui/components/GameBox.ts";
-import { PlanetFactory } from "../features/planet/PlanetFactory.ts";
-import { PlanetManager } from "../features/planet/PlanetManager.ts";
-import { PlanetRandomizer } from "../features/planet/PlanetRandomizer.ts";
-import { PlanetSpawnQueue } from "../features/planet/spawn/PlanetSpawnQueue.ts";
+import {
+    type Planet,
+    PlanetDragController,
+    Timer,
+    PlanetSpawner,
+    PlanetInteractionManager,
+    PlanetSpawnQueue,
+    PlanetRandomizer,
+    PlanetManager,
+    PlanetFactory,
+    SkinManager,
+} from "../features/planet";
 import { MouseInputManager } from "../core/input/MouseInputManager.ts";
-import { PlanetInteractionManager } from "../features/planet/interaction/PlanetInteractionManager.ts";
-import { PlanetSpawner } from "../features/planet/spawn/PlanetSpawner.ts";
-import { PlanetDragController } from "../features/planet/interaction/PlanetDragController.ts";
-import { type Planet } from "../features/planet/entities/Planet.ts";
 import { CollisionManager } from "../core/CollisionManager.ts";
 import { MergeManager } from "../core/MergeManager.ts";
-import { Timer } from "../features/planet/spawn/TimerSpawner.ts";
 import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";
-import { SkinManager } from "../features/planet/SkinManager.ts";
 import { particleManager } from "../core/ParticleManager.ts";
-import { ToolController } from "../features/tool/ToolController.ts";
-import { ToolManager } from "../features/tool/ToolManager.ts";
-import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
+import {
+    ToolController,
+    ToolManager,
+    PickaxeTool,
+    ToolPrice,
+    ToolType,
+    PickaxeEffect,
+    ShakeBoxEffect,
+    ShuffleTool,
+    PickaxeCursor,
+} from "../features/tool";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
-import { ToolPrice, ToolType } from "../features/tool/ToolType.ts";
 import { GameOverOverlay } from "../ui/GameOverOverlay.ts";
 import { EventBus, GameEvent } from "../core/event/GameEvent.ts";
 import { WarningLine } from "../ui/components/WarningLine.ts";
-import { PickaxeEffect } from "../features/tool/effects/PickaxeEffect.ts";
-import { ShakeBoxEffect } from "../features/tool/effects/ShakeBoxEffect.ts";
-import { ShuffleTool } from "../features/tool/tools/ShuffleTool.ts";
-import { PickaxeCursor } from "../features/tool/effects/PickaxeCursor.ts";
 import { StorageManager } from "../core/manager/StorageManager.ts";
 
 export class GameScene extends BaseScene {
