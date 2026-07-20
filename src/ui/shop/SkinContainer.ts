@@ -2,7 +2,7 @@ import { Application, Container, Sprite, Text } from "pixi.js";
 import { Button } from "../components/Button.ts";
 import { Font } from "../../core/Font.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
-import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
+import { SkinManager } from "../../features/planet";
 
 export class SkinContainer extends Container {
     private app: Application;
