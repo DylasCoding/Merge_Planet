@@ -6,9 +6,6 @@ import { PlanetSpawnQueue } from "./PlanetSpawnQueue";
 import { PlanetDragController } from "../interaction/PlanetDragController";
 import { type IMouseTracker } from "../../../core/input/IMouseTracker.ts";
 import type { PlanetInteractionManager } from "../interaction/PlanetInteractionManager.ts";
-import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
-import { PLANET_CONFIG } from "../data/PlanetConfig.ts";
-import { SkinManager } from "../skin/SkinManager.ts";
 
 export class PlanetSpawner {
     private readonly queue: PlanetSpawnQueue;
