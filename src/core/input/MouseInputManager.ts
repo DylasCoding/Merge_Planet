@@ -10,20 +10,9 @@ export class MouseInputManager implements IMouseTracker {
     private readonly bounds: { x: number; y: number; width: number; height: number };
 
     constructor(app: Application, bounds: { x: number; y: number; width: number; height: number }) {
-        this.canvas = this.resolveCanvas(app);
+        this.canvas = app.view;
         this.bounds = bounds;
         this.setupListeners();
-    }
-
-    private resolveCanvas(app: Application): HTMLCanvasElement | null {
-        const anyApp = app as any;
-        const view = anyApp.view ?? anyApp.renderer?.view ?? null;
-
-        if (view instanceof HTMLCanvasElement) {
-            return view;
-        }
-
-        return null;
     }
 
     private isInsideBounds(position: Vector2): boolean {
@@ -63,10 +52,6 @@ export class MouseInputManager implements IMouseTracker {
             for (const callback of this.clickCallbacks) {
                 callback(position);
             }
-        });
-
-        this.canvas.addEventListener("touchstart", (event) => event.preventDefault(), {
-            passive: false,
         });
     }
 
