@@ -1,11 +1,11 @@
 import { MergePlanet } from "../features/physics/MergePlanet";
 import { Planet } from "../features/planet/entities/Planet";
 import type { PlanetFactory } from "../features/planet/PlanetFactory.ts";
-import type { PlanetManager } from "../features/planet/PlanetManager.ts";
+import type { PlanetManager } from "../features/planet/PlanetManager";
 import type { MergeRequest } from "../features/planet/types/MergeType";
 import type { GameScene } from "../scenes/GameScene";
 import type { particleManager } from "./ParticleManager";
-import type { PlanetRandomizer } from "../features/planet/random/PlanetRandomizer.ts";
+import type { PlanetRandomizer } from "../features/planet/PlanetRandomizer.ts";
 import type { PlanetInteractionManager } from "../features/planet/interaction/PlanetInteractionManager.ts";
 
 export class MergeManager {
