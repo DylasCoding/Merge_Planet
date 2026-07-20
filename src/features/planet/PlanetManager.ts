@@ -1,5 +1,5 @@
-import { Planet } from "../entities/Planet";
-import { SkinManager } from "../skin/SkinManager.ts";
+import { Planet } from "./entities/Planet";
+import { SkinManager } from "./SkinManager.ts";
 
 export class PlanetManager {
     public readonly planets: Array<Planet> = [];

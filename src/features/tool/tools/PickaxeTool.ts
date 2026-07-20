@@ -1,5 +1,5 @@
 import { Planet } from "../../planet/entities/Planet";
-import { PlanetManager } from "../../planet/manager/PlanetManager";
+import { PlanetManager } from "../../planet/PlanetManager";
 import { type Tool } from "../Tool";
 import { ToolType } from "../ToolType";
 

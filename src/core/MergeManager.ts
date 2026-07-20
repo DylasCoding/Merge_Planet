@@ -1,7 +1,7 @@
 import { MergePlanet } from "../features/physics/MergePlanet";
 import { Planet } from "../features/planet/entities/Planet";
-import type { PlanetFactory } from "../features/planet/factory/PlanetFactory";
-import type { PlanetManager } from "../features/planet/manager/PlanetManager";
+import type { PlanetFactory } from "../features/planet/PlanetFactory.ts";
+import type { PlanetManager } from "../features/planet/PlanetManager.ts";
 import type { MergeRequest } from "../features/planet/types/MergeType";
 import type { GameScene } from "../scenes/GameScene";
 import type { particleManager } from "./ParticleManager";

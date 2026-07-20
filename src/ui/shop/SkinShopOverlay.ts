@@ -2,7 +2,7 @@ import { type Application, Container, Graphics, Sprite } from "pixi.js";
 import { Button } from "../components/Button.ts";
 import { SkinContainer } from "./SkinContainer.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
-import type { PlanetManager } from "../../features/planet/manager/PlanetManager.ts";
+import type { PlanetManager } from "../../features/planet/PlanetManager.ts";
 import { SKIN_LIST } from "../../features/planet/data/SkinConfig.ts";
 
 export class SkinShopOverlay extends Container {

@@ -1,4 +1,4 @@
-import { PlanetManager } from "../../planet/manager/PlanetManager";
+import { PlanetManager } from "../../planet/PlanetManager";
 
 export class ShuffleTool {
     private readonly planetManager: PlanetManager;

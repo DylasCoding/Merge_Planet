@@ -1,7 +1,7 @@
 import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
 import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
-import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
+import { SkinManager } from "../../features/planet/SkinManager.ts";
 
 export class LeftSideBar extends Container {
     private arrowIcon: Sprite;

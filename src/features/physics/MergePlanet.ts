@@ -1,6 +1,6 @@
 import { Vector2 } from "../../utils/math/Vector2";
 import type { Planet } from "../planet/entities/Planet";
-import { PlanetFactory } from "../planet/factory/PlanetFactory";
+import { PlanetFactory } from "../planet/PlanetFactory.ts";
 import { GameSession } from "../../core/manager/GameSession.ts";
 import { StorageManager } from "../../core/manager/StorageManager.ts";
 import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";

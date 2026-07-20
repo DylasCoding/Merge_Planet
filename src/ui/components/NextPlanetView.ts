@@ -2,7 +2,7 @@ import { Container, Sprite, Text } from "pixi.js";
 import { Font } from "../../core/Font.ts";
 import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 import { PLANET_CONFIG } from "../../features/planet/data/PlanetConfig.ts";
-import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
+import { SkinManager } from "../../features/planet/SkinManager.ts";
 
 export class NextPlanetView extends Container {
     private icon: Sprite;

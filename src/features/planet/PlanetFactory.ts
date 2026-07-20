@@ -1,8 +1,8 @@
 import { Sprite } from "pixi.js";
-import { PLANET_CONFIG } from "../data/PlanetConfig";
-import { Planet } from "../entities/Planet";
-import { type PlanetCreateOptions } from "../types/PlanetCreateOptions";
-import { SkinManager } from "../skin/SkinManager.ts";
+import { PLANET_CONFIG } from "./data/PlanetConfig.ts";
+import { Planet } from "./entities/Planet.ts";
+import { type PlanetCreateOptions } from "./types/PlanetCreateOptions.ts";
+import { SkinManager } from "./SkinManager.ts";
 
 export class PlanetFactory {
     public create(options: PlanetCreateOptions): Planet {

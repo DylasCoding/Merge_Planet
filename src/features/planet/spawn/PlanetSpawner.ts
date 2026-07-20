@@ -1,7 +1,7 @@
 import { Vector2 } from "../../../utils/math/Vector2";
 import { Planet } from "../entities/Planet";
-import { PlanetFactory } from "../factory/PlanetFactory";
-import { PlanetManager } from "../manager/PlanetManager";
+import { PlanetFactory } from "../PlanetFactory.ts";
+import { PlanetManager } from "../PlanetManager.ts";
 import { PlanetSpawnQueue } from "./PlanetSpawnQueue";
 import { PlanetDragController } from "../interaction/PlanetDragController";
 import { type IMouseTracker } from "../../../core/input/IMouseTracker.ts";
