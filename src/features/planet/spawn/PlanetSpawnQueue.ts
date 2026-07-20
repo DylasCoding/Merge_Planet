@@ -1,4 +1,4 @@
-import { PlanetRandomizer } from "../random/PlanetRandomizer";
+import { PlanetRandomizer } from "../PlanetRandomizer";
 import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
 
 export class PlanetSpawnQueue {

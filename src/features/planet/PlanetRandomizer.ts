@@ -1,4 +1,4 @@
-import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
+import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 
 export class PlanetRandomizer {
     private currentMaxRandomLevel = 1;
