@@ -1,11 +1,12 @@
 import { Graphics, Container, Sprite } from "pixi.js";
 import { type Application } from "pixi.js";
-import { Button } from "../components/Button.ts";
+import { Button } from "../components/common/Button.ts";
 import { SettingRow } from "./SettingRow.ts";
 import { SettingActionButtons } from "./SettingActionButtons.ts";
-import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+// import { EventBus, GameEvent } from "../../core/GameEvent.ts";
 import { StorageManager } from "../../core/manager/StorageManager.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
+import { EventManager } from "../../core/event/EventManager.ts";
 
 export class SettingsOverlay extends Container {
     private backdrop: Graphics;
@@ -93,7 +94,8 @@ export class SettingsOverlay extends Container {
     }
 
     private handleRestart(): void {
-        EventBus.instance.emit(GameEvent.GameStart);
+        // EventBus.instance.emit(GameEvent.GameStart);
+        EventManager.gameStart();
     }
 
     private handleContinue(): void {

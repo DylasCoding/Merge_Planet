@@ -1,4 +1,4 @@
-import { EventBus, GameEvent } from "../event/GameEvent.ts";
+import { EventManager } from "../event/EventManager.ts";
 
 interface GameSessionData {
     score: number;
@@ -26,7 +26,7 @@ export class GameSession {
 
     public set score(score: number) {
         this.sesionData.score += score;
-        EventBus.instance.emit(GameEvent.ScoreChanged, this.sesionData.score);
+        EventManager.scoreChanged(this.sesionData.score);
     }
 
     public reset(): void {

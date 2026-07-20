@@ -1,5 +1,5 @@
 import { Container, Sprite, Text } from "pixi.js";
-import { Font } from "../../core/Font.ts";
+import { Font } from "../../../core/Font.ts";
 
 export class Button extends Container {
     private baseScale = 1;

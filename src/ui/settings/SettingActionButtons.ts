@@ -1,5 +1,5 @@
 import { Container, Sprite } from "pixi.js";
-import { Button } from "../components/Button.ts";
+import { Button } from "../components/common/Button.ts";
 
 export class SettingActionButtons extends Container {
     private restartBtn: Button;

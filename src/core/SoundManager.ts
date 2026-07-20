@@ -1,6 +1,6 @@
 import { sound } from "@pixi/sound";
-import { EventBus, GameEvent } from "./event/GameEvent.ts";
 import { StorageManager } from "./manager/StorageManager.ts";
+import { EventManager } from "./event/EventManager.ts";
 
 export class SoundManager {
     private static isBackgroundMusicPlaying: boolean = false;
@@ -26,10 +26,22 @@ export class SoundManager {
     }
 
     public static registerEvents(): void {
-        EventBus.instance.on(GameEvent.MusicVolumeChanged, this.applyMusicVolume, this);
-        EventBus.instance.on(GameEvent.SoundVolumeChanged, this.applySoundVolume, this);
-        EventBus.instance.on(GameEvent.PlanetMerged, this.playMergeSound, this);
-        EventBus.instance.on(GameEvent.GameOver, this.playGameOverMusic, this);
+        // EventBus.instance.on(GameEvent.MusicVolumeChanged, this.applyMusicVolume, this);
+        // EventBus.instance.on(GameEvent.SoundVolumeChanged, this.applySoundVolume, this);
+        // EventBus.instance.on(GameEvent.PlanetMerged, this.playMergeSound, this);
+        // EventBus.instance.on(GameEvent.GameOver, this.playGameOverMusic, this);
+        EventManager.onMusicVolumeChanged((volume) => {
+            this.applyMusicVolume(volume);
+        });
+        EventManager.onSoundVolumeChanged((volume) => {
+            this.applySoundVolume(volume);
+        });
+        EventManager.onPlanetMerged(() => {
+            this.playMergeSound();
+        });
+        EventManager.onGameOver(() => {
+            this.playGameOverMusic();
+        });
     }
 
     private static applyMusicVolume(volume: number): void {

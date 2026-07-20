@@ -2,7 +2,7 @@ import { ScoreView } from "../components/ScoreView.ts";
 import { GemView } from "../components/GemView.ts";
 import { Container, Application, Sprite } from "pixi.js";
 import { NextPlanetView } from "../components/NextPlanetView.ts";
-import { Button } from "../components/Button.ts";
+import { Button } from "../components/common/Button.ts";
 import { StorageManager } from "../../core/manager/StorageManager.ts";
 
 export class TopBar extends Container {

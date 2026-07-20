@@ -1,5 +1,5 @@
 import { type Application, Container, Graphics, Sprite } from "pixi.js";
-import { Button } from "../components/Button.ts";
+import { Button } from "../components/common/Button.ts";
 import { SkinContainer } from "./SkinContainer.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
 import type { PlanetManager } from "../../features/planet/PlanetManager.ts";
