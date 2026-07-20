@@ -2,6 +2,8 @@ import { Container, Sprite, Texture } from "pixi.js";
 import { type PlanetData } from "../data/PlanetData";
 import { RigidBody } from "../../physics/Rigidbody";
 import type { PlanetOptions } from "../types/PlanetOptions";
+import { EventBus, GameEvent } from "../../../core/event/GameEvent";
+import Matter from "matter-js";
 
 export class Planet extends Container {
     public readonly data: PlanetData;
@@ -14,6 +16,8 @@ export class Planet extends Container {
     private baseScale!: number;
     private spawnScale: number = 0;
     private aliveTime: number = 0;
+
+    public body!: Matter.Body;
     constructor(options: PlanetOptions) {
         super();
         const { data, sprite } = options;
@@ -32,6 +36,8 @@ export class Planet extends Container {
         this.position.set(this.planetRigidbody.position.x, this.planetRigidbody.position.y);
 
         this.addChild(this.sprite);
+
+        EventBus.instance.emit(GameEvent.CreatePlanetPhysicBody, this);
     }
     update(deltaTime: number) {
         if (this.isDropPlanet) this.aliveTime += deltaTime;

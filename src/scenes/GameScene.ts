@@ -31,6 +31,8 @@ import { ShakeBoxEffect } from "../features/tool/effects/ShakeBoxEffect.ts";
 import { ShuffleTool } from "../features/tool/tools/ShuffleTool.ts";
 import { PickaxeCursor } from "../features/tool/effects/PickaxeCursor.ts";
 import { StorageManager } from "../core/manager/StorageManager.ts";
+import { EnginePhysics } from "../features/physics/EnginePhysics.ts";
+import { PlanetSaveSerialize } from "../features/planet/data/PlanetSaveSerialize.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -48,6 +50,8 @@ export class GameScene extends BaseScene {
     private CollisionManager!: CollisionManager;
     private mergeManager!: MergeManager;
     private particleManager!: particleManager;
+    private Engine!: EnginePhysics;
+    private planetSaveSerialize!: PlanetSaveSerialize;
     private toolController!: ToolController;
     private toolManager!: ToolManager;
     private pickaxeTool!: PickaxeTool;
@@ -62,7 +66,7 @@ export class GameScene extends BaseScene {
     private currentDragController: PlanetDragController | null = null;
     private timer!: Timer;
     private shouldSpawnNext = false;
-    private currentPlanet!: Planet;
+    private currentPlanet!: Planet | null;
 
     private isInputLocked = false;
     private isGameOver = false;
@@ -85,17 +89,14 @@ export class GameScene extends BaseScene {
         this.world.addChild(this.gameBox);
         console.log(this.gameBox.position);
 
-        this.planetManager = new PlanetManager();
+        this.planetManager = new PlanetManager(this);
         this.CollisionManager = new CollisionManager();
         this.mouseInputManager = new MouseInputManager(this.app, this.gameBox.getBoundsAsObject());
         this.particleManager = new particleManager(this);
-
+        this.Engine = new EnginePhysics();
         const randomizer = new PlanetRandomizer();
         const queue = new PlanetSpawnQueue(randomizer, 3);
         const factory = new PlanetFactory();
-
-        this.timer = new Timer();
-        this.timer.setTimer(0.6);
 
         this.toolManager = new ToolManager();
         this.pickaxeTool = new PickaxeTool(this.planetManager);
@@ -118,7 +119,12 @@ export class GameScene extends BaseScene {
             this.mouseInputManager,
             this.toolController,
         );
-
+        this.planetSaveSerialize = new PlanetSaveSerialize(this.planetManager);
+        StorageManager.planetSaveSerialize = this.planetSaveSerialize;
+        this.planetSaveSerialize.planetDataInterface = StorageManager.planets;
+        this.planetSaveSerialize.createPlanetData();
+        this.timer = new Timer();
+        this.timer.setTimer(0.5);
         this.interactionManager.isLockedCheck = () => this.isInputLocked;
 
         this.mergeManager = new MergeManager(
@@ -206,9 +212,12 @@ export class GameScene extends BaseScene {
             }
 
             if (this.currentDragController) {
-                this.planetManager.setDropPlanet(this.currentPlanet);
+                this.planetManager.setDropPlanet(this.currentPlanet!);
                 this.currentDragController.endDrag();
                 this.shouldSpawnNext = true;
+                StorageManager.updatePlanet(this.currentPlanet);
+
+                this.currentPlanet = null;
                 this.timer.turnTimer();
             }
         });
@@ -299,6 +308,7 @@ export class GameScene extends BaseScene {
             this.shouldSpawnNext = false;
             this.spawnNextPlanet();
             this.interactionManager.updateDrag();
+            this.Engine.update();
         }
         this.gameBox.update();
 
@@ -307,6 +317,7 @@ export class GameScene extends BaseScene {
         this.mergeManager.update();
         this.particleManager.update(deltaTime);
         this.timer.update(deltaTime);
+        this.planetSaveSerialize.updateDataPertime(deltaTime);
         this.interactionManager.updateDrag();
         if (!this.isGameOver) {
             this.warningLine.update(deltaTime);

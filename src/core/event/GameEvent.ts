@@ -13,6 +13,10 @@ export const GameEvent = {
     SoundVolumeChanged: "SoundVolumeChanged",
     MusicVolumeChanged: "MusicVolumeChanged",
     PlanetMerged: "PlanetMerged",
+    CreatePlanetPhysicBody: "CreateBody",
+    CreatePlanet: "CreatePlanet",
+    GetAllPlanet: "GetAllPlanet",
+    AddPLanet: "AddPlanet",
 } as const;
 
 export class EventBus {

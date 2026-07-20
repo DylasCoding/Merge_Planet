@@ -1,17 +1,30 @@
 import { Planet } from "../entities/Planet";
 import { SkinManager } from "../skin/SkinManager.ts";
 
+import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
+import { GameScene } from "../../../scenes/GameScene.ts";
 export class PlanetManager {
     public readonly planets: Array<Planet> = [];
 
+    public gameScene: GameScene;
+    constructor(Gamescene: GameScene) {
+        this.gameScene = Gamescene;
+        // EventBus.instance.on(GameEvent.GetAllPlanet,this.getAll());
+        EventBus.instance.on(GameEvent.AddPLanet, (planet: Planet) => {
+            this.add(planet);
+        });
+    }
     public update(deltaTime: number) {
         this.planets.forEach((planet) => planet.update(deltaTime));
     }
     public add(planet: Planet): void {
         this.planets.push(planet);
+        EventBus.instance.emit(GameEvent.AddInteraction, planet);
+        this.gameScene.addPlanet(planet);
     }
     public setDropPlanet(Planet: Planet): void {
         Planet.isDropPlanet = true;
+        // this.add(Planet);
     }
     public remove(planet: Planet): void {
         const index = this.planets.indexOf(planet);

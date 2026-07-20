@@ -88,7 +88,7 @@ export class ApplylingResolve {
         const planetPositionY = planet.planetRigidbody.position.y;
         const planetRG = planet.planetRigidbody;
         const EPS_V = 0.2;
-        const EPS_ROLL = 0.3;
+
         if (planetPositionX - planetRadius <= left) {
             planetRG.position.x = left + planetRadius;
             planetRG.velocity.x *= -planet.planetRigidbody.restitution;
@@ -148,6 +148,22 @@ export class ApplylingResolve {
 
                 planetRG.angularVelocity = 0;
             }
+        }
+    }
+    public applyingSleeping(planet: Planet, deltaTime: number) {
+        const planetRB = planet.planetRigidbody;
+
+        const linearSpeed = Math.sqrt(
+            planetRB.velocity.x * planetRB.velocity.x + planetRB.velocity.y * planetRB.velocity.y,
+        );
+        const angularSpeed = Math.abs(planetRB.angularVelocity);
+
+        const sleepVelocity = planetRB.sleepVelocity;
+        const sleepAngle = planetRB.sleepAngularVelocity;
+
+        if (linearSpeed < sleepVelocity && angularSpeed < sleepAngle && planetRB.isGrounded) {
+            planetRB.isSleeping = true;
+            planetRB.sleepTimer += deltaTime;
         }
     }
 }
