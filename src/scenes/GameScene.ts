@@ -12,7 +12,7 @@ import { PlanetSpawner } from "../features/planet/spawn/PlanetSpawner.ts";
 import { PlanetDragController } from "../features/planet/interaction/PlanetDragController.ts";
 import type { Planet } from "../features/planet/entities/Planet.ts";
 import { CollisionManager } from "../core/CollisionManager.ts";
-import { MergeManager } from "../core/MergeManager.ts";
+import { MergeManager } from "../core/MergePlanet.ts";
 import { Timer } from "../features/planet/spawn/TimerSpawner.ts";
 import { SettingsOverlay } from "../ui/settings/SettingsOverlay.ts";
 import { SkinShopOverlay } from "../ui/shop/SkinShopOverlay.ts";

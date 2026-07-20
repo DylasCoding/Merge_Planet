@@ -4,12 +4,14 @@ import { RigidBody } from "../../physics/Rigidbody";
 import type { PlanetOptions } from "../types/PlanetOptions";
 import { EventBus, GameEvent } from "../../../core/event/GameEvent";
 import Matter from "matter-js";
+import { CircleCollider } from "../../physics/CircleCollider";
 
 export class Planet extends Container {
     public readonly data: PlanetData;
     public readonly sprite: Sprite;
 
     public planetRigidbody: RigidBody;
+    public circleCollider: CircleCollider;
     public isDropPlanet: boolean;
     public isMerge: boolean;
     public notUntilCount: boolean;
@@ -31,7 +33,11 @@ export class Planet extends Container {
         this.isMerge = false;
         this.notUntilCount = false;
         this.planetRigidbody = new RigidBody(options.position!.x, options.position!.y);
-
+        this.circleCollider = new CircleCollider(
+            this.data.radius,
+            this.planetRigidbody.position,
+            this.planetRigidbody,
+        );
         // Initialize the position of the Planet container to match the rigidBody's position
         this.position.set(this.planetRigidbody.position.x, this.planetRigidbody.position.y);
 
@@ -40,6 +46,7 @@ export class Planet extends Container {
         EventBus.instance.emit(GameEvent.CreatePlanetPhysicBody, this);
     }
     update(deltaTime: number) {
+        this.circleCollider.update();
         if (this.isDropPlanet) this.aliveTime += deltaTime;
         if (this.aliveTime >= 1.3) {
             this.notUntilCount = true;

@@ -36,7 +36,7 @@ export class Game {
         SoundManager.registerEvents();
 
         GameSession.Instance.reset();
-
+        StorageManager.resetData();
         if (this.gameScene) {
             this.app.stage.removeChild(this.gameScene);
             this.gameScene.destroy({ children: true });
