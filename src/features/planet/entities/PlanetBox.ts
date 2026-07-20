@@ -1,6 +1,6 @@
 import { Container, Graphics, Sprite } from "pixi.js";
 
-export class planetBox extends Container {
+export class PlanetBox extends Container {
     public sprite: Sprite;
     public strokeWidth: number;
     public boxX: number;
@@ -25,9 +25,8 @@ export class planetBox extends Container {
                 width: 6,
                 color: 0xffffff,
             });
-        
+
         this.addChild(boxStroke);
         this.pivot.set(this.boxWidth / 2, this.boxHeight / 2);
     }
-    planetBoxSpriteLoad() {}
 }
