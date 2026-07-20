@@ -1,5 +1,5 @@
 import { Container, Sprite } from "pixi.js";
-import type { Planet } from "../../planet/entities/Planet";
+import { type Planet } from "../../planet/entities/Planet";
 
 export class PickaxeEffect extends Container {
     private readonly sprite = Sprite.from("tool1_icon");

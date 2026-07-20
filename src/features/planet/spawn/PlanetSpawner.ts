@@ -5,7 +5,7 @@ import { PlanetManager } from "../manager/PlanetManager";
 import { PlanetSpawnQueue } from "./PlanetSpawnQueue";
 import { PlanetDragController } from "../interaction/PlanetDragController";
 import { type IMouseTracker } from "../../../core/input/IMouseTracker.ts";
-import type { PlanetInteractionManager } from "../interaction/PlanetInteractionManager.ts";
+import { type PlanetInteractionManager } from "../interaction/PlanetInteractionManager.ts";
 
 export class PlanetSpawner {
     private readonly queue: PlanetSpawnQueue;

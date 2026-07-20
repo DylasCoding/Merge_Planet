@@ -1,7 +1,7 @@
 import { Container, Sprite, Texture } from "pixi.js";
 import { type PlanetData } from "../data/PlanetData";
 import { RigidBody } from "../../physics/Rigidbody";
-import type { PlanetOptions } from "../types/PlanetOptions";
+import { type PlanetOptions } from "../types/PlanetOptions";
 
 export class Planet extends Container {
     public readonly data: PlanetData;

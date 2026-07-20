@@ -1,4 +1,4 @@
-import type { GameBox } from "../../../ui/components/GameBox";
+import { type GameBox } from "../../../ui/components/GameBox";
 
 export class ShakeBoxEffect {
     private readonly gameBox: GameBox;

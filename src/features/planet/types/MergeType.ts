@@ -1,4 +1,4 @@
-import type { Planet } from "../entities/Planet";
+import { type Planet } from "../entities/Planet";
 
 export type MergeRequest = {
     planet1: Planet;

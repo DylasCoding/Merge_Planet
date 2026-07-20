@@ -10,7 +10,7 @@ import { MouseInputManager } from "../core/input/MouseInputManager.ts";
 import { PlanetInteractionManager } from "../features/planet/interaction/PlanetInteractionManager.ts";
 import { PlanetSpawner } from "../features/planet/spawn/PlanetSpawner.ts";
 import { PlanetDragController } from "../features/planet/interaction/PlanetDragController.ts";
-import type { Planet } from "../features/planet/entities/Planet.ts";
+import { type Planet } from "../features/planet/entities/Planet.ts";
 import { CollisionManager } from "../core/CollisionManager.ts";
 import { MergeManager } from "../core/MergeManager.ts";
 import { Timer } from "../features/planet/spawn/TimerSpawner.ts";
