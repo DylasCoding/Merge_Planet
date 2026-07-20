@@ -1,5 +1,5 @@
 import { Application, Container, Sprite, Text } from "pixi.js";
-import { Button } from "../components/Button.ts";
+import { Button } from "../components/common/Button.ts";
 import { Font } from "../../core/Font.ts";
 import { ScaleUtils } from "../../utils/ScaleUtils.ts";
 import { SkinManager } from "../../features/planet/skin/SkinManager.ts";

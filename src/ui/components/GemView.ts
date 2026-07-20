@@ -1,7 +1,7 @@
 import { Container, Sprite, Text } from "pixi.js";
 import { Font } from "../../core/Font.ts";
 import { StorageManager } from "../../core/manager/StorageManager.ts";
-import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { EventManager } from "../../core/event/EventManager.ts";
 
 export class GemView extends Container {
     private readonly gemText: Text;
@@ -53,7 +53,7 @@ export class GemView extends Container {
 
         this.addChild(bg, icon, addIcon, this.gemText);
 
-        EventBus.instance.on(GameEvent.GemChanged, (gems: number) => {
+        EventManager.onGemChanged((gems: number) => {
             this.setGemText(gems);
         });
     }

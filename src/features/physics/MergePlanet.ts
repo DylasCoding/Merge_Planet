@@ -3,7 +3,7 @@ import type { Planet } from "../planet/entities/Planet";
 import { PlanetFactory } from "../planet/factory/PlanetFactory";
 import { GameSession } from "../../core/manager/GameSession.ts";
 import { StorageManager } from "../../core/manager/StorageManager.ts";
-import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
+import { EventManager } from "../../core/event/EventManager.ts";
 
 export class MergePlanet {
     planetFactory: PlanetFactory;
@@ -18,7 +18,7 @@ export class MergePlanet {
             (planet1.planetRigidbody.position.y + planet2.planetRigidbody.position.y) / 2 -
             planet1.data.radius * 0.8;
 
-        EventBus.instance.emit(GameEvent.PlanetMerged);
+        EventManager.planetMerged();
 
         GameSession.Instance.score = (planet1.data.level + planet2.data.level) * 10;
         this.updateHighScore(GameSession.Instance.score);

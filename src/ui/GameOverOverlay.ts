@@ -1,9 +1,9 @@
 import { type Application, Container, Graphics, Sprite, Text, TextStyle } from "pixi.js";
-import { Button } from "./components/Button.ts";
+import { Button } from "./components/common/Button.ts";
 import { ScaleUtils } from "../utils/ScaleUtils.ts";
 import { Font } from "../core/Font.ts";
-import { EventBus, GameEvent } from "../core/event/GameEvent.ts";
 import { gsap } from "gsap/gsap-core";
+import { EventManager } from "../core/event/EventManager.ts";
 
 export class GameOverOverlay extends Container {
     private app: Application;
@@ -107,7 +107,8 @@ export class GameOverOverlay extends Container {
     public onRestartClick(): void {
         this.restartBtn.onClick(() => {
             this.hide();
-            EventBus.instance.emit(GameEvent.GameStart);
+            // EventBus.instance.emit(GameEvent.GameStart);
+            EventManager.gameStart();
         });
     }
 

@@ -1,8 +1,8 @@
 import { Container, Sprite, Text } from "pixi.js";
 import { Font } from "../../core/Font.ts";
-import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 import { PLANET_CONFIG } from "../../features/planet/data/PlanetConfig.ts";
 import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
+import { EventManager } from "../../core/event/EventManager.ts";
 
 export class NextPlanetView extends Container {
     private icon: Sprite;
@@ -37,12 +37,12 @@ export class NextPlanetView extends Container {
 
         this.addChild(bg, this.icon, text);
 
-        EventBus.instance.on(GameEvent.NextPlanetLevelChanged, (nextLevel: number) => {
+        EventManager.onNextPlanetLevelChanged((nextLevel: number) => {
             this.currentLevel = nextLevel;
             this.updatePlanetIcon(nextLevel);
         });
 
-        EventBus.instance.on(GameEvent.SkinChanged, () => {
+        EventManager.onSkinChanged(() => {
             this.updatePlanetIcon(this.currentLevel);
         });
     }

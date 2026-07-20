@@ -24,13 +24,13 @@ import { PickaxeTool } from "../features/tool/tools/PickaxeTool.ts";
 import { ToolOverlayWithPickaxe } from "../ui/overlays/ToolOverlayWithPickaxe.ts";
 import { ToolPrice, ToolType } from "../features/tool/ToolType.ts";
 import { GameOverOverlay } from "../ui/GameOverOverlay.ts";
-import { EventBus, GameEvent } from "../core/event/GameEvent.ts";
 import { WarningLine } from "../ui/components/WarningLine.ts";
 import { PickaxeEffect } from "../features/tool/effects/PickaxeEffect.ts";
 import { ShakeBoxEffect } from "../features/tool/effects/ShakeBoxEffect.ts";
 import { ShuffleTool } from "../features/tool/tools/ShuffleTool.ts";
 import { PickaxeCursor } from "../features/tool/effects/PickaxeCursor.ts";
 import { StorageManager } from "../core/manager/StorageManager.ts";
+import { EventManager } from "../core/event/EventManager.ts";
 
 export class GameScene extends BaseScene {
     private readonly world = new Container();
@@ -216,7 +216,7 @@ export class GameScene extends BaseScene {
         this.addChild(this.skinShopOverlay);
         this.addChild(this.gameOverOverlay);
 
-        EventBus.instance.on(GameEvent.GameOver, (finalScore: number) => {
+        EventManager.onGameOver((finalScore: number) => {
             this.triggerGameOver(finalScore);
         });
     }
@@ -278,7 +278,8 @@ export class GameScene extends BaseScene {
         }
         this.isShuffling = true;
         StorageManager.updateGems(-ToolPrice[ToolType.Shuffle]);
-        EventBus.instance.emit(GameEvent.GemChanged, StorageManager.gems);
+        // EventBus.instance.emit(GameEvent.GemChanged, StorageManager.gems);
+        EventManager.gemChanged(StorageManager.gems);
         await this.toolController.useShuffle();
         this.isShuffling = false;
         this.warningLine.turnWorking();

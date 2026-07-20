@@ -1,8 +1,8 @@
 import { Assets, Container, Sprite } from "pixi.js";
 import { Timer } from "../../features/planet/spawn/TimerSpawner";
-import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 import { GameSession } from "../../core/manager/GameSession.ts";
 import { WarningAlert } from "./WarningAlertUI";
+import { EventManager } from "../../core/event/EventManager.ts";
 
 export class WarningLine extends Container {
     public sprite: Sprite;
@@ -55,7 +55,7 @@ export class WarningLine extends Container {
         if (this.timer.timeUp()) {
             // console.log("Game Over");
             if (!this.hasGameOver) {
-                EventBus.instance.emit(GameEvent.GameOver, GameSession.Instance.score);
+                EventManager.gameOver(GameSession.Instance.score);
                 this.hasGameOver = true;
             }
         }

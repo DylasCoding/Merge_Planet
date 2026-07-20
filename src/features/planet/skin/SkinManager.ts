@@ -1,6 +1,6 @@
 import { Assets, Texture } from "pixi.js";
 import { SKIN_LIST } from "../data/SkinConfig.ts";
-import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
+import { EventManager } from "../../../core/event/EventManager.ts";
 
 export class SkinManager {
     private static instance: SkinManager;
@@ -26,7 +26,8 @@ export class SkinManager {
 
             if (this.onSkinChanged) this.onSkinChanged();
 
-            EventBus.instance.emit(GameEvent.SkinChanged);
+            // EventBus.instance.emit(GameEvent.SkinChanged);
+            EventManager.skinChanged();
         } catch (error) {
             console.error(error);
         }

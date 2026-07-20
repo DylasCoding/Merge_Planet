@@ -1,7 +1,7 @@
 import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
-import { EventBus, GameEvent } from "../../core/event/GameEvent.ts";
 import { SkinManager } from "../../features/planet/skin/SkinManager.ts";
+import { EventManager } from "../../core/event/EventManager.ts";
 
 export class LeftSideBar extends Container {
     private arrowIcon: Sprite;
@@ -56,11 +56,11 @@ export class LeftSideBar extends Container {
         planetsContainer.addChild(this.arrowIcon);
         this.pointToPlanet(1);
 
-        EventBus.instance.on(GameEvent.SkinChanged, () => {
+        EventManager.onSkinChanged(() => {
             this.onSkinChanged();
         });
 
-        EventBus.instance.on(GameEvent.LevelChanged, (level: number) => {
+        EventManager.onLevelChanged((level: number) => {
             this.pointToPlanet(level);
         });
     }

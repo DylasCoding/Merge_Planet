@@ -1,4 +1,4 @@
-import { EventBus, GameEvent } from "../../../core/event/GameEvent.ts";
+import { EventManager } from "../../../core/event/EventManager.ts";
 
 export class PlanetRandomizer {
     private currentMaxRandomLevel = 1;
@@ -12,7 +12,8 @@ export class PlanetRandomizer {
     public onPlanetAppeared(level: number): void {
         if (level > this.defaultLevel) {
             this.defaultLevel = level;
-            EventBus.instance.emit(GameEvent.LevelChanged, this.defaultLevel);
+            // EventBus.instance.emit(GameEvent.LevelChanged, this.defaultLevel);
+            EventManager.levelChanged(this.defaultLevel);
         }
 
         if (level % 2 !== 0) {

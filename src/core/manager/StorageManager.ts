@@ -1,4 +1,4 @@
-import { EventBus, GameEvent } from "../event/GameEvent.ts";
+import { EventManager } from "../event/EventManager.ts";
 
 export interface IGameSaveData {
     highScore: number;
@@ -50,7 +50,7 @@ export class StorageManager {
     public static updateGems(amount: number): void {
         this.data.gems += amount;
         this.save();
-        EventBus.instance.emit(GameEvent.GemChanged, this.data.gems);
+        EventManager.gemChanged(this.data.gems);
     }
 
     public static get highScore(): number {
@@ -61,7 +61,7 @@ export class StorageManager {
         if (score > this.data.highScore) {
             this.data.highScore = score;
             this.save();
-            EventBus.instance.emit(GameEvent.HighScoreChanged, this.data.highScore);
+            EventManager.highScoreChanged(this.data.highScore);
         }
     }
 
@@ -72,7 +72,7 @@ export class StorageManager {
     public static updateSoundVolume(volume: number): void {
         this.data.soundVolume = volume;
         this.save();
-        EventBus.instance.emit(GameEvent.SoundVolumeChanged, volume);
+        EventManager.soundVolumeChanged(this.data.soundVolume);
     }
 
     public static get musicVolume(): number {
@@ -82,6 +82,6 @@ export class StorageManager {
     public static updateMusicVolume(volume: number): void {
         this.data.musicVolume = volume;
         this.save();
-        EventBus.instance.emit(GameEvent.MusicVolumeChanged, volume);
+        EventManager.musicVolumeChanged(this.data.musicVolume);
     }
 }

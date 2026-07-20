@@ -1,6 +1,6 @@
 import { Container, Sprite } from "pixi.js";
 import type { Application } from "pixi.js";
-import { ToolButton } from "../components/ToolButton.ts";
+import { ToolButton } from "../components/common/ToolButton.ts";
 
 export class RightSideBar extends Container {
     public pickaxeButton: ToolButton;
