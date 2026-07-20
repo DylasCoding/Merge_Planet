@@ -88,7 +88,6 @@ export class ApplylingResolve {
         const planetPositionY = planet.planetRigidbody.position.y;
         const planetRG = planet.planetRigidbody;
         const EPS_V = 0.2;
-        const EPS_ROLL = 0.3;
         if (planetPositionX - planetRadius <= left) {
             planetRG.position.x = left + planetRadius;
             planetRG.velocity.x *= -planet.planetRigidbody.restitution;
@@ -107,7 +106,7 @@ export class ApplylingResolve {
                 planetRG.angularVelocity = 0;
             }
         }
-        if (planetPositionY - planetRadius <= top) {
+        if (planetRG.velocity.y < 0 && planetPositionY - planetRadius <= top) {
             planet.planetRigidbody.position.y = top + planetRadius;
 
             if (planet.planetRigidbody.velocity.y < 0) {

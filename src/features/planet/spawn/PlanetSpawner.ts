@@ -38,7 +38,7 @@ export class PlanetSpawner {
             position ??
             new Vector2(
                 this.bounds.x + this.bounds.width / 2,
-                this.bounds.y + this.bounds.height / 2,
+                this.bounds.y - 70,
             );
 
         const planet = this.factory.create({
