@@ -1,5 +1,5 @@
 import { Container, Sprite, Text, TextStyle } from "pixi.js";
-import { Font } from "../../core/Font.ts";
+import { Font } from "../../../core/Font.ts";
 
 export class ToolButton extends Container {
     private bg: Sprite;
