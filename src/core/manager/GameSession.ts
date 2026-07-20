@@ -31,5 +31,6 @@ export class GameSession {
 
     public reset(): void {
         this.sesionData.score = 0;
+        console.log("GAME RESTART");
     }
 }

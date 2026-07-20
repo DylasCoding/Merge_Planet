@@ -1,19 +1,22 @@
-import { MergePlanet } from "../features/physics/MergePlanet";
-import { Planet } from "../features/planet/entities/Planet";
-import type { PlanetFactory } from "../features/planet/PlanetFactory.ts";
-import type { PlanetManager } from "../features/planet/PlanetManager";
+import { Planet } from "../features/planet";
+import type { PlanetFactory } from "../features/planet";
+import type { PlanetManager } from "../features/planet";
 import type { MergeRequest } from "../features/planet/types/MergeType";
 import type { GameScene } from "../scenes/GameScene";
 import type { particleManager } from "./ParticleManager";
-import type { PlanetRandomizer } from "../features/planet/PlanetRandomizer.ts";
+import type { PlanetRandomizer } from "../features/planet";
 import type { PlanetInteractionManager } from "../features/planet/interaction/PlanetInteractionManager.ts";
+import { StorageManager } from "./manager/StorageManager.ts";
+import { GameSession } from "./manager/GameSession.ts";
+import { Vector2 } from "../utils/math/Vector2.ts";
+import { EventManager } from "./event/EventManager.ts";
 
 export class MergeManager {
-    private MergePlanet: MergePlanet;
     private mergeQueue: MergeRequest[] = [];
-    public planetManager: PlanetManager;
-    public particleManager: particleManager;
-    public gameScene: GameScene;
+    private planetManager: PlanetManager;
+    private particleManager: particleManager;
+    private gameScene: GameScene;
+    private planetFactory: PlanetFactory;
     private readonly planetRandomizer: PlanetRandomizer;
     private readonly planetInteractionManager: PlanetInteractionManager;
     constructor(
@@ -24,7 +27,7 @@ export class MergeManager {
         particleManager: particleManager,
         planetInteractionManager: PlanetInteractionManager,
     ) {
-        this.MergePlanet = new MergePlanet(planetFactory);
+        this.planetFactory = planetFactory;
         this.planetManager = planetManager;
         this.gameScene = gameScene;
         this.particleManager = particleManager;
@@ -49,25 +52,25 @@ export class MergeManager {
         this.MergingProcess();
         this.removePlanetMerged();
     }
-    public MergingProcess() {
+    private MergingProcess() {
         for (const request of this.mergeQueue) {
-            const newMergePlanet = this.MergePlanet.mergePlanet(request.planet1, request.planet2);
+            const newMergePlanet = this.mergePlanet(request.planet1, request.planet2);
 
             // random level for new planet
             this.planetRandomizer.onPlanetAppeared(newMergePlanet.data.level);
 
             newMergePlanet.isDropPlanet = true;
+            this.planetInteractionManager.registerPlanet(newMergePlanet!);
 
+            this.gameScene.removePlanet(request.planet1, request.planet2);
             this.planetManager.add(newMergePlanet!);
             this.gameScene.addPlanet(newMergePlanet!);
             this.otherEventWithParticle(newMergePlanet!);
-            this.planetInteractionManager.registerPlanet(newMergePlanet!);
-            // this.forceImpulsePlanet(newMergePlanet);
-            this.gameScene.removePlanet(request.planet1, request.planet2);
+            StorageManager.savePlanetData();
         }
         this.mergeQueue.length = 0;
     }
-    public removePlanetMerged() {
+    private removePlanetMerged() {
         for (let i = this.planetManager.getAll().length - 1; i >= 0; i--) {
             if (this.planetManager.getAll()[i].isMerge) {
                 this.gameScene.removeChild(this.planetManager.getAll()[i]);
@@ -75,7 +78,7 @@ export class MergeManager {
             }
         }
     }
-    public otherEventWithParticle(planet: Planet) {
+    private otherEventWithParticle(planet: Planet) {
         this.particleManager.spawnWhenMerge(
             planet.planetRigidbody.position.x,
             planet.planetRigidbody.position.y,
@@ -84,23 +87,31 @@ export class MergeManager {
             planet.data.radius,
         );
     }
-    // public forceImpulsePlanet(mergePlanet: Planet) {
-    //     for (const planet of this.planetManager.getAll()) {
-    //         if (planet === mergePlanet) continue;
-    //         if (planet.isMerge) continue;
+    private mergePlanet(planet1: Planet, planet2: Planet) {
+        const x = (planet1.planetRigidbody.position.x + planet2.planetRigidbody.position.x) / 2;
+        const y =
+            (planet1.planetRigidbody.position.y + planet2.planetRigidbody.position.y) / 2 -
+            planet1.data.radius * 0.8;
 
-    //         const dx = planet.planetRigidbody.position.x - mergePlanet.planetRigidbody.position.x;
-    //         const dy = planet.planetRigidbody.position.y - mergePlanet.planetRigidbody.position.y;
+        // EventBus.instance.emit(GameEvent.PlanetMerged);
+        EventManager.planetMerged();
 
-    //         const distance = Math.sqrt(dx * dx + dy * dy);
-    //         const explosionRadius = mergePlanet.data.radius * 2.5;
-    //         if (distance > explosionRadius || distance < 0.0001) continue;
-    //         const strength = (1 - distance / explosionRadius) * mergePlanet.data.radius * 12;
-    //         const nx = dx / distance;
-    //         const ny = dy / distance;
+        GameSession.Instance.score = (planet1.data.level + planet2.data.level) * 10;
+        console.log(StorageManager.currentScore);
+        this.updateHighScore(GameSession.Instance.score);
 
-    //         planet.planetRigidbody.velocity.x += nx * strength;
-    //         planet.planetRigidbody.velocity.y += ny * strength;
-    //     }
-    // }
+        const MergePlanetPosition = new Vector2(x, y);
+        const newLevel = planet1.data.level + 1;
+        return this.planetFactory.create({
+            level: newLevel,
+            position: MergePlanetPosition,
+        });
+    }
+
+    private updateHighScore(score: number): void {
+        StorageManager.setCurrentScore(score);
+        if (score > StorageManager.highScore) {
+            StorageManager.updateHighScore(score);
+        }
+    }
 }

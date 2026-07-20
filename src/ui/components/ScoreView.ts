@@ -38,7 +38,7 @@ export class ScoreView extends Container {
         const icon = Sprite.from("score_star");
 
         this.scoreText = new Text({
-            text: "0",
+            text: StorageManager.currentScore.toString(),
             style: {
                 fontFamily: Font.Righteous_Regular,
                 fill: 0xffffb3,

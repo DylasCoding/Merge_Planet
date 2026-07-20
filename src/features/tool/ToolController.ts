@@ -65,7 +65,7 @@ export class ToolController {
                 await this.pickaxeEffect.play(planet);
                 this.pickaxeTool.use(planet);
                 StorageManager.updateGems(-ToolPrice[ToolType.Pickaxe]);
-                EventManager.gemChanged(StorageManager.gems);
+                // EventManager.gemChanged(StorageManager.gems);
                 break;
 
             case ToolType.None:

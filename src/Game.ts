@@ -2,6 +2,7 @@ import { Application } from "pixi.js";
 import { GameScene } from "./scenes/GameScene.ts";
 import { GameSession } from "./core/manager/GameSession.ts";
 import { SoundManager } from "./core/SoundManager.ts";
+import { StorageManager } from "./core/manager/StorageManager.ts";
 import { EventManager } from "./core/event/EventManager.ts";
 
 export class Game {
@@ -17,7 +18,7 @@ export class Game {
         SoundManager.registerEvents();
 
         EventManager.onGameStart(() => {
-            this.reloadGameScene();
+            this.resstartGameScene();
         });
 
         await this.reloadGameScene();
@@ -33,12 +34,32 @@ export class Game {
     private async reloadGameScene(): Promise<void> {
         EventManager.removeAllListenerEvents();
         EventManager.onGameStart(() => {
-            this.reloadGameScene();
+            this.resstartGameScene();
+        });
+        SoundManager.registerEvents();
+
+        GameSession.Instance.reset();
+        if (this.gameScene) {
+            this.app.stage.removeChild(this.gameScene);
+            this.gameScene.destroy({ children: true });
+        }
+
+        this.gameScene = new GameScene(this.app);
+        await this.gameScene.initialize();
+
+        this.app.stage.addChild(this.gameScene);
+    }
+
+    private async resstartGameScene(): Promise<void> {
+        EventManager.removeAllListenerEvents();
+        EventManager.onGameStart(() => {
+            this.resstartGameScene();
         });
 
         SoundManager.registerEvents();
 
         GameSession.Instance.reset();
+        StorageManager.resetData();
 
         if (this.gameScene) {
             this.app.stage.removeChild(this.gameScene);
